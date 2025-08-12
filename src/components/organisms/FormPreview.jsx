@@ -69,7 +69,7 @@ const validateField = (field, value) => {
             }
           }
           break;
-        default:
+default:
 phoneRegex = /^[\d\s()+\-]{10,}$/;
       }
       if (phoneRegex && !phoneRegex.test(value)) {
