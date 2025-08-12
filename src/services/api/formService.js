@@ -741,7 +741,7 @@ function displayUploadedFile(container, fileData, fieldId) {
             
 // Email validation
             if (field.type === "email" && value) {
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                const emailRegex = /^[^s@]+@[^s@]+.[^s@]+$/;
                 if (!emailRegex.test(value)) {
                     errors.push("Please enter a valid email address (e.g., name@example.com)");
                 }
@@ -749,12 +749,11 @@ function displayUploadedFile(container, fileData, fieldId) {
 
             // Phone validation
             if (field.type === "phone" && value) {
-                const phoneRegex = /^[\+]?[(]?[\d\s\-\(\)]{10,}$/;
+                const phoneRegex = /^[+]?[(]?[ds()+-]{10,}$/;
                 if (!phoneRegex.test(value)) {
                     errors.push("Please enter a valid phone number (e.g., (555) 123-4567)");
                 }
             }
-
             // URL validation  
             if (field.type === "url" && value) {
                 try {
