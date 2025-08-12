@@ -67,10 +67,10 @@ const validateField = (field, value) => {
             } catch (e) {
               console.warn('Invalid phone pattern:', field.pattern);
             }
-          }
+}
           break;
 default:
-phoneRegex = /^[\d\s()+\-]{10,}$/;
+phoneRegex = /^[\d\s()+−]{10,}$/;
       }
       if (phoneRegex && !phoneRegex.test(value)) {
         errors.push(field.errorMessage || "Please enter a valid phone number");
