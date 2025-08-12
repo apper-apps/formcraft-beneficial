@@ -1,0 +1,60 @@
+[
+  {
+    "Id": 1,
+    "title": "Contact Form",
+    "description": "A simple contact form for collecting user inquiries",
+    "fields": [
+      {
+        "id": "1",
+        "type": "text",
+        "label": "Full Name",
+        "placeholder": "Enter your full name",
+        "required": true
+      },
+      {
+        "id": "2",
+        "type": "email",
+        "label": "Email Address",
+        "placeholder": "Enter your email address",
+        "required": true
+      },
+      {
+        "id": "3",
+        "type": "dropdown",
+        "label": "Subject",
+        "options": ["General Inquiry", "Support", "Sales", "Other"],
+        "required": false
+      }
+    ],
+    "createdAt": "2024-01-15T10:30:00Z"
+  },
+  {
+    "Id": 2,
+    "title": "Registration Form",
+    "description": "User registration form with basic information",
+    "fields": [
+      {
+        "id": "4",
+        "type": "text",
+        "label": "Username",
+        "placeholder": "Choose a username",
+        "required": true
+      },
+      {
+        "id": "5",
+        "type": "email",
+        "label": "Email",
+        "placeholder": "Your email address",
+        "required": true
+      },
+      {
+        "id": "6",
+        "type": "dropdown",
+        "label": "Country",
+        "options": ["United States", "Canada", "United Kingdom", "Australia", "Other"],
+        "required": true
+      }
+    ],
+    "createdAt": "2024-01-14T14:20:00Z"
+  }
+]

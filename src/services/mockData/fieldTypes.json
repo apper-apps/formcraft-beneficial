@@ -1,0 +1,70 @@
+[
+  {
+    "Id": 1,
+    "type": "text",
+    "name": "Text Input",
+    "icon": "Type",
+    "description": "Single line text input field",
+    "defaultLabel": "Text Field",
+    "defaultPlaceholder": "Enter text here...",
+    "properties": ["label", "placeholder", "required", "maxLength"]
+  },
+  {
+    "Id": 2,
+    "type": "email",
+    "name": "Email",
+    "icon": "Mail",
+    "description": "Email address input with validation",
+    "defaultLabel": "Email Address",
+    "defaultPlaceholder": "Enter email address...",
+    "properties": ["label", "placeholder", "required"]
+  },
+  {
+    "Id": 3,
+    "type": "dropdown",
+    "name": "Dropdown",
+    "icon": "ChevronDown",
+    "description": "Select dropdown with multiple options",
+    "defaultLabel": "Select Option",
+    "defaultOptions": ["Option 1", "Option 2", "Option 3"],
+    "properties": ["label", "options", "required"]
+  },
+  {
+    "Id": 4,
+    "type": "phone",
+    "name": "Phone Number",
+    "icon": "Phone",
+    "description": "Phone number input field",
+    "defaultLabel": "Phone Number",
+    "defaultPlaceholder": "Enter phone number...",
+    "properties": ["label", "placeholder", "required"]
+  },
+  {
+    "Id": 5,
+    "type": "checkbox",
+    "name": "Checkbox",
+    "icon": "CheckSquare",
+    "description": "Single checkbox for yes/no options",
+    "defaultLabel": "Checkbox Option",
+    "properties": ["label", "required", "defaultChecked"]
+  },
+  {
+    "Id": 6,
+    "type": "radio",
+    "name": "Radio Buttons",
+    "icon": "Circle",
+    "description": "Multiple choice radio button group",
+    "defaultLabel": "Choose Option",
+    "defaultOptions": ["Option 1", "Option 2", "Option 3"],
+    "properties": ["label", "options", "required"]
+  },
+  {
+    "Id": 7,
+    "type": "date",
+    "name": "Date Picker",
+    "icon": "Calendar",
+    "description": "Date selection input",
+    "defaultLabel": "Select Date",
+    "properties": ["label", "required", "minDate", "maxDate"]
+  }
+]
