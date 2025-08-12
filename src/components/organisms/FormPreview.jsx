@@ -3,9 +3,11 @@ import { toast } from 'react-toastify'
 import ApperIcon from '@/components/ApperIcon'
 import Button from '@/components/atoms/Button'
 import { cn } from '@/utils/cn'
-const FormPreview = ({ fields, formSettings = {}, selectedTheme }) => {
+const FormPreview = ({ fields, formSettings = {}, selectedTheme, isPreviewMode = false, onBackToEditor }) => {
 const [formData, setFormData] = useState({});
   const [validationErrors, setValidationErrors] = useState({});
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submittedData, setSubmittedData] = useState(null);
 const validateField = (field, value) => {
     const errors = [];
     
@@ -193,6 +195,21 @@ const handleSubmit = (e) => {
       return;
     }
     
+    // Clear any existing errors
+    setValidationErrors({});
+    
+    // Store submitted data for preview mode
+    const formattedData = Object.keys(formData).reduce((acc, fieldId) => {
+      const field = fields.find(f => f.id === fieldId);
+      if (field && formData[fieldId] !== undefined && formData[fieldId] !== '') {
+        acc[field.label || `Field ${fieldId}`] = formData[fieldId];
+      }
+      return acc;
+    }, {});
+    
+    setSubmittedData(formattedData);
+    setIsSubmitted(true);
+    
     console.log("Form Data:", formData);
     toast.success(formSettings.successMessage || "Form submitted successfully!");
     
@@ -202,6 +219,14 @@ const handleSubmit = (e) => {
         window.open(formSettings.redirectUrl, '_blank');
       }, 2000);
     }
+  };
+
+  // Handle form reset for testing
+  const handleFormReset = () => {
+    setFormData({});
+    setValidationErrors({});
+    setIsSubmitted(false);
+    setSubmittedData(null);
   };
 
 const getThemeClasses = () => {
@@ -464,22 +489,90 @@ return (
     );
   }
 
-  return (
+return (
 <div className={getThemeClasses().container}>
-      <div className="mb-6">
-        <div className="flex items-center justify-between mb-2">
-          <h2 className="text-lg font-bold text-gray-900 bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent">
-            Live Preview
-          </h2>
-          <div className="flex items-center space-x-1 text-xs text-green-600">
-            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-            <span>Live</span>
+      {/* Header for preview mode */}
+      {isPreviewMode && (
+        <div className="mb-6 flex items-center justify-between">
+          <div>
+            <h2 className="text-lg font-bold text-gray-900 dark:text-white">
+              Form Preview - Test Mode
+            </h2>
+            <p className="text-sm text-gray-600 dark:text-gray-300">
+              Test your form as users will experience it
+            </p>
+          </div>
+          <div className="flex items-center space-x-2">
+            <Button
+              variant="secondary"
+              onClick={handleFormReset}
+              className="flex items-center space-x-2"
+            >
+              <ApperIcon name="RefreshCw" className="w-4 h-4" />
+              <span>Reset Form</span>
+            </Button>
+            <Button
+              variant="primary"
+              onClick={onBackToEditor}
+              className="flex items-center space-x-2"
+            >
+              <ApperIcon name="ArrowLeft" className="w-4 h-4" />
+              <span>Back to Editor</span>
+            </Button>
           </div>
         </div>
+      )}
+
+      {/* Regular preview header for build mode */}
+      {!isPreviewMode && (
+        <div className="mb-6">
+          <div className="flex items-center justify-between mb-2">
+            <h2 className="text-lg font-bold text-gray-900 bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent">
+              Live Preview
+            </h2>
+            <div className="flex items-center space-x-1 text-xs text-green-600">
+              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+              <span>Live</span>
+            </div>
+          </div>
 <p className="text-sm text-gray-600 dark:text-gray-300">
-          This is how your form will look to users
-        </p>
-      </div>
+            This is how your form will look to users
+          </p>
+        </div>
+      )}
+
+      {/* Form Submission Success Display */}
+      {isSubmitted && isPreviewMode && (
+        <div className="mb-6 p-6 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
+          <div className="flex items-start space-x-3">
+            <ApperIcon name="CheckCircle" className="w-6 h-6 text-green-600 dark:text-green-400 mt-0.5" />
+            <div className="flex-1">
+              <h3 className="text-lg font-semibold text-green-800 dark:text-green-200 mb-2">
+                Form Submitted Successfully!
+              </h3>
+              <p className="text-green-700 dark:text-green-300 mb-4">
+                {formSettings.successMessage || "Thank you! Your form has been submitted successfully."}
+              </p>
+              
+              {submittedData && Object.keys(submittedData).length > 0 && (
+                <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-green-200 dark:border-green-700">
+                  <h4 className="font-medium text-gray-900 dark:text-white mb-3">Submitted Data:</h4>
+                  <div className="space-y-2">
+                    {Object.entries(submittedData).map(([label, value]) => (
+                      <div key={label} className="flex justify-between items-center py-1 border-b border-gray-100 dark:border-gray-700 last:border-0">
+                        <span className="text-sm font-medium text-gray-600 dark:text-gray-300">{label}:</span>
+                        <span className="text-sm text-gray-900 dark:text-white max-w-xs truncate">
+                          {Array.isArray(value) ? value.join(', ') : value}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       <div className="preview-form">
         <form onSubmit={handleSubmit} className="space-y-6">

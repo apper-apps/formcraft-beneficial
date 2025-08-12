@@ -1,19 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { toast } from "react-toastify";
-import themeTemplateService from "@/services/api/themeTemplateService";
 import FormCanvas from "@/components/organisms/FormCanvas";
+import FormPreview from "@/components/organisms/FormPreview";
 import Header from "@/components/organisms/Header";
 import FormSettingsModal from "@/components/organisms/FormSettingsModal";
 import FieldToolbar from "@/components/organisms/FieldToolbar";
 import FieldConfigurationPanel from "@/components/organisms/FieldConfigurationPanel";
 import fieldTypesData from "@/services/mockData/fieldTypes.json";
 import formsData from "@/services/mockData/forms.json";
+import themeTemplateService from "@/services/api/themeTemplateService";
 import localStorageService from "@/services/api/localStorageService";
 const FormBuilder = () => {
 const [fields, setFields] = useState([]);
   const [selectedFieldId, setSelectedFieldId] = useState(null);
   const [draggedField, setDraggedField] = useState(null);
+  const [isPreviewMode, setIsPreviewMode] = useState(false);
   const [selectedFormTheme, setSelectedFormTheme] = useState(themeTemplateService.getDefaultTheme());
   const [formSettings, setFormSettings] = useState({
     title: "Untitled Form",
@@ -198,13 +200,18 @@ const handleFormSettingsOpen = () => {
           allowSaveDraft: false
         });
         toast.info("Started new form");
-      }
+}
     }
   };
 
+  // Handle preview mode toggle
+  const handlePreviewModeToggle = () => {
+    setIsPreviewMode(!isPreviewMode);
+    setSelectedFieldId(null); // Clear field selection when entering preview mode
+  };
   return (
 <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
-      <Header 
+<Header 
         onExport={handleExport} 
         onFormSettings={handleFormSettingsOpen}
         onSaveForm={handleSaveForm}
@@ -216,45 +223,65 @@ const handleFormSettingsOpen = () => {
         selectedTheme={selectedFormTheme}
         availableThemes={availableThemes}
         onThemeSelect={handleThemeSelect}
+        isPreviewMode={isPreviewMode}
+        onPreviewModeToggle={handlePreviewModeToggle}
       />
       
-      <div className="flex h-[calc(100vh-80px)]">
-        {/* Left Panel - Field Toolbar */}
-        <motion.div 
+<div className="flex h-[calc(100vh-80px)]">
+        {!isPreviewMode && (
+          <>
+            {/* Left Panel - Field Toolbar */}
+            <motion.div 
 className="w-80 p-6 bg-background dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-colors duration-200"
-          initial={{ x: -50, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          transition={{ duration: 0.3 }}
-        >
-          <FieldToolbar onDragStart={handleDragStart} />
-        </motion.div>
+              initial={{ x: -50, opacity: 0 }}
+              animate={{ x: 0, opacity: 1 }}
+              transition={{ duration: 0.3 }}
+            >
+              <FieldToolbar onDragStart={handleDragStart} />
+            </motion.div>
+          </>
+        )}
 
-        {/* Center Panel - Form Canvas */}
+        {/* Center Panel - Form Canvas or Preview */}
         <motion.div 
-          className="flex-1 p-6"
+          className={isPreviewMode ? "flex-1 p-6" : "flex-1 p-6"}
           initial={{ y: 20, opacity: 0 }}
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.3, delay: 0.1 }}
         >
+          {isPreviewMode ? (
+            <FormPreview
+              fields={fields}
+              formSettings={formSettings}
+              selectedTheme={selectedFormTheme}
+              isPreviewMode={true}
+              onBackToEditor={handlePreviewModeToggle}
+            />
+          ) : (
 <FormCanvas
-            fields={fields}
-            selectedFieldId={selectedFieldId}
-            onFieldSelect={setSelectedFieldId}
-            onFieldUpdate={handleFieldUpdate}
-            onFieldDelete={handleFieldDelete}
-            onFieldAdd={handleFieldAdd}
-            onFieldReorder={handleFieldReorder}
-            formSettings={formSettings}
-            selectedTheme={selectedFormTheme}
-          />
+              fields={fields}
+              selectedFieldId={selectedFieldId}
+              onFieldSelect={setSelectedFieldId}
+              onFieldUpdate={handleFieldUpdate}
+              onFieldDelete={handleFieldDelete}
+              onFieldAdd={handleFieldAdd}
+              onFieldReorder={handleFieldReorder}
+              formSettings={formSettings}
+              selectedTheme={selectedFormTheme}
+            />
+          )}
         </motion.div>
 
+        {!isPreviewMode && (
+          <>
 {/* Right Panel - Field Configuration */}
-        <FieldConfigurationPanel
-          selectedField={fields.find(f => f.id === selectedFieldId)}
-          onFieldUpdate={handleFieldUpdate}
-          onFieldDelete={handleFieldDelete}
-        />
+            <FieldConfigurationPanel
+              selectedField={fields.find(f => f.id === selectedFieldId)}
+              onFieldUpdate={handleFieldUpdate}
+              onFieldDelete={handleFieldDelete}
+            />
+          </>
+        )}
       </div>
 <FormSettingsModal
         isOpen={isSettingsModalOpen}

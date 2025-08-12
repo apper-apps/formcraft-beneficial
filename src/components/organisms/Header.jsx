@@ -15,7 +15,9 @@ const Header = ({
   hasFields,
   selectedTheme,
   availableThemes,
-  onThemeSelect
+  onThemeSelect,
+  isPreviewMode,
+  onPreviewModeToggle
 }) => {
 const { isDark, toggleTheme } = useTheme();
 
@@ -86,14 +88,23 @@ const { isDark, toggleTheme } = useTheme();
                     className="flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
                     <ApperIcon name="Settings" className="w-4 h-4" />
                     <span>Form Settings</span>
-                </Button>
+</Button>
                 <Button
-                    variant="secondary"
-                    onClick={onExport}
-                    className="flex items-center space-x-2">
-                    <ApperIcon name="Download" className="w-4 h-4" />
-                    <span>Export</span>
+                  variant={isPreviewMode ? "primary" : "secondary"}
+                  onClick={onPreviewModeToggle}
+                  className="flex items-center space-x-2">
+                  <ApperIcon name={isPreviewMode ? "Edit" : "Play"} className="w-4 h-4" />
+                  <span>{isPreviewMode ? "Build Mode" : "Preview Mode"}</span>
                 </Button>
+                {!isPreviewMode && (
+                  <Button
+                      variant="secondary"
+                      onClick={onExport}
+                      className="flex items-center space-x-2">
+                      <ApperIcon name="Download" className="w-4 h-4" />
+                      <span>Export</span>
+                  </Button>
+                )}
             </div>
         </div>
     </div></header>
