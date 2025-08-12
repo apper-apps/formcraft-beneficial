@@ -92,6 +92,68 @@ body {
 .dark .drop-zone.drag-over {
   background-color: rgba(91, 71, 224, 0.1);
 }
+
+/* Mobile Touch Optimizations */
+.touch-manipulation {
+  touch-action: manipulation;
+}
+
+@media (max-width: 768px) {
+  .field-item {
+    min-height: 60px;
+    padding: 16px;
+  }
+  
+  .drop-zone {
+    min-height: 8px;
+  }
+  
+  .drop-zone.drag-over {
+    min-height: 48px;
+    border-width: 3px;
+    background-color: rgba(91, 71, 224, 0.15);
+  }
+  
+  /* Touch-friendly button sizing */
+  button, [role="button"] {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* Enhanced touch targets */
+  .field-type-button {
+    min-height: 60px;
+    padding: 16px;
+  }
+  
+  /* Mobile drag feedback */
+  .mobile-dragging {
+    transform: scale(1.05);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+  }
+}
+
+/* Responsive layout adjustments */
+@media (max-width: 767px) {
+  .form-builder-layout {
+    flex-direction: column;
+  }
+  
+  .toolbar-panel {
+    max-height: 240px;
+    overflow-y: auto;
+    border-bottom: 1px solid var(--color-border);
+    border-right: none;
+  }
+  
+  .config-panel {
+    border-top: 1px solid var(--color-border);
+    border-left: none;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+}
 /* Field Animations */
 .field-item {
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);

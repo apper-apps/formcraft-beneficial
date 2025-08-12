@@ -20,6 +20,8 @@ const [fields, setFields] = useState([]);
   const [selectedFieldId, setSelectedFieldId] = useState(null);
   const [draggedField, setDraggedField] = useState(null);
   const [isPreviewMode, setIsPreviewMode] = useState(false);
+  const [isMobileDragging, setIsMobileDragging] = useState(false);
+  const [touchStartPos, setTouchStartPos] = useState(null);
   const [selectedFormTheme, setSelectedFormTheme] = useState(themeTemplateService.getDefaultTheme());
   const [formSettings, setFormSettings] = useState({
     title: "Untitled Form",
@@ -41,14 +43,26 @@ const [managementLoading, setManagementLoading] = useState(false);
   const [fileStorage, setFileStorage] = useState(new Map());
   const [fileUploads, setFileUploads] = useState(new Map());
   const [uploadProgress, setUploadProgress] = useState(new Map());
-  
   const handleThemeSelect = (theme) => {
     setSelectedFormTheme(theme);
     toast.success(`Theme changed to ${theme.name}!`);
   };
 
-  const handleDragStart = (fieldType) => {
+const handleDragStart = (fieldType) => {
     setDraggedField(fieldType);
+  };
+
+  const handleTouchStart = (fieldType, e) => {
+    setIsMobileDragging(true);
+    setDraggedField(fieldType);
+    const touch = e.touches[0];
+    setTouchStartPos({ x: touch.clientX, y: touch.clientY });
+  };
+
+  const handleTouchEnd = () => {
+    setIsMobileDragging(false);
+    setDraggedField(null);
+    setTouchStartPos(null);
   };
 
   const handleFieldAdd = (newField, targetIndex = fields.length) => {
@@ -417,9 +431,10 @@ const handleFormSettingsOpen = () => {
     
     toast.success('File downloaded successfully');
   };
-  const handlePreviewModeToggle = () => {
+const handlePreviewModeToggle = () => {
     setIsPreviewMode(!isPreviewMode);
     setSelectedFieldId(null); // Clear field selection when entering preview mode
+    setIsMobileDragging(false); // Clear mobile drag state
   };
   return (
 <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
@@ -451,17 +466,22 @@ onExport={handleExport}
         }}
       />
       
-<div className="flex h-[calc(100vh-80px)]">
+<div className="flex flex-col md:flex-row h-[calc(100vh-80px)]">
         {!isPreviewMode && (
           <>
             {/* Left Panel - Field Toolbar */}
             <motion.div 
-className="w-80 p-6 bg-background dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-colors duration-200"
+className="w-full md:w-80 p-4 md:p-6 bg-background dark:bg-gray-800 border-b md:border-b-0 md:border-r border-gray-200 dark:border-gray-700 transition-colors duration-200 overflow-y-auto max-h-60 md:max-h-none"
               initial={{ x: -50, opacity: 0 }}
               animate={{ x: 0, opacity: 1 }}
               transition={{ duration: 0.3 }}
             >
-              <FieldToolbar onDragStart={handleDragStart} />
+              <FieldToolbar 
+                onDragStart={handleDragStart}
+                onTouchStart={handleTouchStart}
+                onTouchEnd={handleTouchEnd}
+                isMobileDragging={isMobileDragging}
+              />
             </motion.div>
           </>
         )}
@@ -497,6 +517,8 @@ fields={fields}
               onFileUpload={handleFileUpload}
               onFileDelete={handleFileDelete}
               onFileDownload={handleFileDownload}
+              isMobileDragging={isMobileDragging}
+              draggedField={draggedField}
             />
           )}
         </motion.div>
@@ -504,11 +526,21 @@ fields={fields}
         {!isPreviewMode && (
           <>
 {/* Right Panel - Field Configuration */}
-            <FieldConfigurationPanel
-              selectedField={fields.find(f => f.id === selectedFieldId)}
-              onFieldUpdate={handleFieldUpdate}
-              onFieldDelete={handleFieldDelete}
-            />
+{/* Right Panel - Field Configuration (Mobile: Below canvas, Desktop: Right side) */}
+            {!isPreviewMode && selectedFieldId && (
+              <motion.div 
+                className="w-full md:w-80 p-4 md:p-6 bg-background dark:bg-gray-800 border-t md:border-t-0 md:border-l border-gray-200 dark:border-gray-700 transition-colors duration-200 order-last md:order-none"
+                initial={{ x: 50, opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                transition={{ duration: 0.3 }}
+              >
+                <FieldConfigurationPanel
+                  selectedField={fields.find(f => f.id === selectedFieldId)}
+                  onFieldUpdate={handleFieldUpdate}
+                  onFieldDelete={handleFieldDelete}
+                />
+              </motion.div>
+            )}
           </>
         )}
       </div>

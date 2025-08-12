@@ -24,7 +24,7 @@ const fieldTypes = [
         </p>
       </div>
 
-      <div className="space-y-3">
+<div className="space-y-3">
         {fieldTypes.map((fieldType) => (
           <FieldTypeButton
             key={fieldType.type}
