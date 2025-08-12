@@ -58,22 +58,33 @@ switch (type) {
       case "phone":
       case "url":
         baseField.placeholder = fieldType.defaultPlaceholder || "";
+        baseField.minLength = null;
+        baseField.maxLength = null;
+        baseField.pattern = "";
+        baseField.errorMessage = "";
+        if (type === "phone") {
+          baseField.phoneFormat = "international";
+        }
         break;
       case "textarea":
         baseField.placeholder = fieldType.defaultPlaceholder || "";
         baseField.rows = 3;
+        baseField.minLength = null;
         baseField.maxLength = null;
+        baseField.errorMessage = "";
         break;
       case "number":
         baseField.placeholder = fieldType.defaultPlaceholder || "";
         baseField.min = null;
         baseField.max = null;
         baseField.step = 1;
+        baseField.errorMessage = "";
         break;
       case "file":
         baseField.accept = "";
         baseField.maxSize = null;
         baseField.multiple = false;
+        baseField.errorMessage = "";
         break;
       case "dropdown":
       case "radio":
@@ -82,13 +93,16 @@ switch (type) {
         if (type === "multiselect") {
           baseField.maxSelections = null;
         }
+        baseField.errorMessage = "";
         break;
       case "checkbox":
         baseField.defaultChecked = false;
+        baseField.errorMessage = "";
         break;
       case "date":
         baseField.minDate = null;
         baseField.maxDate = null;
+        baseField.errorMessage = "";
         break;
     }
 

@@ -4,32 +4,195 @@ import ApperIcon from '@/components/ApperIcon'
 import Button from '@/components/atoms/Button'
 import { cn } from '@/utils/cn'
 const FormPreview = ({ fields, formSettings = {}, selectedTheme }) => {
-  const [formData, setFormData] = useState({});
+const [formData, setFormData] = useState({});
+  const [validationErrors, setValidationErrors] = useState({});
+const validateField = (field, value) => {
+    const errors = [];
+    
+    // Required field validation
+    if (field.required && (!value || value.toString().trim() === '')) {
+      errors.push(field.errorMessage || `${field.label} is required`);
+      return errors;
+    }
+    
+    // Skip validation if field is empty and not required
+    if (!value || value.toString().trim() === '') {
+      return errors;
+    }
+    
+    // Length validation for text fields
+    if ((field.type === "text" || field.type === "textarea" || field.type === "email" || field.type === "url") && value) {
+      if (field.minLength && value.length < field.minLength) {
+        errors.push(field.errorMessage || `${field.label} must be at least ${field.minLength} characters`);
+      }
+      if (field.maxLength && value.length > field.maxLength) {
+        errors.push(field.errorMessage || `${field.label} must not exceed ${field.maxLength} characters`);
+      }
+    }
+    
+    // Pattern validation
+    if (field.pattern && value) {
+      try {
+        const regex = new RegExp(field.pattern);
+        if (!regex.test(value)) {
+          errors.push(field.errorMessage || `${field.label} format is invalid`);
+        }
+      } catch (e) {
+        console.warn('Invalid regex pattern:', field.pattern);
+      }
+    }
+    
+    // Email validation
+    if (field.type === "email" && value) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      if (!emailRegex.test(value)) {
+        errors.push(field.errorMessage || "Please enter a valid email address");
+      }
+    }
+    
+    // Phone validation
+    if (field.type === "phone" && value) {
+      let phoneRegex;
+      switch (field.phoneFormat) {
+        case "us":
+          phoneRegex = /^\(\d{3}\) \d{3}-\d{4}$/;
+          break;
+        case "international":
+          phoneRegex = /^\+\d{1,3} \d{3} \d{3}-\d{4}$/;
+          break;
+        case "custom":
+          if (field.pattern) {
+            try {
+              phoneRegex = new RegExp(field.pattern);
+            } catch (e) {
+              console.warn('Invalid phone pattern:', field.pattern);
+            }
+          }
+          break;
+        default:
+          phoneRegex = /^[\d\s\-\+\(\)]{10,}$/;
+      }
+      if (phoneRegex && !phoneRegex.test(value)) {
+        errors.push(field.errorMessage || "Please enter a valid phone number");
+      }
+    }
+    
+    // URL validation
+    if (field.type === "url" && value) {
+      try {
+        new URL(value);
+      } catch (e) {
+        errors.push(field.errorMessage || "Please enter a valid URL");
+      }
+    }
+    
+    // Number range validation
+    if (field.type === "number" && value) {
+      const numValue = parseFloat(value);
+      if (field.min !== null && numValue < field.min) {
+        errors.push(field.errorMessage || `${field.label} must be at least ${field.min}`);
+      }
+      if (field.max !== null && numValue > field.max) {
+        errors.push(field.errorMessage || `${field.label} must not exceed ${field.max}`);
+      }
+    }
+    
+    return errors;
+  };
 
-  const handleInputChange = (fieldId, value) => {
+  const handleInputChange = (fieldId, value, files = null) => {
+    const field = fields.find(f => f.id === fieldId);
+    
+    // Handle file validation
+    if (field?.type === "file" && files) {
+      const errors = [];
+      
+      for (const file of files) {
+        // File size validation
+        if (field.maxSize && file.size > field.maxSize * 1024 * 1024) {
+          errors.push(`${file.name} exceeds maximum size of ${field.maxSize}MB`);
+        }
+        
+        // File type validation
+        if (field.accept) {
+          const acceptedTypes = field.accept.split(',').map(type => type.trim().toLowerCase());
+          const fileName = file.name.toLowerCase();
+          const fileExtension = '.' + fileName.split('.').pop();
+          
+          const isAccepted = acceptedTypes.some(type => {
+            if (type.startsWith('.')) {
+              return fileName.endsWith(type);
+            } else if (type.includes('/')) {
+              return file.type.match(type.replace('*', '.*'));
+            }
+            return false;
+          });
+          
+          if (!isAccepted) {
+            errors.push(`${file.name} is not an accepted file type`);
+          }
+        }
+      }
+      
+      if (errors.length > 0) {
+        setValidationErrors(prev => ({
+          ...prev,
+          [fieldId]: errors
+        }));
+        return;
+      } else {
+        // Clear file errors if validation passes
+        setValidationErrors(prev => {
+          const newErrors = { ...prev };
+          delete newErrors[fieldId];
+          return newErrors;
+        });
+      }
+      
+      setFormData(prev => ({
+        ...prev,
+        [fieldId]: files
+      }));
+      return;
+    }
+    
+    // Regular field validation
     setFormData(prev => ({
       ...prev,
       [fieldId]: value
     }));
+    
+    if (field) {
+      const errors = validateField(field, value);
+      setValidationErrors(prev => ({
+        ...prev,
+        [fieldId]: errors.length > 0 ? errors : undefined
+      }));
+    }
   };
 
 const handleSubmit = (e) => {
     e.preventDefault();
     
-    // Basic validation if enabled
-    if (formSettings.enableValidation) {
-      const requiredFields = formSettings.requireAllFields ? 
-        fields : 
-        fields.filter(field => field.required);
-      
-      for (const field of requiredFields) {
-        if (!formData[field.id] || formData[field.id].toString().trim() === '') {
-          toast.error(`${field.label} is required`);
-          return;
-        }
+    // Validate all fields
+    const allErrors = {};
+    let hasErrors = false;
+    
+    fields.forEach(field => {
+      const value = formData[field.id];
+      const errors = validateField(field, value);
+      if (errors.length > 0) {
+        allErrors[field.id] = errors;
+        hasErrors = true;
       }
+    });
+    
+    if (hasErrors) {
+      setValidationErrors(allErrors);
+      toast.error("Please fix the validation errors before submitting");
+      return;
     }
-
+    
     console.log("Form Data:", formData);
     toast.success(formSettings.successMessage || "Form submitted successfully!");
     
@@ -57,46 +220,226 @@ const getThemeClasses = () => {
   };
 
   const renderField = (field) => {
-    const themeClasses = getThemeClasses();
+const themeClasses = getThemeClasses();
+    const hasError = validationErrors[field.id] && validationErrors[field.id].length > 0;
+    const inputClasses = `${themeClasses.input} ${hasError ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : ''}`;
     
     switch (field.type) {
       case "text":
         return (
-          <input
-            type="text"
-            id={field.id}
-            placeholder={field.placeholder || "Enter text..."}
-            value={formData[field.id] || ""}
-            onChange={(e) => handleInputChange(field.id, e.target.value)}
-            className={themeClasses.input}
-          />
+          <div>
+            <input
+              type="text"
+              id={field.id}
+              placeholder={field.placeholder || "Enter text..."}
+              value={formData[field.id] || ""}
+              onChange={(e) => handleInputChange(field.id, e.target.value)}
+              className={inputClasses}
+              minLength={field.minLength}
+              maxLength={field.maxLength}
+              pattern={field.pattern}
+            />
+            {hasError && (
+              <div className="mt-1 text-sm text-red-600">
+                {validationErrors[field.id].map((error, idx) => (
+                  <div key={idx}>{error}</div>
+                ))}
+              </div>
+            )}
+          </div>
         );
       case "email":
         return (
-          <input
-            type="email"
-            id={field.id}
-            placeholder={field.placeholder || "Enter email address..."}
-            value={formData[field.id] || ""}
-            onChange={(e) => handleInputChange(field.id, e.target.value)}
-            className={themeClasses.input}
-          />
+          <div>
+            <input
+              type="email"
+              id={field.id}
+              placeholder={field.placeholder || "Enter email address..."}
+              value={formData[field.id] || ""}
+              onChange={(e) => handleInputChange(field.id, e.target.value)}
+              className={inputClasses}
+            />
+            {hasError && (
+              <div className="mt-1 text-sm text-red-600">
+                {validationErrors[field.id].map((error, idx) => (
+                  <div key={idx}>{error}</div>
+                ))}
+              </div>
+            )}
+          </div>
+        );
+      case "phone":
+        return (
+          <div>
+            <input
+              type="tel"
+              id={field.id}
+              placeholder={field.placeholder || "Enter phone number..."}
+              value={formData[field.id] || ""}
+              onChange={(e) => handleInputChange(field.id, e.target.value)}
+              className={inputClasses}
+            />
+            {hasError && (
+              <div className="mt-1 text-sm text-red-600">
+                {validationErrors[field.id].map((error, idx) => (
+                  <div key={idx}>{error}</div>
+                ))}
+              </div>
+            )}
+          </div>
+        );
+      case "url":
+        return (
+          <div>
+            <input
+              type="url"
+              id={field.id}
+              placeholder={field.placeholder || "https://example.com"}
+              value={formData[field.id] || ""}
+              onChange={(e) => handleInputChange(field.id, e.target.value)}
+              className={inputClasses}
+            />
+            {hasError && (
+              <div className="mt-1 text-sm text-red-600">
+                {validationErrors[field.id].map((error, idx) => (
+                  <div key={idx}>{error}</div>
+                ))}
+              </div>
+            )}
+          </div>
+        );
+      case "textarea":
+        return (
+          <div>
+            <textarea
+              id={field.id}
+              placeholder={field.placeholder || "Enter your text here..."}
+              value={formData[field.id] || ""}
+              onChange={(e) => handleInputChange(field.id, e.target.value)}
+              className={`${inputClasses} resize-none`}
+              rows={field.rows || 3}
+              minLength={field.minLength}
+              maxLength={field.maxLength}
+            />
+            {hasError && (
+              <div className="mt-1 text-sm text-red-600">
+                {validationErrors[field.id].map((error, idx) => (
+                  <div key={idx}>{error}</div>
+                ))}
+              </div>
+            )}
+          </div>
+        );
+      case "number":
+        return (
+          <div>
+            <input
+              type="number"
+              id={field.id}
+              placeholder={field.placeholder || "Enter a number..."}
+              value={formData[field.id] || ""}
+              onChange={(e) => handleInputChange(field.id, e.target.value)}
+              className={inputClasses}
+              min={field.min}
+              max={field.max}
+              step={field.step || 1}
+            />
+            {hasError && (
+              <div className="mt-1 text-sm text-red-600">
+                {validationErrors[field.id].map((error, idx) => (
+                  <div key={idx}>{error}</div>
+                ))}
+              </div>
+            )}
+          </div>
+        );
+      case "file":
+        return (
+          <div>
+            <input
+              type="file"
+              id={field.id}
+              accept={field.accept}
+              multiple={field.multiple}
+              onChange={(e) => handleInputChange(field.id, e.target.value, e.target.files)}
+              className={inputClasses}
+            />
+            {field.maxSize && (
+              <p className="mt-1 text-xs text-gray-500">
+                Maximum file size: {field.maxSize}MB
+              </p>
+            )}
+            {hasError && (
+              <div className="mt-1 text-sm text-red-600">
+                {validationErrors[field.id].map((error, idx) => (
+                  <div key={idx}>{error}</div>
+                ))}
+              </div>
+            )}
+          </div>
         );
       case "dropdown":
         return (
-          <select
-            id={field.id}
-            value={formData[field.id] || ""}
-            onChange={(e) => handleInputChange(field.id, e.target.value)}
-            className={themeClasses.input}
-          >
-            <option value="">Select an option...</option>
-            {field.options?.map((option, idx) => (
-              <option key={idx} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
+          <div>
+            <select
+              id={field.id}
+              value={formData[field.id] || ""}
+              onChange={(e) => handleInputChange(field.id, e.target.value)}
+              className={inputClasses}
+            >
+              <option value="">Select an option...</option>
+              {field.options?.map((option, idx) => (
+                <option key={idx} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+            {hasError && (
+              <div className="mt-1 text-sm text-red-600">
+                {validationErrors[field.id].map((error, idx) => (
+                  <div key={idx}>{error}</div>
+                ))}
+              </div>
+            )}
+          </div>
+        );
+      case "multiselect":
+        return (
+          <div>
+            <select
+              id={field.id}
+              multiple
+              size="4"
+              value={Array.isArray(formData[field.id]) ? formData[field.id] : []}
+              onChange={(e) => {
+                const selectedValues = Array.from(e.target.selectedOptions, option => option.value);
+                if (field.maxSelections && selectedValues.length > field.maxSelections) {
+                  toast.error(`Maximum ${field.maxSelections} selections allowed`);
+                  return;
+                }
+                handleInputChange(field.id, selectedValues);
+              }}
+              className={inputClasses}
+            >
+              {field.options?.map((option, idx) => (
+                <option key={idx} value={option}>
+                  {option}
+                </option>
+              ))}
+            </select>
+            {field.maxSelections && (
+              <p className="mt-1 text-xs text-gray-500">
+                Maximum {field.maxSelections} selections
+              </p>
+            )}
+            {hasError && (
+              <div className="mt-1 text-sm text-red-600">
+                {validationErrors[field.id].map((error, idx) => (
+                  <div key={idx}>{error}</div>
+                ))}
+              </div>
+            )}
+          </div>
         );
       default:
         return null;
@@ -152,7 +495,7 @@ return (
             )}
           </div>
 
-          {fields.map((field) => (
+{fields.map((field) => (
             <div key={field.id} className="space-y-2">
               <label 
 htmlFor={field.id} 
@@ -162,6 +505,11 @@ htmlFor={field.id}
                 {field.required && <span className="text-red-500 ml-1">*</span>}
               </label>
               {renderField(field)}
+              {field.description && (
+                <p className="text-sm text-gray-600 mt-1">
+                  {field.description}
+                </p>
+              )}
             </div>
           ))}
 

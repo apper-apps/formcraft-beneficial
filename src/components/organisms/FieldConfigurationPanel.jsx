@@ -209,6 +209,20 @@ const updates = { ...localField };
                     Use comma-separated extensions or MIME types
                   </p>
                 </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-700 mb-1">
+                    Max File Size (MB)
+                  </label>
+                  <Input
+                    type="number"
+                    value={localField.maxSize || ""}
+                    onChange={(e) => handleLocalUpdate("maxSize", e.target.value ? parseFloat(e.target.value) : null)}
+                    placeholder="No limit"
+                    min="0.1"
+                    step="0.1"
+                    className="text-sm"
+                  />
+                </div>
                 <div className="flex items-center space-x-2">
                   <input
                     type="checkbox"
@@ -238,6 +252,112 @@ const updates = { ...localField };
                   className="text-sm"
                 />
               </div>
+            )}
+
+            {/* Validation Settings */}
+            {(localField.type === "text" || localField.type === "textarea" || localField.type === "email" || localField.type === "url") && (
+              <>
+                <div className="grid grid-cols-2 gap-2">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">
+                      Min Length
+                    </label>
+                    <Input
+                      type="number"
+                      value={localField.minLength || ""}
+                      onChange={(e) => handleLocalUpdate("minLength", e.target.value ? parseInt(e.target.value) : null)}
+                      placeholder="No min"
+                      min="0"
+                      className="text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">
+                      Max Length
+                    </label>
+                    <Input
+                      type="number"
+                      value={localField.maxLength || ""}
+                      onChange={(e) => handleLocalUpdate("maxLength", e.target.value ? parseInt(e.target.value) : null)}
+                      placeholder="No max"
+                      min="1"
+                      className="text-sm"
+                    />
+                  </div>
+                </div>
+
+                {localField.type === "text" && (
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">
+                      Pattern (Regex)
+                    </label>
+                    <Input
+                      value={localField.pattern || ""}
+                      onChange={(e) => handleLocalUpdate("pattern", e.target.value)}
+                      placeholder="e.g., ^[A-Za-z]+$"
+                      className="text-sm"
+                    />
+                    <p className="text-xs text-gray-500 mt-1">
+                      Regular expression for validation
+                    </p>
+                  </div>
+                )}
+
+                <div>
+                  <label className="block text-xs font-medium text-gray-700 mb-1">
+                    Custom Error Message
+                  </label>
+                  <Input
+                    value={localField.errorMessage || ""}
+                    onChange={(e) => handleLocalUpdate("errorMessage", e.target.value)}
+                    placeholder="This field is invalid"
+                    className="text-sm"
+                  />
+                </div>
+              </>
+            )}
+
+            {localField.type === "phone" && (
+              <>
+                <div>
+                  <label className="block text-xs font-medium text-gray-700 mb-1">
+                    Phone Format
+                  </label>
+                  <select
+                    value={localField.phoneFormat || "international"}
+                    onChange={(e) => handleLocalUpdate("phoneFormat", e.target.value)}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+                  >
+                    <option value="international">International (+1 234 567-8900)</option>
+                    <option value="us">US Format ((234) 567-8900)</option>
+                    <option value="custom">Custom Pattern</option>
+                  </select>
+                </div>
+                {localField.phoneFormat === "custom" && (
+                  <div>
+                    <label className="block text-xs font-medium text-gray-700 mb-1">
+                      Custom Pattern
+                    </label>
+                    <Input
+                      value={localField.pattern || ""}
+                      onChange={(e) => handleLocalUpdate("pattern", e.target.value)}
+                      placeholder="e.g., ^\d{3}-\d{3}-\d{4}$"
+                      className="text-sm"
+                    />
+                  </div>
+                )}
+                <div>
+                  <label className="block text-xs font-medium text-gray-700 mb-1">
+                    Custom Error Message
+                  </label>
+                  <Input
+                    value={localField.errorMessage || ""}
+                    onChange={(e) => handleLocalUpdate("errorMessage", e.target.value)}
+                    placeholder="Please enter a valid phone number"
+                    className="text-sm"
+                  />
+                </div>
+              </>
             )}
           </div>
         </Card>
@@ -354,11 +474,11 @@ const updates = { ...localField };
           </Button>
         </div>
 
-        {/* Field Preview */}
+{/* Field Preview */}
         <Card className="p-4 bg-gray-50">
           <h3 className="text-sm font-semibold text-gray-800 mb-3 flex items-center">
             <ApperIcon name="Eye" className="w-4 h-4 mr-2 text-gray-500" />
-            Preview
+            Preview with Validation
           </h3>
           
           <div className="space-y-2">
@@ -368,30 +488,64 @@ const updates = { ...localField };
             </label>
             
 {localField.type === "text" && (
-              <input
-                type="text"
-                placeholder={localField.placeholder || "Enter text..."}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
-                disabled
-              />
+              <div>
+                <input
+                  type="text"
+                  placeholder={localField.placeholder || "Enter text..."}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                  disabled
+                />
+                {(localField.minLength || localField.maxLength || localField.pattern) && (
+                  <div className="mt-1 text-xs text-gray-500 space-y-1">
+                    {localField.minLength && <div>Min length: {localField.minLength}</div>}
+                    {localField.maxLength && <div>Max length: {localField.maxLength}</div>}
+                    {localField.pattern && <div>Pattern: {localField.pattern}</div>}
+                  </div>
+                )}
+              </div>
             )}
             
             {localField.type === "email" && (
-              <input
-                type="email"
-                placeholder={localField.placeholder || "Enter email..."}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
-                disabled
-              />
+              <div>
+                <input
+                  type="email"
+                  placeholder={localField.placeholder || "Enter email..."}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                  disabled
+                />
+                <div className="mt-1 text-xs text-gray-500">Email format validation enabled</div>
+              </div>
+            )}
+
+            {localField.type === "phone" && (
+              <div>
+                <input
+                  type="tel"
+                  placeholder={localField.placeholder || "Enter phone number..."}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                  disabled
+                />
+                <div className="mt-1 text-xs text-gray-500">
+                  Format: {localField.phoneFormat || "International"}
+                </div>
+              </div>
             )}
 
             {localField.type === "textarea" && (
-              <textarea
-                placeholder={localField.placeholder || "Enter your text here..."}
-                rows={localField.rows || 3}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm resize-none"
-                disabled
-              />
+              <div>
+                <textarea
+                  placeholder={localField.placeholder || "Enter your text here..."}
+                  rows={localField.rows || 3}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm resize-none"
+                  disabled
+                />
+                {(localField.minLength || localField.maxLength) && (
+                  <div className="mt-1 text-xs text-gray-500 space-y-1">
+                    {localField.minLength && <div>Min length: {localField.minLength}</div>}
+                    {localField.maxLength && <div>Max length: {localField.maxLength}</div>}
+                  </div>
+                )}
+              </div>
             )}
 
             {localField.type === "number" && (
@@ -407,22 +561,33 @@ const updates = { ...localField };
             )}
 
             {localField.type === "url" && (
-              <input
-                type="url"
-                placeholder={localField.placeholder || "https://example.com"}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
-                disabled
-              />
+              <div>
+                <input
+                  type="url"
+                  placeholder={localField.placeholder || "https://example.com"}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                  disabled
+                />
+                <div className="mt-1 text-xs text-gray-500">URL format validation enabled</div>
+              </div>
             )}
 
             {localField.type === "file" && (
-              <input
-                type="file"
-                accept={localField.accept}
-                multiple={localField.multiple}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
-                disabled
-              />
+              <div>
+                <input
+                  type="file"
+                  accept={localField.accept}
+                  multiple={localField.multiple}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                  disabled
+                />
+                {(localField.accept || localField.maxSize) && (
+                  <div className="mt-1 text-xs text-gray-500 space-y-1">
+                    {localField.accept && <div>Accepted: {localField.accept}</div>}
+                    {localField.maxSize && <div>Max size: {localField.maxSize}MB</div>}
+                  </div>
+                )}
+              </div>
             )}
             
             {localField.type === "dropdown" && (
@@ -435,22 +600,35 @@ const updates = { ...localField };
             )}
 
             {localField.type === "multiselect" && (
-              <select 
-                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm" 
-                multiple 
-                size="3"
-                disabled
-              >
-                {optionInputs.filter(opt => opt.trim()).map((option, idx) => (
-                  <option key={idx}>{option}</option>
-                ))}
-              </select>
+              <div>
+                <select 
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm" 
+                  multiple 
+                  size="3"
+                  disabled
+                >
+                  {optionInputs.filter(opt => opt.trim()).map((option, idx) => (
+                    <option key={idx}>{option}</option>
+                  ))}
+                </select>
+                {localField.maxSelections && (
+                  <div className="mt-1 text-xs text-gray-500">
+                    Max selections: {localField.maxSelections}
+                  </div>
+                )}
+              </div>
             )}
             
             {localField.description && (
               <p className="text-xs text-gray-500 mt-1">
                 {localField.description}
               </p>
+            )}
+
+            {localField.errorMessage && (
+              <div className="mt-2 p-2 bg-red-50 border border-red-200 rounded text-xs text-red-600">
+                <strong>Custom error:</strong> {localField.errorMessage}
+              </div>
             )}
           </div>
         </Card>
