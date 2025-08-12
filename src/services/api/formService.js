@@ -251,18 +251,29 @@ async saveFormConfig(formConfig) {
               step="${field.step || 1}"
             />`;
           break;
-        case "file":
+case "file":
           fieldHTML = `
-            <input
-              type="file"
-              id="${field.id}"
-              name="${field.id}"
-              class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:border-blue-500 focus:outline-none transition-all"
-              ${field.required ? 'required' : ''}
-              ${field.accept ? `accept="${field.accept}"` : ''}
-              ${field.multiple ? 'multiple' : ''}
-            />
-            ${field.maxSize ? `<p class="mt-1 text-xs text-gray-500">Maximum file size: ${field.maxSize}MB</p>` : ''}`;
+            <div class="file-upload-container">
+              <input
+                type="file"
+                id="${field.id}"
+                name="${field.id}"
+                class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:border-blue-500 focus:outline-none transition-all file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                ${field.required ? 'required' : ''}
+                ${field.accept ? `accept="${field.accept}"` : ''}
+                ${field.multiple ? 'multiple' : ''}
+                onchange="handleFileChange(this, '${field.id}')"
+              />
+              <div id="${field.id}-upload-progress" class="mt-2 hidden">
+                <div class="bg-gray-200 rounded-full h-2">
+                  <div class="bg-blue-600 h-2 rounded-full" style="width: 0%"></div>
+                </div>
+                <p class="text-sm text-gray-600 mt-1">Uploading...</p>
+              </div>
+              <div id="${field.id}-files" class="mt-2 space-y-2"></div>
+              ${field.maxSize ? `<p class="mt-1 text-xs text-gray-500">Maximum file size: ${field.maxSize}MB per file</p>` : ''}
+              ${field.accept ? `<p class="mt-1 text-xs text-gray-500">Accepted types: ${field.accept}</p>` : ''}
+            </div>`;
           break;
         case "dropdown":
           fieldHTML = `
@@ -344,15 +355,165 @@ async saveFormConfig(formConfig) {
         </div>
     </div>
     
-    <script>
+<script>
         // Form configuration
         const formConfig = ${JSON.stringify({ fields, successMessage: successMsg })};
         let formData = {};
         let validationErrors = {};
+        let uploadedFiles = {};
+        
+        // File handling functions
+        function handleFileChange(input, fieldId) {
+            const files = Array.from(input.files);
+            const field = formConfig.fields.find(f => f.id === fieldId);
+            
+            if (!field) return;
+            
+            // Validate files
+            const errors = validateFiles(field, files);
+            if (errors.length > 0) {
+                showToast(errors.join(', '), 'error');
+                input.value = '';
+                return;
+            }
+            
+            // Process files
+            processFiles(field, files, fieldId);
+        }
+        
+        function validateFiles(field, files) {
+            const errors = [];
+            
+            // Check file count for non-multiple fields
+            if (!field.multiple && files.length > 1) {
+                errors.push('Only one file allowed');
+            }
+            
+            // Check file sizes
+            if (field.maxSize) {
+                const maxSizeBytes = field.maxSize * 1024 * 1024;
+                files.forEach(file => {
+                    if (file.size > maxSizeBytes) {
+                        errors.push(file.name + ' exceeds size limit of ' + field.maxSize + 'MB');
+                    }
+                });
+            }
+            
+            // Check file types
+            if (field.accept) {
+                const acceptedTypes = field.accept.split(',').map(type => type.trim());
+                files.forEach(file => {
+                    const isValidType = acceptedTypes.some(acceptedType => {
+                        if (acceptedType.startsWith('.')) {
+                            return file.name.toLowerCase().endsWith(acceptedType.toLowerCase());
+                        }
+                        return file.type.match(acceptedType.replace('*', '.*'));
+                    });
+                    if (!isValidType) {
+                        errors.push(file.name + ' is not an accepted file type');
+                    }
+                });
+            }
+            
+            return errors;
+        }
+        
+        function processFiles(field, files, fieldId) {
+            const progressContainer = document.getElementById(fieldId + '-upload-progress');
+            const filesContainer = document.getElementById(fieldId + '-files');
+            
+            if (!uploadedFiles[fieldId]) {
+                uploadedFiles[fieldId] = [];
+            }
+            
+            files.forEach((file, index) => {
+                // Show progress
+                progressContainer.classList.remove('hidden');
+                
+                // Simulate upload progress
+                let progress = 0;
+                const progressBar = progressContainer.querySelector('.bg-blue-600');
+                const progressInterval = setInterval(() => {
+                    progress += 20;
+                    progressBar.style.width = progress + '%';
+                    
+                    if (progress >= 100) {
+                        clearInterval(progressInterval);
+                        setTimeout(() => {
+                            progressContainer.classList.add('hidden');
+                        }, 500);
+                        
+                        // Add file to storage
+                        const fileData = {
+                            id: fieldId + '_' + Date.now() + '_' + index,
+                            name: file.name,
+                            size: file.size,
+                            type: file.type,
+                            fieldId: fieldId
+                        };
+                        
+                        uploadedFiles[fieldId].push(fileData);
+                        displayUploadedFile(filesContainer, fileData, fieldId);
+                    }
+                }, 100);
+            });
+            
+            showToast(files.length + ' file(s) uploaded successfully');
+        }
+        
+        function displayUploadedFile(container, fileData, fieldId) {
+            const fileDiv = document.createElement('div');
+fileDiv.innerHTML = \`
+                <div class="flex items-center space-x-2">
+                    <div class="w-4 h-4 bg-blue-500 rounded"></div>
+                    <span class="text-sm font-medium">\${fileData.name}</span>
+                    <span class="text-xs text-gray-500">(\${formatFileSize(fileData.size)})</span>
+                    <span class="text-xs text-gray-500">(${formatFileSize(fileData.size)})</span>
+                </div>
+                <div class="flex space-x-1">
+<button onclick="downloadFile('\${fileData.id}')" class="px-2 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">
+                        Download
+                    </button>
+                    <button onclick="deleteFile('\${fileData.id}', '\${fieldId}', this.parentElement.parentElement)" class="px-2 py-1 text-xs bg-red-500 text-white rounded hover:bg-red-600">
+                        Delete
+                    </button>
+                </div>
+            \`;
+            container.appendChild(fileDiv);
+        }
+        
+        function formatFileSize(bytes) {
+            if (bytes === 0) return '0 Bytes';
+            const k = 1024;
+            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+            const i = Math.floor(Math.log(bytes) / Math.log(k));
+            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+        }
+        
+        function downloadFile(fileId) {
+            // In a real application, this would download the actual file
+            showToast('File download initiated', 'success');
+        }
+        
+        function deleteFile(fileId, fieldId, element) {
+            if (uploadedFiles[fieldId]) {
+                uploadedFiles[fieldId] = uploadedFiles[fieldId].filter(f => f.id !== fileId);
+            }
+            element.remove();
+            showToast('File deleted successfully');
+        }
         
         // Validation functions
         function validateField(field, value) {
             const errors = [];
+            
+            if (field.type === 'file') {
+                // File validation is handled separately in handleFileChange
+                if (field.required && (!uploadedFiles[field.id] || uploadedFiles[field.id].length === 0)) {
+                    errors.push(field.label + ' is required');
+                }
+                return errors;
+            }
             
             if (field.required && (!value || value.toString().trim() === '')) {
                 errors.push(field.errorMessage || field.label + ' is required');
@@ -375,7 +536,7 @@ async saveFormConfig(formConfig) {
             
             // Email validation
             if (field.type === "email" && value) {
-                const emailRegex = /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/;
+const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 if (!emailRegex.test(value)) {
                     errors.push("Please enter a valid email address");
                 }
@@ -423,12 +584,16 @@ async saveFormConfig(formConfig) {
             if (errors && errors.length > 0) {
                 errorDiv.innerHTML = errors.join('<br>');
                 errorDiv.classList.remove('hidden');
-                inputElement.classList.add('border-red-500');
-                inputElement.classList.remove('border-gray-300');
+                if (inputElement) {
+                    inputElement.classList.add('border-red-500');
+                    inputElement.classList.remove('border-gray-300');
+                }
             } else {
                 errorDiv.classList.add('hidden');
-                inputElement.classList.remove('border-red-500');
-                inputElement.classList.add('border-gray-300');
+                if (inputElement) {
+                    inputElement.classList.remove('border-red-500');
+                    inputElement.classList.add('border-gray-300');
+                }
             }
         }
         
@@ -457,6 +622,8 @@ async saveFormConfig(formConfig) {
                     const selectElement = document.getElementById(field.id);
                     const selectedValues = Array.from(selectElement.selectedOptions).map(option => option.value);
                     formData[field.id] = selectedValues;
+                } else if (field.type === 'file') {
+                    formData[field.id] = uploadedFiles[field.id] || [];
                 } else {
                     formData[field.id] = value;
                 }
@@ -475,8 +642,9 @@ async saveFormConfig(formConfig) {
             // Store in localStorage
             const submissions = JSON.parse(localStorage.getItem('formSubmissions') || '[]');
             submissions.push({
-                formTitle: '${formTitle}',
+formTitle: '\${formTitle}',
                 data: formData,
+                files: uploadedFiles,
                 timestamp: new Date().toISOString()
             });
             localStorage.setItem('formSubmissions', JSON.stringify(submissions));
@@ -486,9 +654,16 @@ async saveFormConfig(formConfig) {
             // Reset form
             this.reset();
             formData = {};
+            uploadedFiles = {};
             
-            // Clear all errors
+            // Clear file displays
             formConfig.fields.forEach(field => {
+                if (field.type === 'file') {
+                    const filesContainer = document.getElementById(field.id + '-files');
+                    if (filesContainer) {
+                        filesContainer.innerHTML = '';
+                    }
+                }
                 updateFieldError(field.id, null);
             });
             
@@ -501,7 +676,7 @@ async saveFormConfig(formConfig) {
         // Real-time validation
         formConfig.fields.forEach(field => {
             const element = document.getElementById(field.id);
-            if (element) {
+            if (element && field.type !== 'file') {
                 element.addEventListener('blur', function() {
                     const errors = validateField(field, this.value);
                     updateFieldError(field.id, errors.length > 0 ? errors : null);

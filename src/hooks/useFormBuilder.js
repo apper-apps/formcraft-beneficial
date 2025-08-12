@@ -9,6 +9,97 @@ export const useFormBuilder = () => {
   const [selectedFieldId, setSelectedFieldId] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [fileStorage, setFileStorage] = useState(new Map());
+  const [uploadProgress, setUploadProgress] = useState(new Map());
+
+  // File storage utilities
+const initializeFileStorage = useCallback(() => {
+    if (typeof window !== 'undefined' && 'indexedDB' in window) {
+      const request = window.indexedDB.open('FormBuilderFiles', 1);
+      
+      request.onupgradeneeded = (event) => {
+        const db = event.target.result;
+        if (!db.objectStoreNames.contains('files')) {
+          const store = db.createObjectStore('files', { keyPath: 'id' });
+          store.createIndex('fieldId', 'fieldId', { unique: false });
+        }
+      };
+      
+      return request;
+    }
+    return null;
+  }, []);
+
+  const storeFile = useCallback(async (fileData) => {
+    return new Promise((resolve, reject) => {
+      const request = initializeFileStorage();
+      if (!request) {
+        // Fallback to memory storage
+        setFileStorage(prev => new Map(prev.set(fileData.id, fileData)));
+        resolve(fileData);
+        return;
+      }
+
+      request.onsuccess = (event) => {
+        const db = event.target.result;
+        const transaction = db.transaction(['files'], 'readwrite');
+        const store = transaction.objectStore('files');
+        
+        const addRequest = store.add(fileData);
+        addRequest.onsuccess = () => {
+          setFileStorage(prev => new Map(prev.set(fileData.id, fileData)));
+          resolve(fileData);
+        };
+        addRequest.onerror = () => reject(addRequest.error);
+      };
+      
+      request.onerror = () => {
+        // Fallback to memory storage
+        setFileStorage(prev => new Map(prev.set(fileData.id, fileData)));
+        resolve(fileData);
+      };
+    });
+  }, [initializeFileStorage]);
+
+  const deleteStoredFile = useCallback(async (fileId) => {
+    return new Promise((resolve) => {
+      const request = initializeFileStorage();
+      if (!request) {
+        // Fallback to memory storage
+        setFileStorage(prev => {
+          const newMap = new Map(prev);
+          newMap.delete(fileId);
+          return newMap;
+        });
+        resolve();
+        return;
+      }
+
+      request.onsuccess = (event) => {
+        const db = event.target.result;
+        const transaction = db.transaction(['files'], 'readwrite');
+        const store = transaction.objectStore('files');
+        
+        store.delete(fileId);
+        setFileStorage(prev => {
+          const newMap = new Map(prev);
+          newMap.delete(fileId);
+          return newMap;
+        });
+        resolve();
+      };
+      
+      request.onerror = () => {
+        // Fallback to memory storage
+        setFileStorage(prev => {
+          const newMap = new Map(prev);
+          newMap.delete(fileId);
+          return newMap;
+        });
+        resolve();
+      };
+    });
+  }, [initializeFileStorage]);
 
   const addField = useCallback((fieldType, targetIndex = fields.length) => {
     try {
@@ -34,13 +125,22 @@ export const useFormBuilder = () => {
     toast.success("Field updated!");
   }, []);
 
-  const deleteField = useCallback((fieldId) => {
+  const deleteField = useCallback(async (fieldId) => {
     setFields(prevFields => prevFields.filter(field => field.id !== fieldId));
+    
+    // Clean up associated files
+    const filesToDelete = Array.from(fileStorage.values())
+      .filter(file => file.fieldId === fieldId);
+    
+    for (const file of filesToDelete) {
+      await deleteStoredFile(file.id);
+    }
+    
     if (selectedFieldId === fieldId) {
       setSelectedFieldId(null);
     }
-    toast.success("Field deleted!");
-  }, [selectedFieldId]);
+    toast.success("Field and associated files deleted!");
+  }, [selectedFieldId, fileStorage, deleteStoredFile]);
 
   const reorderFields = useCallback((sourceIndex, targetIndex) => {
     if (sourceIndex === targetIndex) return;
@@ -102,12 +202,19 @@ const exportForm = useCallback((formSettings) => {
     toast.success("Form configuration exported!");
   }, [fields]);
 
-  const clearForm = useCallback(() => {
+  const clearForm = useCallback(async () => {
+    // Clear all stored files
+    const filesToDelete = Array.from(fileStorage.values());
+    for (const file of filesToDelete) {
+      await deleteStoredFile(file.id);
+    }
+    
     setFields([]);
     setSelectedFieldId(null);
     setError(null);
-    toast.info("Form cleared");
-  }, []);
+    setUploadProgress(new Map());
+    toast.info("Form and all files cleared");
+  }, [fileStorage, deleteStoredFile]);
 
 // Local Storage Management Functions
 const saveFormToStorage = useCallback(async (formName, formSettings) => {
@@ -183,6 +290,8 @@ const saveFormToStorage = useCallback(async (formName, formSettings) => {
     selectedFieldId,
     loading,
     error,
+    fileStorage,
+    uploadProgress,
     setSelectedFieldId,
     addField,
     updateField,
@@ -193,6 +302,8 @@ const saveFormToStorage = useCallback(async (formName, formSettings) => {
     clearForm,
     saveFormToStorage,
     loadFormFromStorage,
-    getSavedForms
+    getSavedForms,
+    storeFile,
+    deleteStoredFile
   };
 };

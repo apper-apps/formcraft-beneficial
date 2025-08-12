@@ -38,6 +38,9 @@ const [fields, setFields] = useState([]);
   const [savedForms, setSavedForms] = useState([]);
 const [managementLoading, setManagementLoading] = useState(false);
   const [availableThemes] = useState(themeTemplateService.getAll());
+  const [fileStorage, setFileStorage] = useState(new Map());
+  const [fileUploads, setFileUploads] = useState(new Map());
+  const [uploadProgress, setUploadProgress] = useState(new Map());
   
   const handleThemeSelect = (theme) => {
     setSelectedFormTheme(theme);
@@ -277,7 +280,143 @@ const handleFormSettingsOpen = () => {
     }
   };
 
-  // Handle preview mode toggle
+// Handle preview mode toggle
+  
+  // File upload handlers
+  const handleFileUpload = async (fieldId, files) => {
+    const fileArray = Array.from(files);
+    const field = fields.find(f => f.id === fieldId);
+    
+    if (!field) return;
+    
+    // Validate file types
+    if (field.accept) {
+      const acceptedTypes = field.accept.split(',').map(type => type.trim());
+      const invalidFiles = fileArray.filter(file => {
+        return !acceptedTypes.some(acceptedType => {
+          if (acceptedType.startsWith('.')) {
+            return file.name.toLowerCase().endsWith(acceptedType.toLowerCase());
+          }
+          return file.type.match(acceptedType.replace('*', '.*'));
+        });
+      });
+      
+      if (invalidFiles.length > 0) {
+        toast.error(`Invalid file type(s): ${invalidFiles.map(f => f.name).join(', ')}`);
+        return;
+      }
+    }
+    
+    // Validate file sizes
+    if (field.maxSize) {
+      const maxSizeBytes = field.maxSize * 1024 * 1024; // Convert MB to bytes
+      const oversizedFiles = fileArray.filter(file => file.size > maxSizeBytes);
+      
+      if (oversizedFiles.length > 0) {
+        toast.error(`File(s) too large: ${oversizedFiles.map(f => f.name).join(', ')}. Max size: ${field.maxSize}MB`);
+        return;
+      }
+    }
+    
+    // Validate multiple files setting
+    if (!field.multiple && fileArray.length > 1) {
+      toast.error('Only one file allowed for this field');
+      return;
+    }
+    
+    try {
+      const uploadPromises = fileArray.map(async (file, index) => {
+        const fileId = `${fieldId}_${Date.now()}_${index}`;
+        
+        // Update progress
+        setUploadProgress(prev => new Map(prev.set(fileId, 0)));
+        
+        // Simulate upload progress
+        for (let progress = 0; progress <= 100; progress += 20) {
+          await new Promise(resolve => setTimeout(resolve, 100));
+          setUploadProgress(prev => new Map(prev.set(fileId, progress)));
+        }
+        
+        // Store file data
+        const fileData = {
+          id: fileId,
+          name: file.name,
+          size: file.size,
+          type: file.type,
+          lastModified: file.lastModified,
+          fieldId: fieldId,
+          data: await file.arrayBuffer()
+        };
+        
+        setFileStorage(prev => new Map(prev.set(fileId, fileData)));
+        setUploadProgress(prev => {
+          const newMap = new Map(prev);
+          newMap.delete(fileId);
+          return newMap;
+        });
+        
+        return fileData;
+      });
+      
+      const uploadedFiles = await Promise.all(uploadPromises);
+      
+      // Update field uploads
+      setFileUploads(prev => {
+        const newMap = new Map(prev);
+        const existingFiles = newMap.get(fieldId) || [];
+        const updatedFiles = field.multiple 
+          ? [...existingFiles, ...uploadedFiles]
+          : uploadedFiles;
+        newMap.set(fieldId, updatedFiles);
+        return newMap;
+      });
+      
+      toast.success(`Successfully uploaded ${uploadedFiles.length} file(s)`);
+      
+    } catch (error) {
+      toast.error(`Failed to upload files: ${error.message}`);
+    }
+  };
+  
+  const handleFileDelete = (fieldId, fileId) => {
+    // Remove from storage
+    setFileStorage(prev => {
+      const newMap = new Map(prev);
+      newMap.delete(fileId);
+      return newMap;
+    });
+    
+    // Remove from uploads
+    setFileUploads(prev => {
+      const newMap = new Map(prev);
+      const existingFiles = newMap.get(fieldId) || [];
+      const updatedFiles = existingFiles.filter(file => file.id !== fileId);
+      newMap.set(fieldId, updatedFiles);
+      return newMap;
+    });
+    
+    toast.success('File deleted successfully');
+  };
+  
+  const handleFileDownload = (fileId) => {
+    const fileData = fileStorage.get(fileId);
+    if (!fileData) {
+      toast.error('File not found');
+      return;
+    }
+    
+    const blob = new Blob([fileData.data], { type: fileData.type });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fileData.name;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    URL.revokeObjectURL(url);
+    
+    toast.success('File downloaded successfully');
+  };
   const handlePreviewModeToggle = () => {
     setIsPreviewMode(!isPreviewMode);
     setSelectedFieldId(null); // Clear field selection when entering preview mode
@@ -344,7 +483,7 @@ className="w-80 p-6 bg-background dark:bg-gray-800 border-r border-gray-200 dark
             />
           ) : (
 <FormCanvas
-              fields={fields}
+fields={fields}
               selectedFieldId={selectedFieldId}
               onFieldSelect={setSelectedFieldId}
               onFieldUpdate={handleFieldUpdate}
@@ -353,6 +492,11 @@ className="w-80 p-6 bg-background dark:bg-gray-800 border-r border-gray-200 dark
               onFieldReorder={handleFieldReorder}
               formSettings={formSettings}
               selectedTheme={selectedFormTheme}
+              fileUploads={fileUploads}
+              uploadProgress={uploadProgress}
+              onFileUpload={handleFileUpload}
+              onFileDelete={handleFileDelete}
+              onFileDownload={handleFileDownload}
             />
           )}
         </motion.div>

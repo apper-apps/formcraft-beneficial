@@ -72,15 +72,23 @@ const renderFieldInput = () => {
             disabled
           />
         );
-      case "file":
+case "file":
         return (
-          <input
-            type="file"
-            accept={field.accept}
-            multiple={field.multiple}
-            className={baseInputClasses}
-            disabled
-          />
+          <div className="space-y-2">
+            <input
+              type="file"
+              accept={field.accept}
+              multiple={field.multiple}
+              className={`${baseInputClasses} file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100`}
+              disabled
+            />
+            {field.maxSize && (
+              <p className="text-xs text-gray-500">Maximum file size: {field.maxSize}MB per file</p>
+            )}
+            {field.accept && (
+              <p className="text-xs text-gray-500">Accepted types: {field.accept}</p>
+            )}
+          </div>
         );
       case "dropdown":
         return (
