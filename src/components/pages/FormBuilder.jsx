@@ -194,7 +194,7 @@ const handleFormSettingsOpen = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50">
+<div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
       <Header 
         onExport={handleExport} 
         onFormSettings={handleFormSettingsOpen}
@@ -209,7 +209,7 @@ const handleFormSettingsOpen = () => {
       <div className="flex h-[calc(100vh-80px)]">
         {/* Left Panel - Field Toolbar */}
         <motion.div 
-          className="w-80 p-6 bg-background border-r border-gray-200"
+className="w-80 p-6 bg-background dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-colors duration-200"
           initial={{ x: -50, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ duration: 0.3 }}

@@ -85,23 +85,23 @@ const FormCanvas = ({
 
   if (fields.length === 0) {
     return (
-      <div
-        className="w-full h-full bg-white rounded-lg shadow-lg border-2 border-dashed border-gray-300 hover:border-primary-400 transition-all duration-200 drop-zone"
+<div
+        className="w-full h-full bg-white dark:bg-gray-800 rounded-lg shadow-lg border-2 border-dashed border-gray-300 dark:border-gray-600 hover:border-primary-400 dark:hover:border-primary-400 transition-all duration-200 drop-zone"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
       >
         <div className="flex flex-col items-center justify-center h-full text-center p-8">
-          <div className="w-16 h-16 mb-4 rounded-full bg-gradient-to-br from-primary-100 to-secondary-100 flex items-center justify-center">
-            <ApperIcon name="MousePointer2" className="w-8 h-8 text-primary-500" />
+          <div className="w-16 h-16 mb-4 rounded-full bg-gradient-to-br from-primary-100 dark:from-primary-900/50 to-secondary-100 dark:to-secondary-900/50 flex items-center justify-center">
+            <ApperIcon name="MousePointer2" className="w-8 h-8 text-primary-500 dark:text-primary-400" />
           </div>
-          <h3 className="text-lg font-semibold text-gray-700 mb-2">
+          <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">
             Drag fields here to start building
           </h3>
-          <p className="text-gray-500 max-w-md">
+          <p className="text-gray-500 dark:text-gray-400 max-w-md">
             Select field types from the toolbar on the left and drag them to this canvas to create your form.
           </p>
-          <div className="mt-6 flex items-center space-x-2 text-sm text-gray-400">
+          <div className="mt-6 flex items-center space-x-2 text-sm text-gray-400 dark:text-gray-500">
             <div className="w-2 h-2 bg-primary-400 rounded-full animate-pulse"></div>
             <span>Ready to accept fields</span>
           </div>
@@ -112,14 +112,14 @@ const FormCanvas = ({
 
   return (
     <div
-      className="w-full h-full bg-white rounded-lg shadow-lg border border-gray-200 p-6 drop-zone custom-scrollbar overflow-y-auto"
+className="w-full h-full bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-6 drop-zone custom-scrollbar overflow-y-auto transition-colors duration-200"
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
     >
       <div className="mb-6">
-        <h2 className="text-lg font-bold text-gray-900 mb-1">Form Builder</h2>
-        <p className="text-sm text-gray-600">
+        <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-1">Form Builder</h2>
+        <p className="text-sm text-gray-600 dark:text-gray-300">
           {fields.length} field{fields.length !== 1 ? "s" : ""} • Click to edit, drag to reorder
         </p>
       </div>

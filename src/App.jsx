@@ -2,11 +2,14 @@ import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
 import FormBuilder from "@/components/pages/FormBuilder";
+import { ThemeProvider, useTheme } from "@/contexts/ThemeContext";
 
-function App() {
+const AppContent = () => {
+  const { isDark } = useTheme();
+  
   return (
     <BrowserRouter>
-      <div className="min-h-screen bg-background">
+      <div className="min-h-screen bg-background dark:bg-gray-900 transition-colors duration-200">
         <Routes>
           <Route path="/" element={<FormBuilder />} />
         </Routes>
@@ -21,11 +24,18 @@ function App() {
           pauseOnFocusLoss
           draggable
           pauseOnHover
-          theme="light"
+          theme={isDark ? "dark" : "light"}
           style={{ zIndex: 9999 }}
         />
       </div>
     </BrowserRouter>
+  );
+};
+function App() {
+  return (
+    <ThemeProvider>
+      <AppContent />
+    </ThemeProvider>
   );
 }
 

@@ -101,6 +101,25 @@ class LocalStorageService {
     } catch (error) {
       console.error('Error clearing localStorage:', error);
       throw new Error('Failed to clear saved forms');
+}
+  }
+
+  async getTheme() {
+    try {
+      return localStorage.getItem('formcraft_theme') || 'light';
+    } catch (error) {
+      console.error('Error reading theme preference:', error);
+      return 'light';
+    }
+  }
+
+  async saveTheme(theme) {
+    try {
+      localStorage.setItem('formcraft_theme', theme);
+      return true;
+    } catch (error) {
+      console.error('Error saving theme preference:', error);
+      throw new Error('Failed to save theme preference');
     }
   }
 }
