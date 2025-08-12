@@ -461,17 +461,17 @@ case "file":
             showToast(files.length + ' file(s) uploaded successfully');
         }
         
-        function displayUploadedFile(container, fileData, fieldId) {
+
+function displayUploadedFile(container, fileData, fieldId) {
             const fileDiv = document.createElement('div');
-fileDiv.innerHTML = \`
+            fileDiv.innerHTML = \`
                 <div class="flex items-center space-x-2">
                     <div class="w-4 h-4 bg-blue-500 rounded"></div>
                     <span class="text-sm font-medium">\${fileData.name}</span>
                     <span class="text-xs text-gray-500">(\${formatFileSize(fileData.size)})</span>
-                    <span class="text-xs text-gray-500">(${formatFileSize(fileData.size)})</span>
                 </div>
                 <div class="flex space-x-1">
-<button onclick="downloadFile('\${fileData.id}')" class="px-2 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">
+                    <button onclick="downloadFile('\${fileData.id}')" class="px-2 py-1 text-xs bg-blue-500 text-white rounded hover:bg-blue-600">
                         Download
                     </button>
                     <button onclick="deleteFile('\${fileData.id}', '\${fieldId}', this.parentElement.parentElement)" class="px-2 py-1 text-xs bg-red-500 text-white rounded hover:bg-red-600">
@@ -535,8 +535,8 @@ fileDiv.innerHTML = \`
             }
             
             // Email validation
-            if (field.type === "email" && value) {
-const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+if (field.type === "email" && value) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 if (!emailRegex.test(value)) {
                     errors.push("Please enter a valid email address");
                 }
@@ -642,7 +642,7 @@ const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
             // Store in localStorage
             const submissions = JSON.parse(localStorage.getItem('formSubmissions') || '[]');
             submissions.push({
-formTitle: '\${formTitle}',
+formTitle: \`\${formTitle}\`,
                 data: formData,
                 files: uploadedFiles,
                 timestamp: new Date().toISOString()
