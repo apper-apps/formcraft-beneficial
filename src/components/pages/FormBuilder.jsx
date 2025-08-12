@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
-import { toast } from "react-toastify";
-import JSZip from "jszip";
-import FormCanvas from "@/components/organisms/FormCanvas";
-import Header from "@/components/organisms/Header";
-import FormSettingsModal from "@/components/organisms/FormSettingsModal";
-import FieldToolbar from "@/components/organisms/FieldToolbar";
-import FieldConfigurationPanel from "@/components/organisms/FieldConfigurationPanel";
-import FormPreview from "@/components/organisms/FormPreview";
-import fieldTypesData from "@/services/mockData/fieldTypes.json";
-import formsData from "@/services/mockData/forms.json";
+import React, { useEffect, useState } from 'react'
+import { AnimatePresence, motion } from 'framer-motion'
+import { toast } from 'react-toastify'
+import JSZip from 'jszip'
+import FormCanvas from '@/components/organisms/FormCanvas'
+import Header from '@/components/organisms/Header'
+import FormSettingsModal from '@/components/organisms/FormSettingsModal'
+import FieldToolbar from '@/components/organisms/FieldToolbar'
+import FieldConfigurationPanel from '@/components/organisms/FieldConfigurationPanel'
+import FormPreview from '@/components/organisms/FormPreview'
+import ShareFormModal from '@/components/organisms/ShareFormModal'
+import fieldTypesData from '@/services/mockData/fieldTypes.json'
+import formsData from '@/services/mockData/forms.json'
 import themeTemplateService from "@/services/api/themeTemplateService";
 import localStorageService from "@/services/api/localStorageService";
 import formService from "@/services/api/formService";
@@ -149,6 +150,27 @@ Form Title: ${formSettings.title || 'Untitled Form'}
       console.error("Export error:", error);
       toast.error("Failed to export form. Please try again.");
     }
+};
+
+  // Share Form Modal State
+  const [isShareModalOpen, setIsShareModalOpen] = useState(false);
+
+  const handleShareForm = async () => {
+    if (fields.length === 0) {
+      toast.error('Please add at least one field before sharing the form');
+      return;
+    }
+
+    try {
+      setIsShareModalOpen(true);
+    } catch (error) {
+      console.error('Error preparing form for sharing:', error);
+      toast.error('Failed to prepare form for sharing');
+    }
+  };
+
+  const handleShareModalClose = () => {
+    setIsShareModalOpen(false);
   };
 const handleFormSettingsOpen = () => {
     setIsSettingsModalOpen(true);
@@ -263,11 +285,12 @@ const handleFormSettingsOpen = () => {
   return (
 <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
 <Header 
-        onExport={handleExport} 
+onExport={handleExport} 
         onFormSettings={handleFormSettingsOpen}
         onSaveForm={handleSaveForm}
         onLoadForm={handleLoadFormModal}
         onNewForm={handleNewForm}
+        onShareForm={handleShareForm}
         fieldCount={fields.length} 
         formTitle={formSettings.title}
         hasFields={fields.length > 0}
@@ -276,6 +299,17 @@ const handleFormSettingsOpen = () => {
         onThemeSelect={handleThemeSelect}
         isPreviewMode={isPreviewMode}
         onPreviewModeToggle={handlePreviewModeToggle}
+      />
+
+      {/* Share Form Modal */}
+      <ShareFormModal
+        isOpen={isShareModalOpen}
+        onClose={handleShareModalClose}
+        formData={{
+          fields,
+          settings: formSettings,
+          theme: selectedFormTheme
+        }}
       />
       
 <div className="flex h-[calc(100vh-80px)]">

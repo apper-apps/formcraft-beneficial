@@ -10,7 +10,8 @@ const Header = ({
   onSaveForm, 
   onLoadForm, 
   onNewForm, 
-  onDownloadForm,
+onDownloadForm,
+  onShareForm,
   fieldCount, 
   formTitle, 
   hasFields,
@@ -97,7 +98,7 @@ const { isDark, toggleTheme } = useTheme();
                   <ApperIcon name={isPreviewMode ? "Edit" : "Play"} className="w-4 h-4" />
                   <span>{isPreviewMode ? "Build Mode" : "Preview Mode"}</span>
                 </Button>
-                {!isPreviewMode && (
+{!isPreviewMode && (
                   <>
                     <Button
                         variant="secondary"
@@ -105,6 +106,14 @@ const { isDark, toggleTheme } = useTheme();
                         className="flex items-center space-x-2">
                         <ApperIcon name="Download" className="w-4 h-4" />
                         <span>Export Config</span>
+                    </Button>
+                    <Button
+                        variant="secondary"
+                        onClick={onShareForm}
+                        disabled={!hasFields}
+                        className="flex items-center space-x-2">
+                        <ApperIcon name="Share2" className="w-4 h-4" />
+                        <span>Share Form</span>
                     </Button>
                     <Button
                         variant="primary"

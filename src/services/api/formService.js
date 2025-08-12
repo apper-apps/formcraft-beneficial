@@ -515,6 +515,70 @@ async saveFormConfig(formConfig) {
 </html>`;
 
     return html;
+}
+
+// Generate a shareable public link for a form
+  async generateShareableLink(formConfig) {
+    await this.delay();
+    
+    try {
+      // Generate a unique share ID
+      const shareId = 'form_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
+      
+      // Create shared form data
+      const sharedForm = {
+        shareId,
+        title: formConfig.settings?.title || 'Untitled Form',
+        fields: formConfig.fields,
+        settings: formConfig.settings,
+        theme: formConfig.theme,
+        createdAt: new Date().toISOString(),
+        isPublic: true
+      };
+
+      // Store in localStorage (in real app, would be database)
+      const existingSharedForms = JSON.parse(localStorage.getItem('sharedForms') || '[]');
+      existingSharedForms.push(sharedForm);
+      localStorage.setItem('sharedForms', JSON.stringify(existingSharedForms));
+
+      // Generate public URL
+      const baseUrl = window.location.origin;
+      const shareUrl = `${baseUrl}/form/${shareId}`;
+
+      return {
+        success: true,
+        shareUrl,
+        shareId,
+        message: 'Shareable link generated successfully'
+      };
+
+    } catch (error) {
+      console.error('Error generating shareable link:', error);
+      throw new Error('Failed to generate shareable link');
+    }
+  }
+
+  // Get shared form by share ID
+  async getSharedForm(shareId) {
+    await this.delay();
+    
+    try {
+      const sharedForms = JSON.parse(localStorage.getItem('sharedForms') || '[]');
+      const sharedForm = sharedForms.find(form => form.shareId === shareId);
+
+      if (!sharedForm) {
+        throw new Error('Shared form not found');
+      }
+
+      return {
+        success: true,
+        form: sharedForm
+      };
+
+    } catch (error) {
+      console.error('Error fetching shared form:', error);
+      throw new Error('Shared form not found or expired');
+    }
   }
 }
 
