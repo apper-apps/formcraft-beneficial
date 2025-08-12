@@ -1,5 +1,6 @@
-import { useState, useCallback } from "react";
+import { useCallback, useState } from "react";
 import { toast } from "react-toastify";
+import Error from "@/components/ui/Error";
 import formService from "@/services/api/formService";
 import fieldTypeService from "@/services/api/fieldTypeService";
 
@@ -108,6 +109,75 @@ const exportForm = useCallback((formSettings) => {
     toast.info("Form cleared");
   }, []);
 
+// Local Storage Management Functions
+const saveFormToStorage = useCallback(async (formName, formSettings) => {
+    if (fields.length === 0) {
+      toast.error("Cannot save empty form");
+      return null;
+    }
+
+    setLoading(true);
+    setError(null);
+
+    try {
+      const localStorageService = (await import('@/services/api/localStorageService')).default;
+      const savedForm = await localStorageService.saveForm({
+        name: formName,
+        formSettings,
+        fields
+      });
+      toast.success("Form saved successfully!");
+      return savedForm;
+    } catch (err) {
+      const errorMessage = "Failed to save form";
+      setError(errorMessage);
+      toast.error(errorMessage);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  }, [fields]);
+
+  const loadFormFromStorage = useCallback(async (formId) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const localStorageService = (await import('@/services/api/localStorageService')).default;
+      const form = await localStorageService.loadForm(formId);
+      if (form) {
+        return form;
+      } else {
+        throw new Error("Form not found");
+      }
+    } catch (err) {
+      const errorMessage = "Failed to load form";
+      setError(errorMessage);
+      toast.error(errorMessage);
+      throw err;
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const getSavedForms = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      const localStorageService = (await import('@/services/api/localStorageService')).default;
+      const forms = await localStorageService.getSavedForms();
+      return forms;
+    } catch (err) {
+      const errorMessage = "Failed to load saved forms";
+      setError(errorMessage);
+      toast.error(errorMessage);
+      return [];
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
   return {
     fields,
     selectedFieldId,
@@ -120,6 +190,9 @@ const exportForm = useCallback((formSettings) => {
     reorderFields,
     saveForm,
     exportForm,
-    clearForm
+    clearForm,
+    saveFormToStorage,
+    loadFormFromStorage,
+    getSavedForms
   };
 };
