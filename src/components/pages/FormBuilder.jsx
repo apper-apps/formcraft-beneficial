@@ -8,7 +8,7 @@ import FieldToolbar from "@/components/organisms/FieldToolbar";
 import FieldConfigurationPanel from "@/components/organisms/FieldConfigurationPanel";
 import fieldTypesData from "@/services/mockData/fieldTypes.json";
 import formsData from "@/services/mockData/forms.json";
-import { localStorageService } from "@/services/localStorageService";
+import { localStorageService } from "@/services/api/localStorageService";
 
 const FormBuilder = () => {
   const [fields, setFields] = useState([]);
