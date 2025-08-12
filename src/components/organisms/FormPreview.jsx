@@ -70,7 +70,7 @@ const validateField = (field, value) => {
           }
           break;
         default:
-          phoneRegex = /^[\d\s\-\+\(\)]{10,}$/;
+phoneRegex = /^[\d\s()+\-]{10,}$/;
       }
       if (phoneRegex && !phoneRegex.test(value)) {
         errors.push(field.errorMessage || "Please enter a valid phone number");
