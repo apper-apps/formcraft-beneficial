@@ -4,7 +4,7 @@ import { toast } from "react-toastify";
 import Header from "@/components/organisms/Header";
 import FieldToolbar from "@/components/organisms/FieldToolbar";
 import FormCanvas from "@/components/organisms/FormCanvas";
-import FormPreview from "@/components/organisms/FormPreview";
+import FieldConfigurationPanel from "@/components/organisms/FieldConfigurationPanel";
 
 const FormBuilder = () => {
   const [fields, setFields] = useState([]);
@@ -104,15 +104,12 @@ const FormBuilder = () => {
           />
         </motion.div>
 
-        {/* Right Panel - Form Preview */}
-        <motion.div 
-          className="w-96 p-6 bg-background border-l border-gray-200"
-          initial={{ x: 50, opacity: 0 }}
-          animate={{ x: 0, opacity: 1 }}
-          transition={{ duration: 0.3, delay: 0.2 }}
-        >
-          <FormPreview fields={fields} />
-        </motion.div>
+{/* Right Panel - Field Configuration */}
+        <FieldConfigurationPanel
+          selectedField={fields.find(f => f.id === selectedFieldId)}
+          onFieldUpdate={handleFieldUpdate}
+          onFieldDelete={handleFieldDelete}
+        />
       </div>
     </div>
   );

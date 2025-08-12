@@ -13,18 +13,11 @@ const FormField = ({
   onDragStart,
   className = "" 
 }) => {
-  const [editingProperty, setEditingProperty] = useState(null);
-
   const handleDragStart = (e) => {
     e.dataTransfer.setData("application/json", JSON.stringify({ field, sourceIndex: index }));
     if (onDragStart) {
       onDragStart(field, index);
     }
-  };
-
-  const handlePropertyEdit = (property, value) => {
-    onUpdate(field.id, { [property]: value });
-    setEditingProperty(null);
   };
 
   const renderFieldInput = () => {
@@ -74,27 +67,12 @@ const FormField = ({
         className
       )}
     >
-      {/* Field Label */}
+{/* Field Label */}
       <div className="mb-2">
-        {editingProperty === "label" ? (
-          <InlineEditor
-            value={field.label}
-            onSave={(value) => handlePropertyEdit("label", value)}
-            onCancel={() => setEditingProperty(null)}
-            placeholder="Field label..."
-          />
-        ) : (
-          <label
-            className="block text-sm font-medium text-gray-700 cursor-pointer hover:text-primary-600 transition-colors"
-            onClick={(e) => {
-              e.stopPropagation();
-              setEditingProperty("label");
-            }}
-          >
-            {field.label || "Click to add label"}
-            <ApperIcon name="Edit2" className="w-3 h-3 ml-1 inline opacity-0 group-hover:opacity-100 transition-opacity" />
-          </label>
-        )}
+        <label className="block text-sm font-medium text-gray-700">
+          {field.label || "Untitled Field"}
+          {field.required && <span className="text-accent-500 ml-1">*</span>}
+        </label>
       </div>
 
       {/* Field Input */}
@@ -102,35 +80,22 @@ const FormField = ({
         {renderFieldInput()}
       </div>
 
-      {/* Placeholder Editor */}
-      {(field.type === "text" || field.type === "email") && (
-        <div className="text-xs text-gray-500">
-          {editingProperty === "placeholder" ? (
-            <InlineEditor
-              value={field.placeholder}
-              onSave={(value) => handlePropertyEdit("placeholder", value)}
-              onCancel={() => setEditingProperty(null)}
-              placeholder="Placeholder text..."
-            />
-          ) : (
-            <span
-              className="cursor-pointer hover:text-primary-600 transition-colors"
-              onClick={(e) => {
-                e.stopPropagation();
-                setEditingProperty("placeholder");
-              }}
-            >
-              Placeholder: {field.placeholder || "Click to edit"}
-              <ApperIcon name="Edit2" className="w-3 h-3 ml-1 inline opacity-0 group-hover:opacity-100 transition-opacity" />
-            </span>
-          )}
+      {/* Field Description */}
+      {field.description && (
+        <div className="text-xs text-gray-500 mb-2">
+          {field.description}
         </div>
       )}
 
-      {/* Options Editor for Dropdown */}
-      {field.type === "dropdown" && (
-        <div className="mt-2 text-xs text-gray-500">
-          <div>Options: {field.options?.join(", ") || "No options set"}</div>
+{/* Field Type Indicator */}
+      <div className="absolute top-2 left-2 px-2 py-1 bg-primary-100 text-primary-700 text-xs font-medium rounded opacity-0 group-hover:opacity-100 transition-opacity">
+        {field.type}
+      </div>
+
+      {/* Configuration Indicator */}
+      {isSelected && (
+        <div className="absolute top-2 right-8 px-2 py-1 bg-primary-500 text-white text-xs font-medium rounded">
+          Configuring
         </div>
       )}
 
