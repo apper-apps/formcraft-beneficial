@@ -2,14 +2,15 @@ import React from "react";
 import { toast } from "react-toastify";
 import { useTheme } from "@/contexts/ThemeContext";
 import ApperIcon from "@/components/ApperIcon";
-import Button from "@/components/atoms/Button";
 import ThemeSelector from "@/components/molecules/ThemeSelector";
+import Button from "@/components/atoms/Button";
 const Header = ({ 
   onExport, 
   onFormSettings, 
   onSaveForm, 
   onLoadForm, 
   onNewForm, 
+  onDownloadForm,
   fieldCount, 
   formTitle, 
   hasFields,
@@ -89,7 +90,7 @@ const { isDark, toggleTheme } = useTheme();
                     <ApperIcon name="Settings" className="w-4 h-4" />
                     <span>Form Settings</span>
 </Button>
-                <Button
+<Button
                   variant={isPreviewMode ? "primary" : "secondary"}
                   onClick={onPreviewModeToggle}
                   className="flex items-center space-x-2">
@@ -97,13 +98,22 @@ const { isDark, toggleTheme } = useTheme();
                   <span>{isPreviewMode ? "Build Mode" : "Preview Mode"}</span>
                 </Button>
                 {!isPreviewMode && (
-                  <Button
-                      variant="secondary"
-                      onClick={onExport}
-                      className="flex items-center space-x-2">
-                      <ApperIcon name="Download" className="w-4 h-4" />
-                      <span>Export</span>
-                  </Button>
+                  <>
+                    <Button
+                        variant="secondary"
+                        onClick={onExport}
+                        className="flex items-center space-x-2">
+                        <ApperIcon name="Download" className="w-4 h-4" />
+                        <span>Export Config</span>
+                    </Button>
+                    <Button
+                        variant="primary"
+                        onClick={onDownloadForm}
+                        className="flex items-center space-x-2">
+                        <ApperIcon name="FileDown" className="w-4 h-4" />
+                        <span>Download Form</span>
+                    </Button>
+                  </>
                 )}
             </div>
         </div>

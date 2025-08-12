@@ -1,16 +1,19 @@
 import React, { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { toast } from "react-toastify";
+import JSZip from "jszip";
 import FormCanvas from "@/components/organisms/FormCanvas";
-import FormPreview from "@/components/organisms/FormPreview";
 import Header from "@/components/organisms/Header";
 import FormSettingsModal from "@/components/organisms/FormSettingsModal";
 import FieldToolbar from "@/components/organisms/FieldToolbar";
 import FieldConfigurationPanel from "@/components/organisms/FieldConfigurationPanel";
+import FormPreview from "@/components/organisms/FormPreview";
 import fieldTypesData from "@/services/mockData/fieldTypes.json";
 import formsData from "@/services/mockData/forms.json";
 import themeTemplateService from "@/services/api/themeTemplateService";
 import localStorageService from "@/services/api/localStorageService";
+import formService from "@/services/api/formService";
+
 const FormBuilder = () => {
 const [fields, setFields] = useState([]);
   const [selectedFieldId, setSelectedFieldId] = useState(null);
@@ -79,8 +82,8 @@ const [managementLoading, setManagementLoading] = useState(false);
     toast.success("Field reordered!");
   };
 
-  const handleExport = () => {
-const formConfig = {
+const handleExport = () => {
+    const formConfig = {
       ...formSettings,
       fields: fields,
       timestamp: new Date().toISOString()
@@ -98,6 +101,54 @@ const formConfig = {
     
     URL.revokeObjectURL(url);
     toast.success("Form configuration exported!");
+  };
+
+const handleDownloadForm = async () => {
+    try {
+      const formConfig = {
+        ...formSettings,
+        fields: fields,
+        selectedTheme: selectedFormTheme
+      };
+
+      const htmlContent = await formService.generateStandaloneHTML(formConfig);
+      const zip = new JSZip();
+      zip.file("form.html", htmlContent);
+      
+      // Add a readme file with instructions
+      const readmeContent = `# Standalone Form
+
+This package contains a fully functional HTML form that works offline.
+
+## Files:
+- form.html: The complete form with embedded CSS and JavaScript
+
+## Usage:
+1. Open form.html in any web browser
+2. The form works completely offline
+3. Form submissions are stored in localStorage
+4. All validation and styling are included
+
+Generated on: ${new Date().toISOString()}
+Form Title: ${formSettings.title || 'Untitled Form'}
+`;
+      
+      zip.file("README.md", readmeContent);
+      
+      const zipBlob = await zip.generateAsync({ type: "blob" });
+      
+      const url = URL.createObjectURL(zipBlob);
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = `${(formSettings.title || 'form').toLowerCase().replace(/[^a-z0-9]/g, '-')}.zip`;
+      link.click();
+      
+      URL.revokeObjectURL(url);
+      toast.success("Form downloaded successfully!");
+    } catch (error) {
+      console.error("Export error:", error);
+      toast.error("Failed to export form. Please try again.");
+    }
   };
 const handleFormSettingsOpen = () => {
     setIsSettingsModalOpen(true);

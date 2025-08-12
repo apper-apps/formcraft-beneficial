@@ -1,14 +1,17 @@
-import React, { useState } from 'react'
-import { toast } from 'react-toastify'
-import ApperIcon from '@/components/ApperIcon'
-import Button from '@/components/atoms/Button'
-import { cn } from '@/utils/cn'
+import React, { useState } from "react";
+import { toast } from "react-toastify";
+import ApperIcon from "@/components/ApperIcon";
+import Button from "@/components/atoms/Button";
+import { cn } from "@/utils/cn";
 const FormPreview = ({ fields, formSettings = {}, selectedTheme, isPreviewMode = false, onBackToEditor }) => {
 const [formData, setFormData] = useState({});
   const [validationErrors, setValidationErrors] = useState({});
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [submittedData, setSubmittedData] = useState(null);
-const validateField = (field, value) => {
+
+  // Export validation function for reuse in standalone forms
+  window.FormValidation = window.FormValidation || {};
+  window.FormValidation.validateField = (field, value) => {
     const errors = [];
     
     // Required field validation
@@ -69,10 +72,10 @@ const validateField = (field, value) => {
             } catch (e) {
               console.warn('Invalid phone pattern:', field.pattern);
             }
-}
+          }
           break;
-default:
-phoneRegex = /^[\d\s()+−]{10,}$/;
+        default:
+          phoneRegex = /^[\d\s()+−]{10,}$/;
       }
       if (phoneRegex && !phoneRegex.test(value)) {
         errors.push(field.errorMessage || "Please enter a valid phone number");
@@ -101,6 +104,8 @@ phoneRegex = /^[\d\s()+−]{10,}$/;
     
     return errors;
   };
+
+  const validateField = window.FormValidation.validateField;
 
   const handleInputChange = (fieldId, value, files = null) => {
     const field = fields.find(f => f.id === fieldId);
@@ -229,7 +234,9 @@ const handleSubmit = (e) => {
     setSubmittedData(null);
   };
 
-const getThemeClasses = () => {
+// Export theme function for standalone forms
+  window.FormValidation = window.FormValidation || {};
+  window.FormValidation.getThemeClasses = (selectedTheme) => {
     if (!selectedTheme) {
       return {
         container: "w-full h-full bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-6 custom-scrollbar overflow-y-auto transition-colors duration-200",
@@ -244,8 +251,154 @@ const getThemeClasses = () => {
     return selectedTheme.styles;
   };
 
+const getThemeClasses = () => {
+    return window.FormValidation.getThemeClasses(selectedTheme);
+  };
+
+  // Export render field function for standalone forms
+  window.FormValidation = window.FormValidation || {};
+  window.FormValidation.renderField = (field, formData, validationErrors, handleInputChange) => {
+    const themeClasses = window.FormValidation.getThemeClasses();
+    const hasError = validationErrors[field.id] && validationErrors[field.id].length > 0;
+    const inputClasses = `${themeClasses.input} ${hasError ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : ''}`;
+    
+    switch (field.type) {
+      case "text":
+        return `
+          <div>
+            <input
+              type="text"
+              id="${field.id}"
+              placeholder="${field.placeholder || 'Enter text...'}"
+              value="${formData[field.id] || ''}"
+              class="${inputClasses}"
+              ${field.minLength ? `minlength="${field.minLength}"` : ''}
+              ${field.maxLength ? `maxlength="${field.maxLength}"` : ''}
+              ${field.pattern ? `pattern="${field.pattern}"` : ''}
+            />
+            ${hasError ? `<div class="mt-1 text-sm text-red-600">${validationErrors[field.id].join('<br>')}</div>` : ''}
+          </div>
+        `;
+      case "email":
+        return `
+          <div>
+            <input
+              type="email"
+              id="${field.id}"
+              placeholder="${field.placeholder || 'Enter email address...'}"
+              value="${formData[field.id] || ''}"
+              class="${inputClasses}"
+            />
+            ${hasError ? `<div class="mt-1 text-sm text-red-600">${validationErrors[field.id].join('<br>')}</div>` : ''}
+          </div>
+        `;
+      case "phone":
+        return `
+          <div>
+            <input
+              type="tel"
+              id="${field.id}"
+              placeholder="${field.placeholder || 'Enter phone number...'}"
+              value="${formData[field.id] || ''}"
+              class="${inputClasses}"
+            />
+            ${hasError ? `<div class="mt-1 text-sm text-red-600">${validationErrors[field.id].join('<br>')}</div>` : ''}
+          </div>
+        `;
+      case "url":
+        return `
+          <div>
+            <input
+              type="url"
+              id="${field.id}"
+              placeholder="${field.placeholder || 'https://example.com'}"
+              value="${formData[field.id] || ''}"
+              class="${inputClasses}"
+            />
+            ${hasError ? `<div class="mt-1 text-sm text-red-600">${validationErrors[field.id].join('<br>')}</div>` : ''}
+          </div>
+        `;
+      case "textarea":
+        return `
+          <div>
+            <textarea
+              id="${field.id}"
+              placeholder="${field.placeholder || 'Enter your text here...'}"
+              class="${inputClasses} resize-none"
+              rows="${field.rows || 3}"
+              ${field.minLength ? `minlength="${field.minLength}"` : ''}
+              ${field.maxLength ? `maxlength="${field.maxLength}"` : ''}
+            >${formData[field.id] || ''}</textarea>
+            ${hasError ? `<div class="mt-1 text-sm text-red-600">${validationErrors[field.id].join('<br>')}</div>` : ''}
+          </div>
+        `;
+      case "number":
+        return `
+          <div>
+            <input
+              type="number"
+              id="${field.id}"
+              placeholder="${field.placeholder || 'Enter a number...'}"
+              value="${formData[field.id] || ''}"
+              class="${inputClasses}"
+              ${field.min !== null ? `min="${field.min}"` : ''}
+              ${field.max !== null ? `max="${field.max}"` : ''}
+              step="${field.step || 1}"
+            />
+            ${hasError ? `<div class="mt-1 text-sm text-red-600">${validationErrors[field.id].join('<br>')}</div>` : ''}
+          </div>
+        `;
+      case "file":
+        return `
+          <div>
+            <input
+              type="file"
+              id="${field.id}"
+              ${field.accept ? `accept="${field.accept}"` : ''}
+              ${field.multiple ? 'multiple' : ''}
+              class="${inputClasses}"
+            />
+            ${field.maxSize ? `<p class="mt-1 text-xs text-gray-500">Maximum file size: ${field.maxSize}MB</p>` : ''}
+            ${hasError ? `<div class="mt-1 text-sm text-red-600">${validationErrors[field.id].join('<br>')}</div>` : ''}
+          </div>
+        `;
+      case "dropdown":
+        return `
+          <div>
+            <select
+              id="${field.id}"
+              class="${inputClasses}"
+            >
+              <option value="">Select an option...</option>
+              ${field.options?.map(option => `<option value="${option}" ${formData[field.id] === option ? 'selected' : ''}>${option}</option>`).join('') || ''}
+            </select>
+            ${hasError ? `<div class="mt-1 text-sm text-red-600">${validationErrors[field.id].join('<br>')}</div>` : ''}
+          </div>
+        `;
+      case "multiselect":
+        return `
+          <div>
+            <select
+              id="${field.id}"
+              multiple
+              size="4"
+              class="${inputClasses}"
+            >
+              ${field.options?.map(option => {
+                const selected = Array.isArray(formData[field.id]) && formData[field.id].includes(option);
+                return `<option value="${option}" ${selected ? 'selected' : ''}>${option}</option>`;
+              }).join('') || ''}
+            </select>
+            ${field.maxSelections ? `<p class="mt-1 text-xs text-gray-500">Maximum ${field.maxSelections} selections</p>` : ''}
+            ${hasError ? `<div class="mt-1 text-sm text-red-600">${validationErrors[field.id].join('<br>')}</div>` : ''}
+          </div>
+        `;
+      default:
+        return '';
+    }
+  };
   const renderField = (field) => {
-const themeClasses = getThemeClasses();
+    const themeClasses = getThemeClasses();
     const hasError = validationErrors[field.id] && validationErrors[field.id].length > 0;
     const inputClasses = `${themeClasses.input} ${hasError ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : ''}`;
     
@@ -574,13 +727,13 @@ return (
         </div>
       )}
 
-      <div className="preview-form">
+<div className="preview-form">
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="mb-8">
-<h1 className={getThemeClasses().title}>
+            <h1 className={getThemeClasses().title}>
               {formSettings.title || "Preview Form"}
             </h1>
-{formSettings.description && (
+            {formSettings.description && (
               <p className={getThemeClasses().description}>{formSettings.description}</p>
             )}
             {!formSettings.description && (
@@ -588,10 +741,10 @@ return (
             )}
           </div>
 
-{fields.map((field) => (
+          {fields.map((field) => (
             <div key={field.id} className="space-y-2">
               <label 
-htmlFor={field.id} 
+                htmlFor={field.id} 
                 className={getThemeClasses().fieldLabel}
               >
                 {field.label || "Untitled Field"}
@@ -607,7 +760,7 @@ htmlFor={field.id}
           ))}
 
           <div className="pt-6 border-t border-gray-200 dark:border-gray-700">
-<Button type="submit" className={getThemeClasses().submitButton}>
+            <Button type="submit" className={getThemeClasses().submitButton}>
               {formSettings.submitButtonText || "Submit Form"}
             </Button>
           </div>
