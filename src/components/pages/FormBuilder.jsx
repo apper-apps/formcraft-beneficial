@@ -24,10 +24,10 @@ const [fields, setFields] = useState([]);
   const [touchStartPos, setTouchStartPos] = useState(null);
   const [selectedFormTheme, setSelectedFormTheme] = useState(themeTemplateService.getDefaultTheme());
   const [formSettings, setFormSettings] = useState({
-    title: "Untitled Form",
-    description: "",
+    title: "My New Form",
+    description: "Please fill out this form completely and accurately.",
     submitButtonText: "Submit Form",
-    successMessage: "Thank you! Your form has been submitted successfully.",
+    successMessage: "Thank you! Your form has been submitted successfully. We'll get back to you soon.",
     redirectAfterSubmission: false,
     redirectUrl: "",
     enableValidation: true,
@@ -38,11 +38,12 @@ const [fields, setFields] = useState([]);
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   const [isManagementModalOpen, setIsManagementModalOpen] = useState(false);
   const [savedForms, setSavedForms] = useState([]);
-const [managementLoading, setManagementLoading] = useState(false);
+  const [managementLoading, setManagementLoading] = useState(false);
   const [availableThemes] = useState(themeTemplateService.getAll());
   const [fileStorage, setFileStorage] = useState(new Map());
   const [fileUploads, setFileUploads] = useState(new Map());
   const [uploadProgress, setUploadProgress] = useState(new Map());
+  const [formTemplates] = useState(formsData);
   const handleThemeSelect = (theme) => {
     setSelectedFormTheme(theme);
     toast.success(`Theme changed to ${theme.name}!`);
@@ -113,15 +114,22 @@ const handleExport = () => {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = "form-config.json";
+    link.download = `${formSettings.title.toLowerCase().replace(/[^a-z0-9]/g, '-')}-config.json`;
     link.click();
     
     URL.revokeObjectURL(url);
-    toast.success("Form configuration exported!");
+    toast.success(`Form configuration "${formSettings.title}" exported successfully!`);
   };
 
 const handleDownloadForm = async () => {
+    if (fields.length === 0) {
+      toast.error("Please add at least one field before downloading the form.");
+      return;
+    }
+
     try {
+      toast.info("Preparing your form download...");
+      
       const formConfig = {
         ...formSettings,
         fields: fields,
@@ -132,25 +140,41 @@ const handleDownloadForm = async () => {
       const zip = new JSZip();
       zip.file("form.html", htmlContent);
       
-      // Add a readme file with instructions
-      const readmeContent = `# Standalone Form
+      // Add a comprehensive readme file with instructions
+      const readmeContent = `# ${formSettings.title}
 
-This package contains a fully functional HTML form that works offline.
+This package contains a fully functional HTML form that works completely offline.
 
-## Files:
-- form.html: The complete form with embedded CSS and JavaScript
+## What's Included:
+- form.html: Your complete form with embedded CSS and JavaScript
+- All ${fields.length} form field${fields.length !== 1 ? 's' : ''} with validation
+- ${selectedFormTheme.name} theme styling
+- Responsive design for mobile and desktop
 
-## Usage:
-1. Open form.html in any web browser
-2. The form works completely offline
-3. Form submissions are stored in localStorage
-4. All validation and styling are included
+## How to Use:
+1. Extract this ZIP file to any folder
+2. Double-click "form.html" to open in your web browser
+3. The form works completely offline - no internet required!
+4. Form submissions are automatically saved in the browser's localStorage
+5. Share the HTML file with anyone - it's completely self-contained
 
-Generated on: ${new Date().toISOString()}
-Form Title: ${formSettings.title || 'Untitled Form'}
+## Form Details:
+- Title: ${formSettings.title}
+- Description: ${formSettings.description || 'No description provided'}
+- Fields: ${fields.length} total
+- Theme: ${selectedFormTheme.name}
+- Generated: ${new Date().toLocaleString()}
+
+## Technical Notes:
+- No server required - runs entirely in the browser
+- All validation and styling are embedded
+- Compatible with all modern web browsers
+- Responsive design adapts to any screen size
+
+Enjoy your new form!
 `;
       
-      zip.file("README.md", readmeContent);
+      zip.file("README.txt", readmeContent);
       
       const zipBlob = await zip.generateAsync({ type: "blob" });
       
@@ -161,23 +185,24 @@ Form Title: ${formSettings.title || 'Untitled Form'}
       link.click();
       
       URL.revokeObjectURL(url);
-      toast.success("Form downloaded successfully!");
+      toast.success(`✅ "${formSettings.title}" downloaded successfully! Check your downloads folder.`);
     } catch (error) {
       console.error("Export error:", error);
-      toast.error("Failed to export form. Please try again.");
+      toast.error("Failed to download form. Please try again or check your browser settings.");
     }
 };
 
   // Share Form Modal State
   const [isShareModalOpen, setIsShareModalOpen] = useState(false);
 
-  const handleShareForm = async () => {
+const handleShareForm = async () => {
     if (fields.length === 0) {
       toast.error('Please add at least one field before sharing the form');
       return;
     }
 
     try {
+      toast.info("Preparing your form for sharing...");
       setIsShareModalOpen(true);
     } catch (error) {
       console.error('Error preparing form for sharing:', error);
@@ -202,8 +227,8 @@ const handleFormSettingsOpen = () => {
   };
 
   const handleSaveForm = async (formName) => {
-    if (fields.length === 0) {
-      toast.error("Cannot save empty form");
+if (fields.length === 0) {
+      toast.error("Cannot save empty form - please add at least one field first");
       return;
     }
 
@@ -213,21 +238,21 @@ const handleFormSettingsOpen = () => {
         formSettings,
         fields
       });
-      toast.success("Form saved successfully!");
+      toast.success(`✅ "${formName || formSettings.title}" saved successfully!`);
     } catch (error) {
-      toast.error("Failed to save form");
+      toast.error("Failed to save form - please try again");
       console.error('Save form error:', error);
     }
   };
 
-  const handleLoadFormModal = async () => {
+const handleLoadFormModal = async () => {
     setManagementLoading(true);
     try {
       const forms = await localStorageService.getSavedForms();
       setSavedForms(forms);
       setIsManagementModalOpen(true);
     } catch (error) {
-      toast.error("Failed to load saved forms");
+      toast.error("Failed to load saved forms - please try again");
       console.error('Load forms error:', error);
     } finally {
       setManagementLoading(false);
@@ -271,16 +296,16 @@ const handleFormSettingsOpen = () => {
     }
   };
 
-  const handleNewForm = () => {
+const handleNewForm = () => {
     if (fields.length > 0) {
       if (window.confirm("Are you sure you want to start a new form? All unsaved changes will be lost.")) {
         setFields([]);
         setSelectedFieldId(null);
         setFormSettings({
-          title: "Untitled Form",
-          description: "",
+          title: "My New Form",
+          description: "Please fill out this form completely and accurately.",
           submitButtonText: "Submit Form",
-          successMessage: "Thank you! Your form has been submitted successfully.",
+          successMessage: "Thank you! Your form has been submitted successfully. We'll get back to you soon.",
           redirectAfterSubmission: false,
           redirectUrl: "",
           enableValidation: true,
@@ -288,9 +313,54 @@ const handleFormSettingsOpen = () => {
           showProgressBar: false,
           allowSaveDraft: false
         });
-        toast.info("Started new form");
-}
+        toast.info("✨ Started new form - ready for your creativity!");
+      }
+    } else {
+      // If no fields, just reset settings
+      setFormSettings({
+        title: "My New Form",
+        description: "Please fill out this form completely and accurately.",
+        submitButtonText: "Submit Form",
+        successMessage: "Thank you! Your form has been submitted successfully. We'll get back to you soon.",
+        redirectAfterSubmission: false,
+        redirectUrl: "",
+        enableValidation: true,
+        requireAllFields: false,
+        showProgressBar: false,
+        allowSaveDraft: false
+      });
+      toast.info("✨ Form reset - ready to build!");
     }
+  };
+
+  const handleUseTemplate = (template) => {
+    if (fields.length > 0) {
+      if (!window.confirm("This will replace your current form. Continue?")) {
+        return;
+      }
+    }
+    
+    setFormSettings({
+      title: template.title,
+      description: template.description || "Please fill out this form completely and accurately.",
+      submitButtonText: "Submit Form",
+      successMessage: "Thank you! Your form has been submitted successfully. We'll get back to you soon.",
+      redirectAfterSubmission: false,
+      redirectUrl: "",
+      enableValidation: true,
+      requireAllFields: false,
+      showProgressBar: false,
+      allowSaveDraft: false
+    });
+    
+    const templateFields = template.fields.map(field => ({
+      ...field,
+      id: `${Date.now()}-${Math.random().toString(36).substr(2, 9)}`
+    }));
+    
+    setFields(templateFields);
+    setSelectedFieldId(null);
+    toast.success(`✨ "${template.title}" template loaded! Customize as needed.`);
   };
 
 // Handle preview mode toggle
@@ -437,13 +507,14 @@ const handlePreviewModeToggle = () => {
   };
   return (
 <div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
-<Header 
-onExport={handleExport} 
+      <Header 
+        onExport={handleExport} 
         onFormSettings={handleFormSettingsOpen}
         onSaveForm={handleSaveForm}
         onLoadForm={handleLoadFormModal}
         onNewForm={handleNewForm}
         onShareForm={handleShareForm}
+        onDownloadForm={handleDownloadForm}
         fieldCount={fields.length} 
         formTitle={formSettings.title}
         hasFields={fields.length > 0}
@@ -465,9 +536,9 @@ onExport={handleExport}
         }}
       />
       
-<div className="flex flex-col md:flex-row h-[calc(100vh-80px)]">
-<AnimatePresence mode="wait">
-{!isPreviewMode && (
+      <div className="flex flex-col md:flex-row h-[calc(100vh-80px)]">
+        <AnimatePresence mode="wait">
+          {!isPreviewMode && (
             <motion.div 
               key="toolbar"
               className="w-full md:w-80 p-4 md:p-6 bg-background dark:bg-gray-800 border-b md:border-b-0 md:border-r border-gray-200 dark:border-gray-700 transition-colors duration-300 overflow-y-auto max-h-60 md:max-h-none"
@@ -491,9 +562,9 @@ onExport={handleExport}
           )}
         </AnimatePresence>
 
-{/* Center Panel - Form Canvas or Preview */}
+        {/* Center Panel - Form Canvas or Preview */}
         <AnimatePresence mode="wait">
-<motion.div 
+          <motion.div 
             key={isPreviewMode ? "preview" : "canvas"}
             className="flex-1 p-4 md:p-6 min-h-0"
             initial={{ y: 20, opacity: 0, scale: 0.98 }}
@@ -532,13 +603,15 @@ onExport={handleExport}
                 onFileDownload={handleFileDownload}
                 isMobileDragging={isMobileDragging}
                 draggedField={draggedField}
+                formTemplates={formTemplates}
+                onUseTemplate={handleUseTemplate}
               />
             )}
           </motion.div>
         </AnimatePresence>
 
-<AnimatePresence>
-{!isPreviewMode && selectedFieldId && (
+        <AnimatePresence>
+          {!isPreviewMode && selectedFieldId && (
             <motion.div 
               key="config-panel"
               className="w-full md:w-80 p-4 md:p-6 bg-background dark:bg-gray-800 border-t md:border-t-0 md:border-l border-gray-200 dark:border-gray-700 transition-colors duration-300 order-last md:order-none overflow-y-auto"
@@ -561,7 +634,8 @@ onExport={handleExport}
           )}
         </AnimatePresence>
       </div>
-<FormSettingsModal
+      
+      <FormSettingsModal
         isOpen={isSettingsModalOpen}
         onClose={handleFormSettingsClose}
         settings={formSettings}

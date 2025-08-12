@@ -10,8 +10,8 @@ const Header = ({
   onFormSettings, 
   onSaveForm, 
   onLoadForm, 
-  onNewForm, 
-onDownloadForm,
+onNewForm, 
+  onDownloadForm,
   onShareForm,
   fieldCount, 
   formTitle, 
@@ -107,7 +107,7 @@ const navigate = useNavigate();
                   <ApperIcon name={isPreviewMode ? "Edit" : "Play"} className="w-4 h-4" />
                   <span>{isPreviewMode ? "Build Mode" : "Preview Mode"}</span>
                 </Button>
-{!isPreviewMode && (
+                {!isPreviewMode && (
                   <>
                     <Button
                         variant="secondary"
@@ -127,6 +127,7 @@ const navigate = useNavigate();
                     <Button
                         variant="primary"
                         onClick={onDownloadForm}
+                        disabled={!hasFields}
                         className="flex items-center space-x-2">
                         <ApperIcon name="FileDown" className="w-4 h-4" />
                         <span>Download Form</span>

@@ -300,7 +300,7 @@ async exportFormConfig(formId) {
     const submitText = submitButtonText || "Submit Form";
     const successMsg = successMessage || "Thank you! Your form has been submitted successfully.";
 
-    // Generate Tailwind CSS (embedded)
+// Generate Tailwind CSS (embedded)
     const tailwindCSS = `
       * { box-sizing: border-box; }
       .w-full { width: 100%; }
@@ -327,6 +327,7 @@ async exportFormConfig(formId) {
       .bg-blue-600 { background-color: #2563eb; }
       .hover\\:bg-blue-700:hover { background-color: #1d4ed8; }
       .text-2xl { font-size: 1.5rem; line-height: 2rem; }
+      .text-lg { font-size: 1.125rem; line-height: 1.75rem; }
       .text-sm { font-size: 0.875rem; line-height: 1.25rem; }
       .text-xs { font-size: 0.75rem; line-height: 1rem; }
       .font-bold { font-weight: 700; }
@@ -358,11 +359,21 @@ async exportFormConfig(formId) {
       .items-center { align-items: center; }
       .justify-center { justify-content: center; }
       .min-h-screen { min-height: 100vh; }
-      body { font-family: 'Inter', system-ui, sans-serif; margin: 0; background-color: #f9fafb; color: #111827; }
+      body { font-family: 'Inter', system-ui, sans-serif; margin: 0; background-color: #f9fafb; color: #111827; line-height: 1.6; }
       .form-container { max-width: 42rem; margin: 0 auto; padding: 2rem 1rem; }
+      .form-header { text-align: center; margin-bottom: 2rem; }
+      .form-title { font-size: 1.875rem; font-weight: 700; color: #111827; margin-bottom: 0.5rem; }
+      .form-description { font-size: 1rem; color: #6b7280; }
       .success-message { background-color: #dcfce7; color: #166534; padding: 1rem; border-radius: 0.5rem; margin-bottom: 1rem; border: 1px solid #bbf7d0; }
-      .error-message { background-color: #fef2f2; color: #dc2626; padding: 0.5rem; border-radius: 0.375rem; margin-top: 0.25rem; border: 1px solid #fecaca; }
+      .error-message { background-color: #fef2f2; color: #dc2626; padding: 0.5rem; border-radius: 0.375rem; margin-top: 0.25rem; border: 1px solid #fecaca; font-size: 0.875rem; }
       .toast { position: fixed; top: 1rem; right: 1rem; background: #059669; color: white; padding: 1rem; border-radius: 0.5rem; z-index: 1000; }
+      .field-description { color: #6b7280; font-size: 0.875rem; margin-top: 0.25rem; }
+      @media (max-width: 768px) {
+        .form-container { padding: 1rem 0.75rem; }
+        .form-title { font-size: 1.5rem; }
+        .px-3 { padding-left: 0.5rem; padding-right: 0.5rem; }
+        .py-2 { padding-top: 0.375rem; padding-bottom: 0.375rem; }
+      }
     `;
 
     // Generate field HTML
@@ -396,13 +407,13 @@ async exportFormConfig(formId) {
               ${field.required ? 'required' : ''}
             />`;
           break;
-        case "phone":
+case "phone":
           fieldHTML = `
             <input
               type="tel"
               id="${field.id}"
               name="${field.id}"
-              placeholder="${field.placeholder || 'Enter phone number...'}"
+              placeholder="${field.placeholder || '(555) 123-4567'}"
               class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:border-blue-500 focus:outline-none transition-all"
               ${field.required ? 'required' : ''}
             />`;
@@ -729,10 +740,27 @@ function displayUploadedFile(container, fileData, fieldId) {
             }
             
 // Email validation
-if (field.type === "email" && value) {
-                const emailRegex = /^[^ \t\n\r\f\v@]+@[^ \t\n\r\f\v@]+[.][^ \t\n\r\f\v@]+$/;
+            if (field.type === "email" && value) {
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
                 if (!emailRegex.test(value)) {
-                    errors.push("Please enter a valid email address");
+                    errors.push("Please enter a valid email address (e.g., name@example.com)");
+                }
+            }
+
+            // Phone validation
+            if (field.type === "phone" && value) {
+                const phoneRegex = /^[\+]?[(]?[\d\s\-\(\)]{10,}$/;
+                if (!phoneRegex.test(value)) {
+                    errors.push("Please enter a valid phone number (e.g., (555) 123-4567)");
+                }
+            }
+
+            // URL validation  
+            if (field.type === "url" && value) {
+                try {
+                    new URL(value);
+                } catch {
+                    errors.push("Please enter a valid URL starting with http:// or https://");
                 }
             }
             

@@ -2,7 +2,7 @@
   {
     "Id": 1,
     "title": "Contact Form",
-    "description": "A simple contact form for collecting user inquiries",
+    "description": "Perfect for business websites, landing pages, or customer service. Collect inquiries with professional validation.",
     "fields": [
       {
         "id": "1",
@@ -15,46 +15,196 @@
         "id": "2",
         "type": "email",
         "label": "Email Address",
-        "placeholder": "Enter your email address",
+        "placeholder": "your.email@example.com",
         "required": true
       },
       {
         "id": "3",
-        "type": "dropdown",
-        "label": "Subject",
-        "options": ["General Inquiry", "Support", "Sales", "Other"],
+        "type": "phone",
+        "label": "Phone Number",
+        "placeholder": "(555) 123-4567",
         "required": false
+      },
+      {
+        "id": "4",
+        "type": "dropdown",
+        "label": "How can we help?",
+        "options": ["General Inquiry", "Technical Support", "Sales Question", "Partnership", "Other"],
+        "required": true
+      },
+      {
+        "id": "5",
+        "type": "textarea",
+        "label": "Message",
+        "placeholder": "Please provide details about your inquiry...",
+        "required": true,
+        "rows": 4
       }
     ],
     "createdAt": "2024-01-15T10:30:00Z"
   },
   {
     "Id": 2,
-    "title": "Registration Form",
-    "description": "User registration form with basic information",
+    "title": "Event Registration",
+    "description": "Collect attendee information for conferences, workshops, webinars, or any event. Includes dietary preferences and accessibility needs.",
     "fields": [
       {
         "id": "4",
         "type": "text",
-        "label": "Username",
-        "placeholder": "Choose a username",
+        "label": "Full Name",
+        "placeholder": "Enter your full name",
         "required": true
       },
       {
         "id": "5",
         "type": "email",
-        "label": "Email",
-        "placeholder": "Your email address",
+        "label": "Email Address",
+        "placeholder": "your.email@example.com",
         "required": true
       },
       {
         "id": "6",
+        "type": "text",
+        "label": "Company/Organization",
+        "placeholder": "Your company name",
+        "required": false
+      },
+      {
+        "id": "7",
         "type": "dropdown",
-        "label": "Country",
-        "options": ["United States", "Canada", "United Kingdom", "Australia", "Other"],
+        "label": "Ticket Type",
+        "options": ["General Admission", "VIP Pass", "Student", "Group Rate", "Speaker"],
         "required": true
+      },
+      {
+        "id": "8",
+        "type": "multiselect",
+        "label": "Dietary Restrictions",
+        "options": ["None", "Vegetarian", "Vegan", "Gluten-Free", "Nut Allergy", "Other"],
+        "required": false
+      },
+      {
+        "id": "9",
+        "type": "textarea",
+        "label": "Special Requirements",
+        "placeholder": "Any accessibility needs, questions, or special requests...",
+        "required": false,
+        "rows": 3
       }
     ],
     "createdAt": "2024-01-14T14:20:00Z"
+  },
+  {
+    "Id": 3,
+    "title": "Job Application",
+    "description": "Professional job application form with resume upload, experience questions, and availability. Perfect for HR departments.",
+    "fields": [
+      {
+        "id": "10",
+        "type": "text",
+        "label": "Full Name",
+        "placeholder": "Enter your full name",
+        "required": true
+      },
+      {
+        "id": "11",
+        "type": "email",
+        "label": "Email Address",
+        "placeholder": "your.email@example.com",
+        "required": true
+      },
+      {
+        "id": "12",
+        "type": "phone",
+        "label": "Phone Number",
+        "placeholder": "(555) 123-4567",
+        "required": true
+      },
+      {
+        "id": "13",
+        "type": "dropdown",
+        "label": "Position Applying For",
+        "options": ["Software Developer", "Product Manager", "Designer", "Marketing Specialist", "Sales Representative", "Other"],
+        "required": true
+      },
+      {
+        "id": "14",
+        "type": "file",
+        "label": "Resume/CV",
+        "accept": ".pdf,.doc,.docx",
+        "required": true
+      },
+      {
+        "id": "15",
+        "type": "number",
+        "label": "Years of Experience",
+        "placeholder": "Enter number of years",
+        "min": 0,
+        "max": 50,
+        "required": true
+      },
+      {
+        "id": "16",
+        "type": "textarea",
+        "label": "Cover Letter",
+        "placeholder": "Tell us why you're interested in this position and what makes you a great fit...",
+        "required": false,
+        "rows": 5
+      }
+    ],
+    "createdAt": "2024-01-13T09:15:00Z"
+  },
+  {
+    "Id": 4,
+    "title": "Customer Feedback Survey",
+    "description": "Gather valuable customer insights with ratings, multiple choice questions, and open feedback. Great for improving products and services.",
+    "fields": [
+      {
+        "id": "17",
+        "type": "text",
+        "label": "Your Name (Optional)",
+        "placeholder": "Enter your name",
+        "required": false
+      },
+      {
+        "id": "18",
+        "type": "email",
+        "label": "Email Address (Optional)",
+        "placeholder": "your.email@example.com",
+        "required": false
+      },
+      {
+        "id": "19",
+        "type": "dropdown",
+        "label": "How did you hear about us?",
+        "options": ["Google Search", "Social Media", "Friend/Family", "Advertisement", "Email", "Other"],
+        "required": true
+      },
+      {
+        "id": "20",
+        "type": "number",
+        "label": "Overall Experience Rating",
+        "placeholder": "Rate from 1-10",
+        "min": 1,
+        "max": 10,
+        "required": true
+      },
+      {
+        "id": "21",
+        "type": "multiselect",
+        "label": "Which features do you use most?",
+        "options": ["Dashboard", "Reports", "Team Collaboration", "Mobile App", "Integrations", "Customer Support"],
+        "required": false
+      },
+      {
+        "id": "22",
+        "type": "textarea",
+        "label": "What could we improve?",
+        "placeholder": "Share your suggestions for how we can make our service better...",
+        "required": false,
+        "rows": 4
+      }
+    ],
+    "createdAt": "2024-01-12T16:45:00Z"
   }
 ]

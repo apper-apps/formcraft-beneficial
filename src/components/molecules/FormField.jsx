@@ -28,12 +28,12 @@ const handleDragStart = (e) => {
 const renderFieldInput = () => {
     const baseInputClasses = "w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500";
     
-    switch (field.type) {
+switch (field.type) {
       case "text":
         return (
           <input
             type="text"
-            placeholder={field.placeholder || "Enter text..."}
+            placeholder={field.placeholder || "Enter your response here..."}
             className={baseInputClasses}
             disabled
           />
@@ -135,9 +135,9 @@ case "file":
       )}
     >
 {/* Field Label */}
-      <div className="mb-2">
+<div className="mb-2">
         <label className="block text-sm font-medium text-gray-700">
-          {field.label || "Untitled Field"}
+          {field.label || `${field.type.charAt(0).toUpperCase() + field.type.slice(1)} Field`}
           {field.required && <span className="text-accent-500 ml-1">*</span>}
         </label>
       </div>

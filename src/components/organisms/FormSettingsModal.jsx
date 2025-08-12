@@ -7,11 +7,11 @@ import ApperIcon from '@/components/ApperIcon';
 import { cn } from '@/utils/cn';
 
 const FormSettingsModal = ({ isOpen, onClose, settings, onSave }) => {
-  const [formSettings, setFormSettings] = useState({
-    title: settings?.title || 'Untitled Form',
-    description: settings?.description || '',
+const [formSettings, setFormSettings] = useState({
+    title: settings?.title || 'My New Form',
+    description: settings?.description || 'Please fill out this form completely and accurately.',
     submitButtonText: settings?.submitButtonText || 'Submit Form',
-    successMessage: settings?.successMessage || 'Thank you! Your form has been submitted successfully.',
+    successMessage: settings?.successMessage || 'Thank you! Your form has been submitted successfully. We\'ll get back to you soon.',
     redirectAfterSubmission: settings?.redirectAfterSubmission || false,
     redirectUrl: settings?.redirectUrl || '',
     enableValidation: settings?.enableValidation || true,
@@ -82,7 +82,7 @@ const FormSettingsModal = ({ isOpen, onClose, settings, onSave }) => {
 
           {/* Content */}
           <div className="p-6 space-y-8 overflow-y-auto max-h-[calc(90vh-140px)] custom-scrollbar">
-            {/* Basic Information */}
+{/* Basic Information */}
             <Card className="p-6">
               <div className="flex items-center space-x-2 mb-4">
                 <ApperIcon name="FileText" className="w-5 h-5 text-gray-600" />
@@ -96,9 +96,10 @@ const FormSettingsModal = ({ isOpen, onClose, settings, onSave }) => {
                   <Input
                     value={formSettings.title}
                     onChange={(e) => handleInputChange('title', e.target.value)}
-                    placeholder="Enter form title"
+                    placeholder="e.g., Contact Us, Registration Form, Survey"
                     className="w-full"
                   />
+                  <p className="text-xs text-gray-500 mt-1">This appears at the top of your form</p>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -107,10 +108,11 @@ const FormSettingsModal = ({ isOpen, onClose, settings, onSave }) => {
                   <textarea
                     value={formSettings.description}
                     onChange={(e) => handleInputChange('description', e.target.value)}
-                    placeholder="Enter form description (optional)"
+                    placeholder="Brief instructions or context for users filling out this form..."
                     rows={3}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 resize-none"
                   />
+                  <p className="text-xs text-gray-500 mt-1">Help users understand what this form is for</p>
                 </div>
               </div>
             </Card>
@@ -119,19 +121,20 @@ const FormSettingsModal = ({ isOpen, onClose, settings, onSave }) => {
             <Card className="p-6">
               <div className="flex items-center space-x-2 mb-4">
                 <ApperIcon name="MousePointer" className="w-5 h-5 text-gray-600" />
-                <h3 className="font-semibold text-gray-900">Submit Button</h3>
+                <h3 className="font-semibold text-gray-900">Submit Button & Messages</h3>
               </div>
               <div className="space-y-4">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Button Text
+                    Submit Button Text
                   </label>
                   <Input
                     value={formSettings.submitButtonText}
                     onChange={(e) => handleInputChange('submitButtonText', e.target.value)}
-                    placeholder="Submit Form"
+                    placeholder="Submit Form, Send Message, Register Now"
                     className="w-full"
                   />
+                  <p className="text-xs text-gray-500 mt-1">Action-oriented text works best</p>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
@@ -140,10 +143,11 @@ const FormSettingsModal = ({ isOpen, onClose, settings, onSave }) => {
                   <textarea
                     value={formSettings.successMessage}
                     onChange={(e) => handleInputChange('successMessage', e.target.value)}
-                    placeholder="Thank you! Your form has been submitted successfully."
+                    placeholder="Thank you! We've received your submission and will get back to you within 24 hours."
                     rows={2}
                     className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 resize-none"
                   />
+                  <p className="text-xs text-gray-500 mt-1">Set expectations about next steps or response time</p>
                 </div>
               </div>
             </Card>
@@ -152,15 +156,15 @@ const FormSettingsModal = ({ isOpen, onClose, settings, onSave }) => {
             <Card className="p-6">
               <div className="flex items-center space-x-2 mb-4">
                 <ApperIcon name="ArrowRight" className="w-5 h-5 text-gray-600" />
-                <h3 className="font-semibold text-gray-900">Post-Submission</h3>
+                <h3 className="font-semibold text-gray-900">After Submission</h3>
               </div>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <label className="text-sm font-medium text-gray-700">
-                      Redirect after submission
+                      Redirect to another page
                     </label>
-                    <p className="text-xs text-gray-500">Redirect users to a specific URL after form submission</p>
+                    <p className="text-xs text-gray-500">Send users to a thank you page or your website</p>
                   </div>
                   <button
                     type="button"
@@ -187,9 +191,10 @@ const FormSettingsModal = ({ isOpen, onClose, settings, onSave }) => {
                     <Input
                       value={formSettings.redirectUrl}
                       onChange={(e) => handleInputChange('redirectUrl', e.target.value)}
-                      placeholder="https://example.com/thank-you"
+                      placeholder="https://yourwebsite.com/thank-you"
                       className="w-full"
                     />
+                    <p className="text-xs text-gray-500 mt-1">Must be a valid URL starting with https://</p>
                   </motion.div>
                 )}
               </div>
@@ -199,15 +204,15 @@ const FormSettingsModal = ({ isOpen, onClose, settings, onSave }) => {
             <Card className="p-6">
               <div className="flex items-center space-x-2 mb-4">
                 <ApperIcon name="Shield" className="w-5 h-5 text-gray-600" />
-                <h3 className="font-semibold text-gray-900">Validation Settings</h3>
+                <h3 className="font-semibold text-gray-900">Form Validation</h3>
               </div>
               <div className="space-y-4">
                 <div className="flex items-center justify-between">
                   <div>
                     <label className="text-sm font-medium text-gray-700">
-                      Enable form validation
+                      Enable smart validation
                     </label>
-                    <p className="text-xs text-gray-500">Validate fields before allowing submission</p>
+                    <p className="text-xs text-gray-500">Check fields for errors before submission (recommended)</p>
                   </div>
                   <button
                     type="button"
@@ -228,9 +233,9 @@ const FormSettingsModal = ({ isOpen, onClose, settings, onSave }) => {
                 <div className="flex items-center justify-between">
                   <div>
                     <label className="text-sm font-medium text-gray-700">
-                      Require all fields
+                      Make all fields required
                     </label>
-                    <p className="text-xs text-gray-500">Make all form fields mandatory</p>
+                    <p className="text-xs text-gray-500">Override individual field settings (use sparingly)</p>
                   </div>
                   <button
                     type="button"
@@ -261,9 +266,9 @@ const FormSettingsModal = ({ isOpen, onClose, settings, onSave }) => {
                 <div className="flex items-center justify-between">
                   <div>
                     <label className="text-sm font-medium text-gray-700">
-                      Show progress bar
+                      Show progress indicator
                     </label>
-                    <p className="text-xs text-gray-500">Display completion progress for multi-step forms</p>
+                    <p className="text-xs text-gray-500">Visual progress bar for longer forms</p>
                   </div>
                   <button
                     type="button"
@@ -284,9 +289,9 @@ const FormSettingsModal = ({ isOpen, onClose, settings, onSave }) => {
                 <div className="flex items-center justify-between">
                   <div>
                     <label className="text-sm font-medium text-gray-700">
-                      Allow save as draft
+                      Allow draft saving
                     </label>
-                    <p className="text-xs text-gray-500">Let users save and continue later</p>
+                    <p className="text-xs text-gray-500">Users can save progress and return later</p>
                   </div>
                   <button
                     type="button"

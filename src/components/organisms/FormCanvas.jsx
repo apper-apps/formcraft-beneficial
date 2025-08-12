@@ -15,7 +15,9 @@ const FormCanvas = ({
   formSettings,
   selectedTheme,
   isMobileDragging,
-  draggedField
+  draggedField,
+  formTemplates,
+  onUseTemplate
 }) => {
 const [dragOverIndex, setDragOverIndex] = useState(null);
   const [touchPosition, setTouchPosition] = useState(null);
@@ -82,24 +84,76 @@ const [dragOverIndex, setDragOverIndex] = useState(null);
     }
   };
 
-  const createNewField = (type) => {
+const createNewField = (type) => {
     const id = Date.now().toString();
     const baseField = {
       id,
       type,
-      label: `${type.charAt(0).toUpperCase() + type.slice(1)} Field`,
       required: false
     };
 
     switch (type) {
       case "text":
-        return { ...baseField, placeholder: "Enter text here..." };
+        return { 
+          ...baseField, 
+          label: "Full Name",
+          placeholder: "Enter your full name..." 
+        };
       case "email":
-        return { ...baseField, placeholder: "Enter email address..." };
+        return { 
+          ...baseField, 
+          label: "Email Address",
+          placeholder: "your.email@example.com" 
+        };
+      case "phone":
+        return { 
+          ...baseField, 
+          label: "Phone Number",
+          placeholder: "(555) 123-4567" 
+        };
+      case "textarea":
+        return { 
+          ...baseField, 
+          label: "Additional Comments",
+          placeholder: "Please share any additional details or questions you may have...",
+          rows: 4
+        };
       case "dropdown":
-        return { ...baseField, options: ["Option 1", "Option 2", "Option 3"] };
+        return { 
+          ...baseField, 
+          label: "How did you hear about us?",
+          options: ["Google Search", "Social Media", "Word of Mouth", "Advertisement", "Other"] 
+        };
+      case "number":
+        return { 
+          ...baseField, 
+          label: "Age",
+          placeholder: "Enter your age" 
+        };
+      case "url":
+        return { 
+          ...baseField, 
+          label: "Website",
+          placeholder: "https://your-website.com" 
+        };
+      case "file":
+        return { 
+          ...baseField, 
+          label: "Upload Document",
+          accept: ".pdf,.doc,.docx,.txt"
+        };
+      case "multiselect":
+        return { 
+          ...baseField, 
+          label: "Areas of Interest",
+          options: ["Technology", "Business", "Design", "Marketing", "Education"] 
+        };
       default:
-        return baseField;
+        return { 
+          ...baseField, 
+          label: `${type.charAt(0).toUpperCase() + type.slice(1)} Field`,
+          placeholder: `Enter ${type} here...`
+        };
     }
   };
 
@@ -125,33 +179,123 @@ if (fields.length === 0) {
         onTouchEnd={handleTouchEnd}
       >
         <div className="flex flex-col items-center justify-center h-full text-center p-8">
-          <div className="w-20 h-20 mb-6 rounded-full bg-gradient-to-br from-primary-100 dark:from-primary-900/50 to-secondary-100 dark:to-secondary-900/50 flex items-center justify-center animate-pulse-glow">
-            <ApperIcon name="MousePointer2" className="w-10 h-10 text-primary-500 dark:text-primary-400" />
+          {/* Hero Section */}
+          <div className="mb-8">
+            <div className="w-24 h-24 mb-6 rounded-full bg-gradient-to-br from-primary-100 dark:from-primary-900/50 to-secondary-100 dark:to-secondary-900/50 flex items-center justify-center animate-pulse-glow mx-auto">
+              <ApperIcon name="Zap" className="w-12 h-12 text-primary-500 dark:text-primary-400" />
+            </div>
+            <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">
+              Create Your Perfect Form
+            </h3>
+            <p className="text-gray-600 dark:text-gray-300 max-w-lg mb-8 leading-relaxed text-lg">
+              Start with a professional template or build from scratch. Drag & drop fields, customize everything, and create forms that convert.
+            </p>
           </div>
-          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
-            Start Building Your Form
-          </h3>
-          <p className="text-gray-600 dark:text-gray-300 max-w-md mb-6 leading-relaxed">
-            Drag field types from the left toolbar and drop them here to start creating your form. You can reorder fields by dragging them around.
-          </p>
-          
-          {/* Quick Start Guide */}
-          <div className="bg-gradient-to-r from-primary-50 to-secondary-50 dark:from-primary-900/20 dark:to-secondary-900/20 rounded-lg p-4 max-w-sm">
-            <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2 flex items-center">
-              <ApperIcon name="Lightbulb" className="w-4 h-4 mr-2 text-yellow-500" />
-              Quick Start
+
+          {/* Template Gallery */}
+          {formTemplates && formTemplates.length > 0 && (
+            <div className="w-full max-w-4xl mb-8">
+              <div className="flex items-center justify-center mb-6">
+                <div className="flex items-center space-x-3">
+                  <ApperIcon name="Sparkles" className="w-5 h-5 text-yellow-500" />
+                  <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
+                    Quick Start Templates
+                  </h4>
+                  <ApperIcon name="Sparkles" className="w-5 h-5 text-yellow-500" />
+                </div>
+              </div>
+              
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+                {formTemplates.slice(0, 4).map((template, index) => (
+                  <div
+                    key={template.Id}
+                    className="bg-gradient-to-br from-gray-50 to-white dark:from-gray-700 dark:to-gray-800 rounded-lg border border-gray-200 dark:border-gray-600 p-6 hover:shadow-lg transition-all duration-300 hover:scale-105 cursor-pointer group"
+                    style={{ animationDelay: `${index * 0.1}s` }}
+                  >
+                    <div className="flex items-start justify-between mb-4">
+                      <div className="flex-1">
+                        <h5 className="font-semibold text-gray-900 dark:text-white mb-2 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
+                          {template.title}
+                        </h5>
+                        <p className="text-sm text-gray-600 dark:text-gray-300 mb-3 line-clamp-2">
+                          {template.description}
+                        </p>
+                        <div className="flex items-center space-x-4 text-xs text-gray-500 dark:text-gray-400">
+                          <span className="flex items-center">
+                            <ApperIcon name="FileText" className="w-3 h-3 mr-1" />
+                            {template.fields?.length || 0} fields
+                          </span>
+                          <span className="flex items-center">
+                            <ApperIcon name="Clock" className="w-3 h-3 mr-1" />
+                            2 min setup
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <button
+                      onClick={() => onUseTemplate(template)}
+                      className="w-full bg-primary-500 hover:bg-primary-600 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 flex items-center justify-center space-x-2 group-hover:bg-primary-600"
+                    >
+                      <ApperIcon name="Download" className="w-4 h-4" />
+                      <span>Use Template</span>
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Divider */}
+          <div className="flex items-center w-full max-w-md mb-8">
+            <div className="flex-1 border-t border-gray-300 dark:border-gray-600"></div>
+            <span className="px-4 text-sm font-medium text-gray-500 dark:text-gray-400">OR</span>
+            <div className="flex-1 border-t border-gray-300 dark:border-gray-600"></div>
+          </div>
+
+          {/* Build From Scratch */}
+          <div className="bg-gradient-to-r from-primary-50 to-secondary-50 dark:from-primary-900/20 dark:to-secondary-900/20 rounded-xl p-6 max-w-lg">
+            <div className="flex items-center justify-center mb-4">
+              <div className="w-12 h-12 bg-primary-100 dark:bg-primary-900/50 rounded-full flex items-center justify-center">
+                <ApperIcon name="Hammer" className="w-6 h-6 text-primary-600 dark:text-primary-400" />
+              </div>
+            </div>
+            <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-3 text-center">
+              Build From Scratch
             </h4>
-            <ul className="text-xs text-gray-600 dark:text-gray-300 space-y-1">
-              <li>• Drag field types from the left panel</li>
-              <li>• Drop them in this area to add</li>
-              <li>• Click fields to edit properties</li>
-              <li>• Reorder by dragging fields up/down</li>
-            </ul>
+            <p className="text-sm text-gray-600 dark:text-gray-300 mb-4 text-center">
+              Drag field types from the left panel to start building your custom form
+            </p>
+            
+            <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-gray-200 dark:border-gray-600">
+              <h5 className="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2 flex items-center">
+                <ApperIcon name="Lightbulb" className="w-4 h-4 mr-2 text-yellow-500" />
+                Pro Tips
+              </h5>
+              <ul className="text-xs text-gray-600 dark:text-gray-300 space-y-1.5">
+                <li className="flex items-start">
+                  <ApperIcon name="ChevronRight" className="w-3 h-3 mt-0.5 mr-2 text-primary-500" />
+                  Drag field types to this canvas area
+                </li>
+                <li className="flex items-start">
+                  <ApperIcon name="ChevronRight" className="w-3 h-3 mt-0.5 mr-2 text-primary-500" />
+                  Click any field to customize properties
+                </li>
+                <li className="flex items-start">
+                  <ApperIcon name="ChevronRight" className="w-3 h-3 mt-0.5 mr-2 text-primary-500" />
+                  Reorder by dragging fields up or down
+                </li>
+                <li className="flex items-start">
+                  <ApperIcon name="ChevronRight" className="w-3 h-3 mt-0.5 mr-2 text-primary-500" />
+                  Preview anytime with the preview button
+                </li>
+              </ul>
+            </div>
           </div>
           
-          <div className="mt-6 flex items-center space-x-2 text-sm text-primary-500 dark:text-primary-400">
+          <div className="mt-8 flex items-center space-x-2 text-sm text-primary-500 dark:text-primary-400">
             <div className="w-2 h-2 bg-primary-500 rounded-full animate-pulse"></div>
-            <span className="font-medium">Ready to accept fields</span>
+            <span className="font-medium">Ready for your creativity</span>
           </div>
         </div>
       </div>
