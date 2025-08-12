@@ -2,7 +2,7 @@ import React from "react";
 import Button from "@/components/atoms/Button";
 import ApperIcon from "@/components/ApperIcon";
 
-const Header = ({ onExport, fieldCount }) => {
+const Header = ({ onExport, onFormSettings, fieldCount }) => {
   return (
     <header className="bg-white shadow-sm border-b border-gray-200 px-6 py-4">
       <div className="flex items-center justify-between">
@@ -23,7 +23,15 @@ const Header = ({ onExport, fieldCount }) => {
             <ApperIcon name="Layout" className="w-4 h-4" />
             <span>{fieldCount} field{fieldCount !== 1 ? "s" : ""}</span>
           </div>
-          
+<Button
+            variant="ghost"
+            onClick={onFormSettings}
+            className="flex items-center space-x-2 text-gray-600 hover:text-gray-900"
+          >
+            <ApperIcon name="Settings" className="w-4 h-4" />
+            <span>Form Settings</span>
+          </Button>
+
           <Button
             variant="secondary"
             onClick={onExport}

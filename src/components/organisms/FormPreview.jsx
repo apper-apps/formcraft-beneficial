@@ -1,9 +1,10 @@
 import React, { useState } from "react";
-import Button from "@/components/atoms/Button";
+import toast from "react-hot-toast";
 import ApperIcon from "@/components/ApperIcon";
+import Button from "@/components/atoms/Button";
 import { cn } from "@/utils/cn";
 
-const FormPreview = ({ fields, formTitle = "Preview Form" }) => {
+const FormPreview = ({ fields, formSettings = {} }) => {
   const [formData, setFormData] = useState({});
 
   const handleInputChange = (fieldId, value) => {
@@ -13,9 +14,32 @@ const FormPreview = ({ fields, formTitle = "Preview Form" }) => {
     }));
   };
 
-  const handleSubmit = (e) => {
+const handleSubmit = (e) => {
     e.preventDefault();
+    
+    // Basic validation if enabled
+    if (formSettings.enableValidation) {
+      const requiredFields = formSettings.requireAllFields ? 
+        fields : 
+        fields.filter(field => field.required);
+      
+      for (const field of requiredFields) {
+        if (!formData[field.id] || formData[field.id].toString().trim() === '') {
+          toast.error(`${field.label} is required`);
+          return;
+        }
+      }
+    }
+
     console.log("Form Data:", formData);
+    toast.success(formSettings.successMessage || "Form submitted successfully!");
+    
+    // Handle redirect if configured
+    if (formSettings.redirectAfterSubmission && formSettings.redirectUrl) {
+      setTimeout(() => {
+        window.open(formSettings.redirectUrl, '_blank');
+      }, 2000);
+    }
   };
 
   const renderField = (field) => {
@@ -103,8 +127,15 @@ const FormPreview = ({ fields, formTitle = "Preview Form" }) => {
       <div className="preview-form">
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="mb-8">
-            <h1 className="text-2xl font-bold text-gray-900 mb-2">{formTitle}</h1>
-            <p className="text-gray-600">Please fill out the form below.</p>
+<h1 className="text-2xl font-bold text-gray-900 mb-2">
+              {formSettings.title || "Preview Form"}
+            </h1>
+            {formSettings.description && (
+              <p className="text-gray-600">{formSettings.description}</p>
+            )}
+            {!formSettings.description && (
+              <p className="text-gray-600">Please fill out the form below.</p>
+            )}
           </div>
 
           {fields.map((field) => (
@@ -121,8 +152,8 @@ const FormPreview = ({ fields, formTitle = "Preview Form" }) => {
           ))}
 
           <div className="pt-6 border-t border-gray-200">
-            <Button type="submit" className="w-full">
-              Submit Form
+<Button type="submit" className="w-full">
+              {formSettings.submitButtonText || "Submit Form"}
             </Button>
           </div>
         </form>

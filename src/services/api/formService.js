@@ -21,11 +21,21 @@ class FormService {
     return form ? { ...form } : null;
   }
 
-  async create(formData) {
+async create(formData) {
     await this.delay();
     const newForm = {
       Id: Math.max(...this.forms.map(f => f.Id), 0) + 1,
-      ...formData,
+      title: formData.title || "Untitled Form",
+      description: formData.description || "",
+      submitButtonText: formData.submitButtonText || "Submit Form",
+      successMessage: formData.successMessage || "Thank you! Your form has been submitted successfully.",
+      redirectAfterSubmission: formData.redirectAfterSubmission || false,
+      redirectUrl: formData.redirectUrl || "",
+      enableValidation: formData.enableValidation !== undefined ? formData.enableValidation : true,
+      requireAllFields: formData.requireAllFields || false,
+      showProgressBar: formData.showProgressBar || false,
+      allowSaveDraft: formData.allowSaveDraft || false,
+      fields: formData.fields || [],
       createdAt: new Date().toISOString()
     };
     this.forms.push(newForm);
@@ -58,13 +68,9 @@ class FormService {
     return { ...deletedForm };
   }
 
-  async saveFormConfig(formConfig) {
+async saveFormConfig(formConfig) {
     await this.delay();
-    const savedForm = await this.create({
-      title: formConfig.title || "Untitled Form",
-      description: formConfig.description || "",
-      fields: formConfig.fields || []
-    });
+    const savedForm = await this.create(formConfig);
     return savedForm;
   }
 
@@ -75,9 +81,17 @@ class FormService {
       throw new Error("Form not found for export");
     }
     
-    return {
+return {
       title: form.title,
       description: form.description,
+      submitButtonText: form.submitButtonText,
+      successMessage: form.successMessage,
+      redirectAfterSubmission: form.redirectAfterSubmission,
+      redirectUrl: form.redirectUrl,
+      enableValidation: form.enableValidation,
+      requireAllFields: form.requireAllFields,
+      showProgressBar: form.showProgressBar,
+      allowSaveDraft: form.allowSaveDraft,
       fields: form.fields,
       exportedAt: new Date().toISOString()
     };

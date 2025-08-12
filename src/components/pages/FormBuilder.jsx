@@ -5,12 +5,25 @@ import Header from "@/components/organisms/Header";
 import FieldToolbar from "@/components/organisms/FieldToolbar";
 import FormCanvas from "@/components/organisms/FormCanvas";
 import FieldConfigurationPanel from "@/components/organisms/FieldConfigurationPanel";
+import FormSettingsModal from "@/components/organisms/FormSettingsModal";
 
 const FormBuilder = () => {
   const [fields, setFields] = useState([]);
   const [selectedFieldId, setSelectedFieldId] = useState(null);
   const [draggedField, setDraggedField] = useState(null);
-
+  const [formSettings, setFormSettings] = useState({
+    title: "Untitled Form",
+    description: "",
+    submitButtonText: "Submit Form",
+    successMessage: "Thank you! Your form has been submitted successfully.",
+    redirectAfterSubmission: false,
+    redirectUrl: "",
+    enableValidation: true,
+    requireAllFields: false,
+    showProgressBar: false,
+    allowSaveDraft: false
+  });
+  const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   const handleDragStart = (fieldType) => {
     setDraggedField(fieldType);
   };
@@ -51,8 +64,8 @@ const FormBuilder = () => {
   };
 
   const handleExport = () => {
-    const formConfig = {
-      title: "Generated Form",
+const formConfig = {
+      ...formSettings,
       fields: fields,
       timestamp: new Date().toISOString()
     };
@@ -70,10 +83,26 @@ const FormBuilder = () => {
     URL.revokeObjectURL(url);
     toast.success("Form configuration exported!");
   };
+const handleFormSettingsOpen = () => {
+    setIsSettingsModalOpen(true);
+  };
+
+  const handleFormSettingsClose = () => {
+    setIsSettingsModalOpen(false);
+  };
+
+  const handleFormSettingsSave = (settings) => {
+    setFormSettings(settings);
+    toast.success("Form settings updated!");
+  };
 
   return (
-    <div className="min-h-screen bg-background">
-      <Header onExport={handleExport} fieldCount={fields.length} />
+    <div className="h-screen bg-background flex flex-col">
+      <Header 
+        onExport={handleExport} 
+        onFormSettings={handleFormSettingsOpen}
+        fieldCount={fields.length} 
+      />
       
       <div className="flex h-[calc(100vh-80px)]">
         {/* Left Panel - Field Toolbar */}
@@ -93,7 +122,7 @@ const FormBuilder = () => {
           animate={{ y: 0, opacity: 1 }}
           transition={{ duration: 0.3, delay: 0.1 }}
         >
-          <FormCanvas
+<FormCanvas
             fields={fields}
             selectedFieldId={selectedFieldId}
             onFieldSelect={setSelectedFieldId}
@@ -101,6 +130,7 @@ const FormBuilder = () => {
             onFieldDelete={handleFieldDelete}
             onFieldAdd={handleFieldAdd}
             onFieldReorder={handleFieldReorder}
+            formSettings={formSettings}
           />
         </motion.div>
 
@@ -111,6 +141,12 @@ const FormBuilder = () => {
           onFieldDelete={handleFieldDelete}
         />
       </div>
+<FormSettingsModal
+        isOpen={isSettingsModalOpen}
+        onClose={handleFormSettingsClose}
+        settings={formSettings}
+        onSave={handleFormSettingsSave}
+      />
     </div>
   );
 };

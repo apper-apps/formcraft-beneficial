@@ -51,7 +51,7 @@ export const useFormBuilder = () => {
     toast.success("Field reordered!");
   }, [fields]);
 
-  const saveForm = useCallback(async (formTitle, formDescription) => {
+const saveForm = useCallback(async (formSettings) => {
     if (fields.length === 0) {
       toast.error("Cannot save empty form");
       return null;
@@ -62,8 +62,7 @@ export const useFormBuilder = () => {
 
     try {
       const formConfig = {
-        title: formTitle || "Untitled Form",
-        description: formDescription || "",
+        ...formSettings,
         fields: fields
       };
 
@@ -80,9 +79,9 @@ export const useFormBuilder = () => {
     }
   }, [fields]);
 
-  const exportForm = useCallback((formTitle = "Generated Form") => {
+const exportForm = useCallback((formSettings) => {
     const formConfig = {
-      title: formTitle,
+      ...formSettings,
       fields: fields,
       timestamp: new Date().toISOString()
     };
@@ -94,7 +93,8 @@ export const useFormBuilder = () => {
     const url = URL.createObjectURL(blob);
     const link = document.createElement("a");
     link.href = url;
-    link.download = `${formTitle.toLowerCase().replace(/\s+/g, '-')}-config.json`;
+    const fileName = (formSettings.title || "Generated Form").toLowerCase().replace(/\s+/g, '-');
+    link.download = `${fileName}-config.json`;
     link.click();
     
     URL.revokeObjectURL(url);
