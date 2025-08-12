@@ -4,6 +4,7 @@ import { ToastContainer } from "react-toastify";
 import PublicFormViewer from "@/components/pages/PublicFormViewer";
 import { ThemeProvider, useTheme } from "@/contexts/ThemeContext";
 import FormBuilder from "@/components/pages/FormBuilder";
+import AdminPanel from "@/components/pages/AdminPanel";
 
 const AppContent = () => {
   const { isDark } = useTheme();
@@ -12,7 +13,8 @@ const AppContent = () => {
     <BrowserRouter>
 <div className="min-h-screen bg-background dark:bg-gray-900 transition-colors duration-200">
         <Routes>
-          <Route path="/" element={<FormBuilder />} />
+<Route path="/" element={<FormBuilder />} />
+          <Route path="/admin" element={<AdminPanel />} />
           <Route path="/form/:shareId" element={<PublicFormViewer />} />
         </Routes>
 <ToastContainer

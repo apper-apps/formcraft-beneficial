@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import { useTheme } from "@/contexts/ThemeContext";
 import ApperIcon from "@/components/ApperIcon";
@@ -22,7 +23,7 @@ onDownloadForm,
   onPreviewModeToggle
 }) => {
 const { isDark, toggleTheme } = useTheme();
-
+const navigate = useNavigate();
   const handleThemeSelect = (theme) => {
     onThemeSelect(theme);
     toast.success(`Applied ${theme.name} theme to form preview!`);
@@ -83,6 +84,14 @@ const { isDark, toggleTheme } = useTheme();
                     className="flex items-center space-x-2 bg-blue-100 hover:bg-blue-200 text-blue-700">
                     <ApperIcon name="FolderOpen" className="w-4 h-4" />
                     <span>Load Form</span>
+</Button>
+                <Button
+                    variant="ghost"
+                    onClick={() => navigate('/admin')}
+                    className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                >
+                    <ApperIcon name="Database" size={18} />
+                    <span className="ml-2">Admin</span>
                 </Button>
                 <Button
                     variant="ghost"
