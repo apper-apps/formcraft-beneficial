@@ -51,7 +51,7 @@ const PublicFormViewer = () => {
     }));
   };
 
-const handleSubmit = async (e) => {
+const handleSubmit = async (e, retryCount = 0) => {
     e.preventDefault();
     setSubmitting(true);
 
@@ -69,7 +69,8 @@ const handleSubmit = async (e) => {
         metadata: {
           fieldCount: formData.fields?.length || 0,
           hasFileUploads: formData.fields?.some(field => field.type === 'file') || false,
-          submissionSource: "public_form_viewer"
+          submissionSource: "public_form_viewer",
+          retryCount
         }
       };
 
@@ -84,7 +85,91 @@ const handleSubmit = async (e) => {
       
     } catch (error) {
       console.error('Error submitting form:', error);
-      toast.error('Failed to submit form. Please try again.');
+      
+      // Determine error type and provide appropriate feedback
+      let errorMessage = 'Failed to submit form. Please try again.';
+      let showRetry = false;
+      
+      // Network connectivity issues
+      if (!navigator.onLine) {
+        errorMessage = 'No internet connection. Please check your connection and try again.';
+        showRetry = true;
+      }
+      // Network request failed (fetch/xhr errors)
+      else if (error.name === 'NetworkError' || error.message.includes('fetch') || error.code === 'NETWORK_ERROR') {
+        errorMessage = 'Network error occurred. Please check your connection and try again.';
+        showRetry = true;
+      }
+      // Service unavailable or server errors
+      else if (error.status >= 500 || error.message.includes('Service unavailable')) {
+        errorMessage = 'Server temporarily unavailable. Please try again in a few moments.';
+        showRetry = true;
+      }
+      // Validation or client errors
+      else if (error.status >= 400 && error.status < 500) {
+        errorMessage = error.message || 'Invalid form data. Please check your inputs and try again.';
+        showRetry = false;
+      }
+      // Storage quota exceeded
+      else if (error.name === 'QuotaExceededError') {
+        errorMessage = 'Storage quota exceeded. Please clear your browser storage and try again.';
+        showRetry = false;
+      }
+      // File upload errors
+      else if (error.message.includes('file') || error.message.includes('upload')) {
+        errorMessage = 'File upload failed. Please check file sizes and try again.';
+        showRetry = true;
+      }
+      // Generic retry for unknown errors
+      else {
+        showRetry = retryCount < 2;
+        if (showRetry) {
+          errorMessage = `Submission failed (attempt ${retryCount + 1}/3). Retrying...`;
+        } else {
+          errorMessage = 'Form submission failed after multiple attempts. Please try again later.';
+        }
+      }
+
+      // Show error toast with retry option if applicable
+      if (showRetry && retryCount < 2) {
+        toast.error(
+          <div className="flex flex-col gap-2">
+            <span>{errorMessage}</span>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => {
+                toast.dismiss();
+                setTimeout(() => handleSubmit(e, retryCount + 1), 1000);
+              }}
+              className="text-xs"
+            >
+              Retry Now
+            </Button>
+          </div>,
+          {
+            autoClose: 8000,
+            closeButton: true
+          }
+        );
+      } else {
+        toast.error(errorMessage, {
+          autoClose: 6000
+        });
+      }
+
+      // Auto-retry for network errors (with exponential backoff)
+      if (showRetry && retryCount < 2 && (
+        !navigator.onLine || 
+        error.name === 'NetworkError' || 
+        error.status >= 500
+      )) {
+        const retryDelay = Math.pow(2, retryCount) * 1000; // 1s, 2s, 4s
+        setTimeout(() => {
+          handleSubmit(e, retryCount + 1);
+        }, retryDelay);
+      }
+      
     } finally {
       setSubmitting(false);
     }

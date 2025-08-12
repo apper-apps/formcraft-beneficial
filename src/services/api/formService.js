@@ -23,38 +23,99 @@ class FormService {
 
 async create(formData) {
     await this.delay();
-    const newForm = {
-      Id: Math.max(...this.forms.map(f => f.Id), 0) + 1,
-      title: formData.title || "Untitled Form",
-      description: formData.description || "",
-      submitButtonText: formData.submitButtonText || "Submit Form",
-      successMessage: formData.successMessage || "Thank you! Your form has been submitted successfully.",
-      redirectAfterSubmission: formData.redirectAfterSubmission || false,
-      redirectUrl: formData.redirectUrl || "",
-      enableValidation: formData.enableValidation !== undefined ? formData.enableValidation : true,
-      requireAllFields: formData.requireAllFields || false,
-      showProgressBar: formData.showProgressBar || false,
-      allowSaveDraft: formData.allowSaveDraft || false,
-      fields: formData.fields || [],
-      createdAt: new Date().toISOString()
-    };
-    this.forms.push(newForm);
-    return { ...newForm };
+    
+    try {
+      // Validate required data
+      if (!formData || typeof formData !== 'object') {
+        throw new Error('Invalid form data provided');
+      }
+
+      // Check if we can store the form (simulate storage limits)
+      if (this.forms.length >= 1000) {
+        const error = new Error('Storage quota exceeded. Maximum number of forms reached.');
+        error.name = 'QuotaExceededError';
+        throw error;
+      }
+
+      const newForm = {
+        Id: Math.max(...this.forms.map(f => f.Id), 0) + 1,
+        title: formData.title || "Untitled Form",
+        description: formData.description || "",
+        submitButtonText: formData.submitButtonText || "Submit Form",
+        successMessage: formData.successMessage || "Thank you! Your form has been submitted successfully.",
+        redirectAfterSubmission: formData.redirectAfterSubmission || false,
+        redirectUrl: formData.redirectUrl || "",
+        enableValidation: formData.enableValidation !== undefined ? formData.enableValidation : true,
+        requireAllFields: formData.requireAllFields || false,
+        showProgressBar: formData.showProgressBar || false,
+        allowSaveDraft: formData.allowSaveDraft || false,
+        fields: formData.fields || [],
+        createdAt: new Date().toISOString()
+      };
+      
+      this.forms.push(newForm);
+      return { ...newForm };
+      
+    } catch (error) {
+      console.error('FormService.create error:', error);
+      
+      // Re-throw with more context
+      if (error.name === 'QuotaExceededError') {
+        throw error;
+      }
+      
+      const serviceError = new Error(`Failed to create form: ${error.message}`);
+      serviceError.originalError = error;
+      throw serviceError;
+    }
   }
 
-  async update(id, formData) {
+async update(id, formData) {
     await this.delay();
-    const index = this.forms.findIndex(form => form.Id === parseInt(id));
-    if (index === -1) {
-      throw new Error("Form not found");
-    }
     
-    this.forms[index] = {
-      ...this.forms[index],
-      ...formData,
-      updatedAt: new Date().toISOString()
-    };
-    return { ...this.forms[index] };
+    try {
+      // Validate inputs
+      if (!id || (!formData || typeof formData !== 'object')) {
+        throw new Error("Invalid parameters provided");
+      }
+
+      const index = this.forms.findIndex(form => form.Id === parseInt(id));
+      if (index === -1) {
+        const error = new Error("Form not found");
+        error.status = 404;
+        throw error;
+      }
+      
+      // Simulate potential update conflicts
+      const existingForm = this.forms[index];
+      if (formData.version && existingForm.version && formData.version < existingForm.version) {
+        const error = new Error("Form has been modified by another user. Please refresh and try again.");
+        error.status = 409;
+        error.code = 'CONFLICT';
+        throw error;
+      }
+      
+      this.forms[index] = {
+        ...this.forms[index],
+        ...formData,
+        updatedAt: new Date().toISOString(),
+        version: (existingForm.version || 1) + 1
+      };
+      
+      return { ...this.forms[index] };
+      
+    } catch (error) {
+      console.error('FormService.update error:', error);
+      
+      // Re-throw with preserved status codes
+      if (error.status) {
+        throw error;
+      }
+      
+      const serviceError = new Error(`Failed to update form: ${error.message}`);
+      serviceError.originalError = error;
+      throw serviceError;
+    }
   }
 
   async delete(id) {
@@ -70,8 +131,43 @@ async create(formData) {
 
 async saveFormConfig(formConfig) {
     await this.delay();
-    const savedForm = await this.create(formConfig);
-    return savedForm;
+    
+    try {
+      // Validate form configuration
+      if (!formConfig) {
+        throw new Error("Form configuration is required");
+      }
+
+      if (!formConfig.fields || !Array.isArray(formConfig.fields)) {
+        throw new Error("Form must contain at least one field");
+      }
+
+      if (formConfig.fields.length === 0) {
+        throw new Error("Form cannot be empty");
+      }
+
+      // Validate field configurations
+      const invalidFields = formConfig.fields.filter(field => 
+        !field.id || !field.type || !field.label
+      );
+
+      if (invalidFields.length > 0) {
+        throw new Error(`Invalid field configuration found. All fields must have id, type, and label.`);
+      }
+
+      const savedForm = await this.create(formConfig);
+      return savedForm;
+      
+    } catch (error) {
+      console.error('FormService.saveFormConfig error:', error);
+      
+      // Enhanced error for form configuration issues
+      if (error.message.includes('field') || error.message.includes('configuration')) {
+        error.status = 400;
+      }
+      
+      throw error;
+    }
   }
 
   async exportFormConfig(formId) {
