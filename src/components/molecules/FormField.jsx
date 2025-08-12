@@ -20,7 +20,7 @@ const FormField = ({
     }
   };
 
-  const renderFieldInput = () => {
+const renderFieldInput = () => {
     const baseInputClasses = "w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500";
     
     switch (field.type) {
@@ -42,11 +42,64 @@ const FormField = ({
             disabled
           />
         );
+      case "textarea":
+        return (
+          <textarea
+            placeholder={field.placeholder || "Enter your text here..."}
+            rows={field.rows || 3}
+            className={`${baseInputClasses} resize-none`}
+            disabled
+          />
+        );
+      case "number":
+        return (
+          <input
+            type="number"
+            placeholder={field.placeholder || "Enter a number..."}
+            min={field.min}
+            max={field.max}
+            step={field.step || 1}
+            className={baseInputClasses}
+            disabled
+          />
+        );
+      case "url":
+        return (
+          <input
+            type="url"
+            placeholder={field.placeholder || "https://example.com"}
+            className={baseInputClasses}
+            disabled
+          />
+        );
+      case "file":
+        return (
+          <input
+            type="file"
+            accept={field.accept}
+            multiple={field.multiple}
+            className={baseInputClasses}
+            disabled
+          />
+        );
       case "dropdown":
         return (
           <select className={baseInputClasses} disabled>
             <option>{field.options?.[0] || "Select an option..."}</option>
             {field.options?.slice(1).map((option, idx) => (
+              <option key={idx}>{option}</option>
+            ))}
+          </select>
+        );
+      case "multiselect":
+        return (
+          <select 
+            className={baseInputClasses} 
+            multiple 
+            size="3"
+            disabled
+          >
+            {field.options?.map((option, idx) => (
               <option key={idx}>{option}</option>
             ))}
           </select>

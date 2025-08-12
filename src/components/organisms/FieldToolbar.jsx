@@ -2,10 +2,15 @@ import React from "react";
 import FieldTypeButton from "@/components/molecules/FieldTypeButton";
 
 const FieldToolbar = ({ onDragStart }) => {
-  const fieldTypes = [
+const fieldTypes = [
     { type: "text", icon: "Type", label: "Text Input" },
     { type: "email", icon: "Mail", label: "Email" },
-    { type: "dropdown", icon: "ChevronDown", label: "Dropdown" }
+    { type: "dropdown", icon: "ChevronDown", label: "Dropdown" },
+    { type: "textarea", icon: "FileText", label: "Textarea" },
+    { type: "file", icon: "Upload", label: "File Upload" },
+    { type: "number", icon: "Hash", label: "Number Input" },
+    { type: "url", icon: "Link", label: "URL Input" },
+    { type: "multiselect", icon: "List", label: "Multi-Select" }
   ];
 
   return (

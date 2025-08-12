@@ -52,15 +52,36 @@ class FieldTypeService {
     };
 
     // Add type-specific properties
-    switch (type) {
+switch (type) {
       case "text":
       case "email":
       case "phone":
+      case "url":
         baseField.placeholder = fieldType.defaultPlaceholder || "";
+        break;
+      case "textarea":
+        baseField.placeholder = fieldType.defaultPlaceholder || "";
+        baseField.rows = 3;
+        baseField.maxLength = null;
+        break;
+      case "number":
+        baseField.placeholder = fieldType.defaultPlaceholder || "";
+        baseField.min = null;
+        baseField.max = null;
+        baseField.step = 1;
+        break;
+      case "file":
+        baseField.accept = "";
+        baseField.maxSize = null;
+        baseField.multiple = false;
         break;
       case "dropdown":
       case "radio":
+      case "multiselect":
         baseField.options = fieldType.defaultOptions || [];
+        if (type === "multiselect") {
+          baseField.maxSelections = null;
+        }
         break;
       case "checkbox":
         baseField.defaultChecked = false;

@@ -14,12 +14,12 @@ const FieldConfigurationPanel = ({
   const [localField, setLocalField] = useState(null);
   const [optionInputs, setOptionInputs] = useState([]);
 
-  useEffect(() => {
+useEffect(() => {
     if (selectedField) {
       setLocalField({ ...selectedField });
-      if (selectedField.type === "dropdown" && selectedField.options) {
+      if ((selectedField.type === "dropdown" || selectedField.type === "multiselect") && selectedField.options) {
         setOptionInputs(selectedField.options.map(opt => opt));
-      } else if (selectedField.type === "dropdown") {
+      } else if (selectedField.type === "dropdown" || selectedField.type === "multiselect") {
         setOptionInputs(["Option 1", "Option 2"]);
       }
     }
@@ -53,9 +53,9 @@ const FieldConfigurationPanel = ({
   };
 
   const handleSave = () => {
-    const updates = { ...localField };
+const updates = { ...localField };
     
-    if (localField.type === "dropdown") {
+    if (localField.type === "dropdown" || localField.type === "multiselect") {
       updates.options = optionInputs.filter(opt => opt.trim() !== "");
     }
     
@@ -121,7 +121,7 @@ const FieldConfigurationPanel = ({
               />
             </div>
             
-            {(localField.type === "text" || localField.type === "email") && (
+{(localField.type === "text" || localField.type === "email" || localField.type === "textarea" || localField.type === "number" || localField.type === "url") && (
               <div>
                 <label className="block text-xs font-medium text-gray-700 mb-1">
                   Placeholder Text
@@ -130,6 +130,111 @@ const FieldConfigurationPanel = ({
                   value={localField.placeholder || ""}
                   onChange={(e) => handleLocalUpdate("placeholder", e.target.value)}
                   placeholder="Enter placeholder text..."
+                  className="text-sm"
+                />
+              </div>
+            )}
+
+            {localField.type === "textarea" && (
+              <div>
+                <label className="block text-xs font-medium text-gray-700 mb-1">
+                  Rows
+                </label>
+                <Input
+                  type="number"
+                  value={localField.rows || 3}
+                  onChange={(e) => handleLocalUpdate("rows", parseInt(e.target.value) || 3)}
+                  min="1"
+                  max="10"
+                  className="text-sm"
+                />
+              </div>
+            )}
+
+            {localField.type === "number" && (
+              <>
+                <div>
+                  <label className="block text-xs font-medium text-gray-700 mb-1">
+                    Minimum Value
+                  </label>
+                  <Input
+                    type="number"
+                    value={localField.min || ""}
+                    onChange={(e) => handleLocalUpdate("min", e.target.value ? parseFloat(e.target.value) : null)}
+                    placeholder="No minimum"
+                    className="text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-700 mb-1">
+                    Maximum Value
+                  </label>
+                  <Input
+                    type="number"
+                    value={localField.max || ""}
+                    onChange={(e) => handleLocalUpdate("max", e.target.value ? parseFloat(e.target.value) : null)}
+                    placeholder="No maximum"
+                    className="text-sm"
+                  />
+                </div>
+                <div>
+                  <label className="block text-xs font-medium text-gray-700 mb-1">
+                    Step
+                  </label>
+                  <Input
+                    type="number"
+                    value={localField.step || 1}
+                    onChange={(e) => handleLocalUpdate("step", parseFloat(e.target.value) || 1)}
+                    min="0.01"
+                    step="0.01"
+                    className="text-sm"
+                  />
+                </div>
+              </>
+            )}
+
+            {localField.type === "file" && (
+              <>
+                <div>
+                  <label className="block text-xs font-medium text-gray-700 mb-1">
+                    Accepted File Types
+                  </label>
+                  <Input
+                    value={localField.accept || ""}
+                    onChange={(e) => handleLocalUpdate("accept", e.target.value)}
+                    placeholder="e.g., .pdf,.doc,.jpg"
+                    className="text-sm"
+                  />
+                  <p className="text-xs text-gray-500 mt-1">
+                    Use comma-separated extensions or MIME types
+                  </p>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <input
+                    type="checkbox"
+                    id="multiple"
+                    checked={localField.multiple || false}
+                    onChange={(e) => handleLocalUpdate("multiple", e.target.checked)}
+                    className="w-3 h-3 text-primary-600"
+                  />
+                  <label htmlFor="multiple" className="text-xs text-gray-700">
+                    Allow multiple files
+                  </label>
+                </div>
+              </>
+            )}
+
+            {localField.type === "multiselect" && (
+              <div>
+                <label className="block text-xs font-medium text-gray-700 mb-1">
+                  Maximum Selections
+                </label>
+                <Input
+                  type="number"
+                  value={localField.maxSelections || ""}
+                  onChange={(e) => handleLocalUpdate("maxSelections", e.target.value ? parseInt(e.target.value) : null)}
+                  placeholder="No limit"
+                  min="1"
                   className="text-sm"
                 />
               </div>
@@ -181,11 +286,11 @@ const FieldConfigurationPanel = ({
         </Card>
 
         {/* Field-Specific Options */}
-        {localField.type === "dropdown" && (
+{(localField.type === "dropdown" || localField.type === "multiselect") && (
           <Card className="p-4">
             <h3 className="text-sm font-semibold text-gray-800 mb-3 flex items-center">
               <ApperIcon name="List" className="w-4 h-4 mr-2 text-gray-500" />
-              Dropdown Options
+              {localField.type === "dropdown" ? "Dropdown Options" : "Multi-Select Options"}
             </h3>
             
             <div className="space-y-2">
@@ -262,7 +367,7 @@ const FieldConfigurationPanel = ({
               {localField.required && <span className="text-accent-500 ml-1">*</span>}
             </label>
             
-            {localField.type === "text" && (
+{localField.type === "text" && (
               <input
                 type="text"
                 placeholder={localField.placeholder || "Enter text..."}
@@ -279,10 +384,63 @@ const FieldConfigurationPanel = ({
                 disabled
               />
             )}
+
+            {localField.type === "textarea" && (
+              <textarea
+                placeholder={localField.placeholder || "Enter your text here..."}
+                rows={localField.rows || 3}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm resize-none"
+                disabled
+              />
+            )}
+
+            {localField.type === "number" && (
+              <input
+                type="number"
+                placeholder={localField.placeholder || "Enter a number..."}
+                min={localField.min}
+                max={localField.max}
+                step={localField.step || 1}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                disabled
+              />
+            )}
+
+            {localField.type === "url" && (
+              <input
+                type="url"
+                placeholder={localField.placeholder || "https://example.com"}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                disabled
+              />
+            )}
+
+            {localField.type === "file" && (
+              <input
+                type="file"
+                accept={localField.accept}
+                multiple={localField.multiple}
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm"
+                disabled
+              />
+            )}
             
             {localField.type === "dropdown" && (
               <select className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm" disabled>
                 <option>Select an option...</option>
+                {optionInputs.filter(opt => opt.trim()).map((option, idx) => (
+                  <option key={idx}>{option}</option>
+                ))}
+              </select>
+            )}
+
+            {localField.type === "multiselect" && (
+              <select 
+                className="w-full px-3 py-2 border border-gray-300 rounded-md text-sm" 
+                multiple 
+                size="3"
+                disabled
+              >
                 {optionInputs.filter(opt => opt.trim()).map((option, idx) => (
                   <option key={idx}>{option}</option>
                 ))}

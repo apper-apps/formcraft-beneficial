@@ -58,7 +58,7 @@
     "defaultOptions": ["Option 1", "Option 2", "Option 3"],
     "properties": ["label", "options", "required"]
   },
-  {
+{
     "Id": 7,
     "type": "date",
     "name": "Date Picker",
@@ -66,5 +66,54 @@
     "description": "Date selection input",
     "defaultLabel": "Select Date",
     "properties": ["label", "required", "minDate", "maxDate"]
+  },
+  {
+    "Id": 8,
+    "type": "textarea",
+    "name": "Textarea",
+    "icon": "FileText",
+    "description": "Multi-line text input field",
+    "defaultLabel": "Long Text Field",
+    "defaultPlaceholder": "Enter your text here...",
+    "properties": ["label", "placeholder", "required", "rows", "maxLength"]
+  },
+  {
+    "Id": 9,
+    "type": "file",
+    "name": "File Upload",
+    "icon": "Upload",
+    "description": "File upload input field",
+    "defaultLabel": "Upload File",
+    "properties": ["label", "required", "accept", "maxSize", "multiple"]
+  },
+  {
+    "Id": 10,
+    "type": "number",
+    "name": "Number Input",
+    "icon": "Hash",
+    "description": "Numeric input with validation",
+    "defaultLabel": "Number Field",
+    "defaultPlaceholder": "Enter a number...",
+    "properties": ["label", "placeholder", "required", "min", "max", "step"]
+  },
+  {
+    "Id": 11,
+    "type": "url",
+    "name": "URL Input",
+    "icon": "Link",
+    "description": "URL input with validation",
+    "defaultLabel": "Website URL",
+    "defaultPlaceholder": "https://example.com",
+    "properties": ["label", "placeholder", "required"]
+  },
+  {
+    "Id": 12,
+    "type": "multiselect",
+    "name": "Multi-Select",
+    "icon": "List",
+    "description": "Multiple selection dropdown",
+    "defaultLabel": "Select Multiple Options",
+    "defaultOptions": ["Option 1", "Option 2", "Option 3"],
+    "properties": ["label", "options", "required", "maxSelections"]
   }
 ]
