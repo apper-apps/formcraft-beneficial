@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { toast } from "react-toastify";
+import themeTemplateService from "@/services/api/themeTemplateService";
 import FormCanvas from "@/components/organisms/FormCanvas";
 import Header from "@/components/organisms/Header";
 import FormSettingsModal from "@/components/organisms/FormSettingsModal";
@@ -10,9 +11,10 @@ import fieldTypesData from "@/services/mockData/fieldTypes.json";
 import formsData from "@/services/mockData/forms.json";
 import localStorageService from "@/services/api/localStorageService";
 const FormBuilder = () => {
-  const [fields, setFields] = useState([]);
+const [fields, setFields] = useState([]);
   const [selectedFieldId, setSelectedFieldId] = useState(null);
   const [draggedField, setDraggedField] = useState(null);
+  const [selectedFormTheme, setSelectedFormTheme] = useState(themeTemplateService.getDefaultTheme());
   const [formSettings, setFormSettings] = useState({
     title: "Untitled Form",
     description: "",
@@ -28,7 +30,14 @@ const FormBuilder = () => {
   const [isSettingsModalOpen, setIsSettingsModalOpen] = useState(false);
   const [isManagementModalOpen, setIsManagementModalOpen] = useState(false);
   const [savedForms, setSavedForms] = useState([]);
-  const [managementLoading, setManagementLoading] = useState(false);
+const [managementLoading, setManagementLoading] = useState(false);
+  const [availableThemes] = useState(themeTemplateService.getAll());
+  
+  const handleThemeSelect = (theme) => {
+    setSelectedFormTheme(theme);
+    toast.success(`Theme changed to ${theme.name}!`);
+  };
+
   const handleDragStart = (fieldType) => {
     setDraggedField(fieldType);
   };
@@ -204,6 +213,9 @@ const handleFormSettingsOpen = () => {
         fieldCount={fields.length} 
         formTitle={formSettings.title}
         hasFields={fields.length > 0}
+        selectedTheme={selectedFormTheme}
+        availableThemes={availableThemes}
+        onThemeSelect={handleThemeSelect}
       />
       
       <div className="flex h-[calc(100vh-80px)]">
@@ -233,6 +245,7 @@ className="w-80 p-6 bg-background dark:bg-gray-800 border-r border-gray-200 dark
             onFieldAdd={handleFieldAdd}
             onFieldReorder={handleFieldReorder}
             formSettings={formSettings}
+            selectedTheme={selectedFormTheme}
           />
         </motion.div>
 

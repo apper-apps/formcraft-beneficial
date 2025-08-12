@@ -1,10 +1,29 @@
 import React from "react";
+import { toast } from "react-toastify";
 import { useTheme } from "@/contexts/ThemeContext";
 import ApperIcon from "@/components/ApperIcon";
 import Button from "@/components/atoms/Button";
+import ThemeSelector from "@/components/molecules/ThemeSelector";
+const Header = ({ 
+  onExport, 
+  onFormSettings, 
+  onSaveForm, 
+  onLoadForm, 
+  onNewForm, 
+  fieldCount, 
+  formTitle, 
+  hasFields,
+  selectedTheme,
+  availableThemes,
+  onThemeSelect
+}) => {
+const { isDark, toggleTheme } = useTheme();
 
-const Header = ({ onExport, onFormSettings, onSaveForm, onLoadForm, onNewForm, fieldCount, formTitle, hasFields }) => {
-  const { isDark, toggleTheme } = useTheme();
+  const handleThemeSelect = (theme) => {
+    onThemeSelect(theme);
+    toast.success(`Applied ${theme.name} theme to form preview!`);
+  };
+
   return (
 <header
     className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 px-6 py-4 transition-colors duration-200">
@@ -29,11 +48,16 @@ const Header = ({ onExport, onFormSettings, onSaveForm, onLoadForm, onNewForm, f
                     <ApperIcon name={isDark ? "Sun" : "Moon"} className="w-4 h-4" />
                 </Button>
             </div>
-            <div className="flex items-center space-x-4">
+<div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-2 text-sm text-gray-600">
                     <ApperIcon name="Layout" className="w-4 h-4" />
-                    <span>{fieldCount}field{fieldCount !== 1 ? "s" : ""}</span>
+                    <span>{fieldCount} field{fieldCount !== 1 ? "s" : ""}</span>
                 </div>
+                <ThemeSelector
+                    selectedTheme={selectedTheme}
+                    themes={availableThemes}
+                    onThemeSelect={handleThemeSelect}
+                />
                 <Button
                     variant="secondary"
                     onClick={onNewForm}

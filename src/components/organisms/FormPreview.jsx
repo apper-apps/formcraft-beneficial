@@ -4,7 +4,7 @@ import ApperIcon from "@/components/ApperIcon";
 import Button from "@/components/atoms/Button";
 import { cn } from "@/utils/cn";
 
-const FormPreview = ({ fields, formSettings = {} }) => {
+const FormPreview = ({ fields, formSettings = {}, selectedTheme }) => {
   const [formData, setFormData] = useState({});
 
   const handleInputChange = (fieldId, value) => {
@@ -42,8 +42,23 @@ const handleSubmit = (e) => {
     }
   };
 
+const getThemeClasses = () => {
+    if (!selectedTheme) {
+      return {
+        container: "w-full h-full bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-6 custom-scrollbar overflow-y-auto transition-colors duration-200",
+        title: "text-2xl font-bold text-gray-900 dark:text-white mb-2",
+        description: "text-gray-600 dark:text-gray-300",
+        fieldLabel: "block text-sm font-medium text-gray-700 dark:text-gray-200",
+        input: "w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200",
+        submitButton: "w-full",
+        formSpacing: "space-y-4"
+      };
+    }
+    return selectedTheme.styles;
+  };
+
   const renderField = (field) => {
-const baseInputClasses = "w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200";
+    const themeClasses = getThemeClasses();
     
     switch (field.type) {
       case "text":
@@ -54,7 +69,7 @@ const baseInputClasses = "w-full px-3 py-2 border border-gray-300 dark:border-gr
             placeholder={field.placeholder || "Enter text..."}
             value={formData[field.id] || ""}
             onChange={(e) => handleInputChange(field.id, e.target.value)}
-            className={baseInputClasses}
+            className={themeClasses.input}
           />
         );
       case "email":
@@ -65,7 +80,7 @@ const baseInputClasses = "w-full px-3 py-2 border border-gray-300 dark:border-gr
             placeholder={field.placeholder || "Enter email address..."}
             value={formData[field.id] || ""}
             onChange={(e) => handleInputChange(field.id, e.target.value)}
-            className={baseInputClasses}
+            className={themeClasses.input}
           />
         );
       case "dropdown":
@@ -74,7 +89,7 @@ const baseInputClasses = "w-full px-3 py-2 border border-gray-300 dark:border-gr
             id={field.id}
             value={formData[field.id] || ""}
             onChange={(e) => handleInputChange(field.id, e.target.value)}
-            className={baseInputClasses}
+            className={themeClasses.input}
           >
             <option value="">Select an option...</option>
             {field.options?.map((option, idx) => (
@@ -108,7 +123,7 @@ return (
   }
 
   return (
-<div className="w-full h-full bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-6 custom-scrollbar overflow-y-auto transition-colors duration-200">
+<div className={getThemeClasses().container}>
       <div className="mb-6">
         <div className="flex items-center justify-between mb-2">
           <h2 className="text-lg font-bold text-gray-900 bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent">
@@ -127,22 +142,22 @@ return (
       <div className="preview-form">
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="mb-8">
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+<h1 className={getThemeClasses().title}>
               {formSettings.title || "Preview Form"}
             </h1>
-            {formSettings.description && (
-              <p className="text-gray-600 dark:text-gray-300">{formSettings.description}</p>
+{formSettings.description && (
+              <p className={getThemeClasses().description}>{formSettings.description}</p>
             )}
             {!formSettings.description && (
-              <p className="text-gray-600 dark:text-gray-300">Please fill out the form below.</p>
+              <p className={getThemeClasses().description}>Please fill out the form below.</p>
             )}
           </div>
 
           {fields.map((field) => (
             <div key={field.id} className="space-y-2">
               <label 
-                htmlFor={field.id} 
-                className="block text-sm font-medium text-gray-700 dark:text-gray-200"
+htmlFor={field.id} 
+                className={getThemeClasses().fieldLabel}
               >
                 {field.label || "Untitled Field"}
                 {field.required && <span className="text-red-500 ml-1">*</span>}
@@ -152,7 +167,7 @@ return (
           ))}
 
           <div className="pt-6 border-t border-gray-200 dark:border-gray-700">
-<Button type="submit" className="w-full">
+<Button type="submit" className={getThemeClasses().submitButton}>
               {formSettings.submitButtonText || "Submit Form"}
             </Button>
           </div>

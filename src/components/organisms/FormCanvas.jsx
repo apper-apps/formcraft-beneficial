@@ -1,6 +1,7 @@
 import React, { useState } from "react";
-import FormField from "@/components/molecules/FormField";
 import ApperIcon from "@/components/ApperIcon";
+import FormPreview from "@/components/organisms/FormPreview";
+import FormField from "@/components/molecules/FormField";
 import { cn } from "@/utils/cn";
 
 const FormCanvas = ({ 
@@ -10,7 +11,9 @@ const FormCanvas = ({
   onFieldUpdate, 
   onFieldDelete, 
   onFieldAdd, 
-  onFieldReorder 
+  onFieldReorder,
+  formSettings,
+  selectedTheme
 }) => {
   const [dragOverIndex, setDragOverIndex] = useState(null);
 
