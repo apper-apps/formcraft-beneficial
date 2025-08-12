@@ -41,25 +41,45 @@ function AdminPanel() {
     applyFilters();
   }, [searchTerm, selectedForm, startDate, endDate]);
 
-  const loadInitialData = async () => {
+const loadInitialData = async () => {
     try {
       setLoading(true);
       setError(null);
       
-      const [submissionsData, formsData, statsData] = await Promise.all([
-        formSubmissionService.getAll(),
-        formService.getAll(),
-        formSubmissionService.getSubmissionStats()
-      ]);
+      // Load services individually to provide better error handling
+      let submissionsData = [];
+      let formsData = [];
+      let statsData = { total: 0, today: 0, lastWeek: 0, lastMonth: 0 };
       
-      setSubmissions(submissionsData);
-      setForms(formsData);
-      setStats(statsData);
+      try {
+        submissionsData = await formSubmissionService.getAll();
+      } catch (submissionError) {
+        console.warn('Failed to load submissions:', submissionError);
+        toast.error('Failed to load form submissions');
+      }
+      
+      try {
+        formsData = await formService.getAll();
+      } catch (formError) {
+        console.warn('Failed to load forms:', formError);
+        toast.error('Failed to load forms data');
+      }
+      
+      try {
+        statsData = await formSubmissionService.getSubmissionStats();
+      } catch (statsError) {
+        console.warn('Failed to load stats:', statsError);
+        toast.error('Failed to load statistics');
+      }
+      
+      setSubmissions(submissionsData || []);
+      setForms(formsData || []);
+      setStats(statsData || { total: 0, today: 0, lastWeek: 0, lastMonth: 0 });
       
     } catch (err) {
       console.error('Error loading admin data:', err);
-      setError('Failed to load admin data. Please try again.');
-      toast.error('Failed to load admin data');
+      setError('Some admin data could not be loaded. Please try again.');
+      toast.error('Error loading admin panel data');
     } finally {
       setLoading(false);
     }

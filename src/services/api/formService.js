@@ -8,26 +8,41 @@ class FormService {
     this.initialize();
   }
 
-  async initialize() {
+async initialize() {
     try {
       // Ensure forms data is valid
       if (!Array.isArray(this.forms)) {
+        console.warn('Forms data is not an array, initializing empty array');
         this.forms = [];
       }
       
       // Validate and fix form data
-      this.forms = this.forms.map(form => ({
-        ...form,
-        Id: form.Id || this.generateId(),
-        title: form.title || 'Untitled Form',
-        description: form.description || '',
-        fields: form.fields || [],
-        createdAt: form.createdAt || new Date().toISOString()
-      }));
+      this.forms = this.forms.map((form, index) => {
+        try {
+          return {
+            ...form,
+            Id: form.Id || (index + 1),
+            title: form.title || 'Untitled Form',
+            description: form.description || '',
+            fields: Array.isArray(form.fields) ? form.fields : [],
+            createdAt: form.createdAt || new Date().toISOString()
+          };
+        } catch (formError) {
+          console.warn(`Error processing form at index ${index}:`, formError);
+          return {
+            Id: index + 1,
+            title: 'Untitled Form',
+            description: '',
+            fields: [],
+            createdAt: new Date().toISOString()
+          };
+        }
+      });
       
       this.isInitialized = true;
+      console.log('FormService initialized with', this.forms.length, 'forms');
     } catch (error) {
-      console.warn('FormService initialization warning:', error);
+      console.error('FormService initialization error:', error);
       this.forms = [];
       this.isInitialized = true;
     }
@@ -41,11 +56,19 @@ class FormService {
     return new Promise(resolve => setTimeout(resolve, this.delay));
   }
 
-  async ensureInitialized() {
+async ensureInitialized() {
     if (!this.isInitialized) {
-      await new Promise(resolve => {
+      await new Promise((resolve, reject) => {
+        const timeout = setTimeout(() => {
+          console.error('FormService initialization timeout');
+          this.forms = [];
+          this.isInitialized = true;
+          resolve();
+        }, 5000); // 5 second timeout
+        
         const checkInit = () => {
           if (this.isInitialized) {
+            clearTimeout(timeout);
             resolve();
           } else {
             setTimeout(checkInit, 10);
@@ -57,10 +80,10 @@ class FormService {
   }
 
 async getAll() {
-    await this.ensureInitialized();
-    await this.delay();
-    
     try {
+      await this.ensureInitialized();
+      await this.delay();
+      
       return [...this.forms];
     } catch (error) {
       console.error('FormService.getAll error:', error);
