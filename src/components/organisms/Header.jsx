@@ -31,7 +31,7 @@ const navigate = useNavigate();
 
   return (
 <header
-    className="bg-white dark:bg-gray-800 shadow-sm border-b border-gray-200 dark:border-gray-700 px-6 py-4 transition-all duration-300 ease-out backdrop-blur-sm">
+className="bg-gradient-to-r from-white via-gray-50 to-white dark:from-gray-800 dark:via-gray-850 dark:to-gray-800 shadow-lg border-b border-gray-200 dark:border-gray-700 px-6 py-4 transition-all duration-300 ease-out backdrop-blur-md">
     <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-4">
@@ -48,7 +48,7 @@ const navigate = useNavigate();
 <Button
                     variant="ghost"
                     onClick={toggleTheme}
-                    className="flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white hover:scale-110 transition-all duration-300 ease-out"
+                    className="flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-all duration-300 ease-out"
                     aria-label={`Switch to ${isDark ? "light" : "dark"} theme`}>
                     <ApperIcon name={isDark ? "Sun" : "Moon"} className="w-4 h-4" />
                 </Button>
@@ -63,10 +63,10 @@ const navigate = useNavigate();
                     themes={availableThemes}
                     onThemeSelect={handleThemeSelect}
                 />
-                <Button
+<Button
                     variant="secondary"
                     onClick={onNewForm}
-                    className="flex items-center space-x-2 bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200">
+                    className="flex items-center space-x-2">
                     <ApperIcon name="Plus" className="w-4 h-4" />
                     <span>New Form</span>
                 </Button>
@@ -74,33 +74,33 @@ const navigate = useNavigate();
                     variant="secondary"
                     onClick={() => onSaveForm(formTitle)}
                     disabled={!hasFields}
-                    className="flex items-center space-x-2 bg-green-100 dark:bg-green-900/50 hover:bg-green-200 dark:hover:bg-green-900/70 text-green-700 dark:text-green-300 disabled:bg-gray-100 dark:disabled:bg-gray-700 disabled:text-gray-400 dark:disabled:text-gray-500">
+                    className="flex items-center space-x-2 disabled:opacity-50 disabled:cursor-not-allowed">
                     <ApperIcon name="Save" className="w-4 h-4" />
                     <span>Save Form</span>
                 </Button>
                 <Button
                     variant="secondary"
                     onClick={onLoadForm}
-                    className="flex items-center space-x-2 bg-blue-100 hover:bg-blue-200 text-blue-700">
+                    className="flex items-center space-x-2">
                     <ApperIcon name="FolderOpen" className="w-4 h-4" />
                     <span>Load Form</span>
-</Button>
+                </Button>
                 <Button
                     variant="ghost"
                     onClick={() => navigate('/admin')}
-                    className="text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white"
+                    className="flex items-center space-x-2"
                 >
                     <ApperIcon name="Database" size={18} />
-                    <span className="ml-2">Admin</span>
+                    <span>Admin</span>
                 </Button>
                 <Button
                     variant="ghost"
                     onClick={onFormSettings}
-                    className="flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white">
+                    className="flex items-center space-x-2">
                     <ApperIcon name="Settings" className="w-4 h-4" />
                     <span>Form Settings</span>
-</Button>
-<Button
+                </Button>
+                <Button
                   variant={isPreviewMode ? "primary" : "secondary"}
                   onClick={onPreviewModeToggle}
                   className="flex items-center space-x-2">

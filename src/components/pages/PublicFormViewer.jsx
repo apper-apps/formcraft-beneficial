@@ -1,13 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { motion } from 'framer-motion';
-import { toast } from 'react-toastify';
-import Button from '@/components/atoms/Button';
-import ApperIcon from '@/components/ApperIcon';
-import Loading from '@/components/ui/Loading';
-import Error from '@/components/ui/Error';
-import formService from '@/services/api/formService';
-import { cn } from '@/utils/cn';
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { motion } from "framer-motion";
+import { toast } from "react-toastify";
+import ApperIcon from "@/components/ApperIcon";
+import Loading from "@/components/ui/Loading";
+import Error from "@/components/ui/Error";
+import Button from "@/components/atoms/Button";
+import formService from "@/services/api/formService";
+import { cn } from "@/utils/cn";
 
 const PublicFormViewer = () => {
   const { shareId } = useParams();
@@ -174,9 +174,8 @@ const handleSubmit = async (e, retryCount = 0) => {
       setSubmitting(false);
     }
   };
-
-  const renderField = (field) => {
-    const baseInputClasses = "w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-500 dark:bg-gray-700 dark:border-gray-600 dark:text-white";
+const renderField = (field) => {
+    const baseInputClasses = "w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-xl bg-gradient-to-r from-white to-gray-50 dark:from-gray-700 dark:to-gray-650 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-400 dark:text-white transition-all duration-300 hover:shadow-md focus:shadow-lg backdrop-blur-sm";
 
     switch (field.type) {
       case 'text':
@@ -327,9 +326,9 @@ const handleSubmit = async (e, retryCount = 0) => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
-      <div className="max-w-2xl mx-auto px-4">
-        <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg overflow-hidden">
+<div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-8">
+<div className="max-w-2xl mx-auto px-4">
+        <div className="bg-gradient-to-br from-white via-gray-50 to-white dark:from-gray-800 dark:via-gray-850 dark:to-gray-800 rounded-2xl shadow-2xl overflow-hidden border border-gray-200 dark:border-gray-700">
           {/* Form Header */}
           <div className="bg-primary-500 text-white p-6">
             <div className="flex items-center justify-between">
@@ -339,7 +338,7 @@ const handleSubmit = async (e, retryCount = 0) => {
                   Fill out this form to submit your information
                 </p>
               </div>
-              <Button
+<Button
                 onClick={() => navigate('/')}
                 variant="ghost"
                 size="sm"
@@ -352,25 +351,25 @@ const handleSubmit = async (e, retryCount = 0) => {
           </div>
 
           {/* Form Content */}
-          <form onSubmit={handleSubmit} className="p-6 space-y-6">
+<form onSubmit={handleSubmit} className="p-8 space-y-8">
             {formData.fields.map((field) => (
-              <div key={field.id} className="space-y-2">
+              <div key={field.id} className="space-y-3">
                 {field.type !== 'checkbox' && (
                   <label
                     htmlFor={field.id}
-                    className="block text-sm font-medium text-gray-700 dark:text-gray-300"
+                    className="block text-sm font-semibold text-gray-800 dark:text-gray-200"
                   >
                     {field.label}
-                    {field.required && <span className="text-red-500 ml-1">*</span>}
+                    {field.required && <span className="text-red-500 ml-1 text-base">*</span>}
                   </label>
                 )}
                 {renderField(field)}
                 {field.description && (
-                  <p className="text-xs text-gray-500 dark:text-gray-400">
+                  <p className="text-sm text-gray-600 dark:text-gray-400 bg-gray-50 dark:bg-gray-700 p-3 rounded-lg border-l-4 border-blue-400">
                     {field.description}
                   </p>
                 )}
-              </div>
+</div>
             ))}
 
             <div className="pt-4 border-t border-gray-200 dark:border-gray-700">
@@ -378,23 +377,23 @@ const handleSubmit = async (e, retryCount = 0) => {
                 type="submit"
                 variant="primary"
                 disabled={submitting}
-                className="w-full flex items-center justify-center space-x-2"
+                className="w-full flex items-center justify-center space-x-2 text-lg py-4"
               >
-                {submitting && <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white"></div>}
+                {submitting && <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white"></div>}
                 <span>{submitting ? 'Submitting...' : 'Submit Form'}</span>
               </Button>
             </div>
           </form>
 
           {/* Footer */}
-          <div className="bg-gray-50 dark:bg-gray-800 px-6 py-4 border-t border-gray-200 dark:border-gray-700">
-            <div className="flex items-center justify-center text-sm text-gray-500 dark:text-gray-400">
+          <div className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-850 px-8 py-6 border-t border-gray-200 dark:border-gray-700">
+<div className="flex items-center justify-center text-sm text-gray-500 dark:text-gray-400">
               <span>Powered by</span>
               <Button
                 onClick={() => navigate('/')}
                 variant="ghost"
                 size="sm"
-                className="ml-1 text-primary-600 dark:text-primary-400 p-0 h-auto font-medium"
+                className="ml-1 text-primary-600 dark:text-primary-400 p-0 h-auto font-semibold"
               >
                 FormCraft
               </Button>

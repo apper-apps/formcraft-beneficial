@@ -235,17 +235,17 @@ const handleSubmit = (e) => {
   };
 
 // Export theme function for standalone forms
-  window.FormValidation = window.FormValidation || {};
+window.FormValidation = window.FormValidation || {};
   window.FormValidation.getThemeClasses = (selectedTheme) => {
     if (!selectedTheme) {
       return {
-        container: "w-full h-full bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-6 custom-scrollbar overflow-y-auto transition-colors duration-200",
-        title: "text-2xl font-bold text-gray-900 dark:text-white mb-2",
-        description: "text-gray-600 dark:text-gray-300",
-        fieldLabel: "block text-sm font-medium text-gray-700 dark:text-gray-200",
-        input: "w-full px-3 py-2 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-md focus:ring-2 focus:ring-primary-500 focus:border-primary-500 transition-all duration-200",
-        submitButton: "w-full",
-        formSpacing: "space-y-4"
+        container: "w-full h-full bg-gradient-to-br from-white via-gray-50 to-white dark:from-gray-800 dark:via-gray-850 dark:to-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 p-8 custom-scrollbar overflow-y-auto transition-all duration-300 backdrop-blur-sm",
+        title: "text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent mb-4",
+        description: "text-gray-600 dark:text-gray-400 text-lg leading-relaxed",
+        fieldLabel: "block text-sm font-semibold text-gray-800 dark:text-gray-200 mb-2",
+        input: "w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl bg-gradient-to-r from-white to-gray-50 dark:from-gray-700 dark:to-gray-650 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-400 transition-all duration-300 hover:shadow-md focus:shadow-lg backdrop-blur-sm",
+        submitButton: "w-full text-lg py-4",
+        formSpacing: "space-y-6"
       };
     }
     return selectedTheme.styles;
@@ -257,11 +257,10 @@ const getThemeClasses = () => {
 
   // Export render field function for standalone forms
   window.FormValidation = window.FormValidation || {};
-  window.FormValidation.renderField = (field, formData, validationErrors, handleInputChange) => {
+window.FormValidation.renderField = (field, formData, validationErrors, handleInputChange) => {
     const themeClasses = window.FormValidation.getThemeClasses();
     const hasError = validationErrors[field.id] && validationErrors[field.id].length > 0;
-    const inputClasses = `${themeClasses.input} ${hasError ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : ''}`;
-    
+    const inputClasses = `${themeClasses.input} ${hasError ? 'border-red-400 focus:ring-red-500 focus:border-red-500 bg-gradient-to-r from-red-50 to-white dark:from-red-900/10 dark:to-gray-800' : ''}`;
     switch (field.type) {
       case "text":
         return `
@@ -276,7 +275,7 @@ const getThemeClasses = () => {
               ${field.maxLength ? `maxlength="${field.maxLength}"` : ''}
               ${field.pattern ? `pattern="${field.pattern}"` : ''}
             />
-            ${hasError ? `<div class="mt-1 text-sm text-red-600">${validationErrors[field.id].join('<br>')}</div>` : ''}
+            ${hasError ? `<div class="mt-2 text-sm text-red-600 bg-red-50 dark:bg-red-900/20 p-2 rounded-lg">${validationErrors[field.id].join('<br>')}</div>` : ''}
           </div>
         `;
       case "email":
@@ -289,7 +288,7 @@ const getThemeClasses = () => {
               value="${formData[field.id] || ''}"
               class="${inputClasses}"
             />
-            ${hasError ? `<div class="mt-1 text-sm text-red-600">${validationErrors[field.id].join('<br>')}</div>` : ''}
+            ${hasError ? `<div class="mt-2 text-sm text-red-600 bg-red-50 dark:bg-red-900/20 p-2 rounded-lg">${validationErrors[field.id].join('<br>')}</div>` : ''}
           </div>
         `;
       case "phone":
@@ -302,7 +301,7 @@ const getThemeClasses = () => {
               value="${formData[field.id] || ''}"
               class="${inputClasses}"
             />
-            ${hasError ? `<div class="mt-1 text-sm text-red-600">${validationErrors[field.id].join('<br>')}</div>` : ''}
+            ${hasError ? `<div class="mt-2 text-sm text-red-600 bg-red-50 dark:bg-red-900/20 p-2 rounded-lg">${validationErrors[field.id].join('<br>')}</div>` : ''}
           </div>
         `;
       case "url":
@@ -315,7 +314,7 @@ const getThemeClasses = () => {
               value="${formData[field.id] || ''}"
               class="${inputClasses}"
             />
-            ${hasError ? `<div class="mt-1 text-sm text-red-600">${validationErrors[field.id].join('<br>')}</div>` : ''}
+            ${hasError ? `<div class="mt-2 text-sm text-red-600 bg-red-50 dark:bg-red-900/20 p-2 rounded-lg">${validationErrors[field.id].join('<br>')}</div>` : ''}
           </div>
         `;
       case "textarea":
@@ -329,7 +328,7 @@ const getThemeClasses = () => {
               ${field.minLength ? `minlength="${field.minLength}"` : ''}
               ${field.maxLength ? `maxlength="${field.maxLength}"` : ''}
             >${formData[field.id] || ''}</textarea>
-            ${hasError ? `<div class="mt-1 text-sm text-red-600">${validationErrors[field.id].join('<br>')}</div>` : ''}
+            ${hasError ? `<div class="mt-2 text-sm text-red-600 bg-red-50 dark:bg-red-900/20 p-2 rounded-lg">${validationErrors[field.id].join('<br>')}</div>` : ''}
           </div>
         `;
       case "number":
@@ -345,7 +344,7 @@ const getThemeClasses = () => {
               ${field.max !== null ? `max="${field.max}"` : ''}
               step="${field.step || 1}"
             />
-            ${hasError ? `<div class="mt-1 text-sm text-red-600">${validationErrors[field.id].join('<br>')}</div>` : ''}
+            ${hasError ? `<div class="mt-2 text-sm text-red-600 bg-red-50 dark:bg-red-900/20 p-2 rounded-lg">${validationErrors[field.id].join('<br>')}</div>` : ''}
           </div>
         `;
       case "file":
@@ -358,8 +357,8 @@ const getThemeClasses = () => {
               ${field.multiple ? 'multiple' : ''}
               class="${inputClasses}"
             />
-            ${field.maxSize ? `<p class="mt-1 text-xs text-gray-500">Maximum file size: ${field.maxSize}MB</p>` : ''}
-            ${hasError ? `<div class="mt-1 text-sm text-red-600">${validationErrors[field.id].join('<br>')}</div>` : ''}
+            ${field.maxSize ? `<p class="mt-2 text-xs text-gray-500 bg-blue-50 dark:bg-blue-900/20 p-2 rounded-lg">Maximum file size: ${field.maxSize}MB</p>` : ''}
+            ${hasError ? `<div class="mt-2 text-sm text-red-600 bg-red-50 dark:bg-red-900/20 p-2 rounded-lg">${validationErrors[field.id].join('<br>')}</div>` : ''}
           </div>
         `;
       case "dropdown":
@@ -372,7 +371,7 @@ const getThemeClasses = () => {
               <option value="">Select an option...</option>
               ${field.options?.map(option => `<option value="${option}" ${formData[field.id] === option ? 'selected' : ''}>${option}</option>`).join('') || ''}
             </select>
-            ${hasError ? `<div class="mt-1 text-sm text-red-600">${validationErrors[field.id].join('<br>')}</div>` : ''}
+            ${hasError ? `<div class="mt-2 text-sm text-red-600 bg-red-50 dark:bg-red-900/20 p-2 rounded-lg">${validationErrors[field.id].join('<br>')}</div>` : ''}
           </div>
         `;
       case "multiselect":
@@ -389,8 +388,8 @@ const getThemeClasses = () => {
                 return `<option value="${option}" ${selected ? 'selected' : ''}>${option}</option>`;
               }).join('') || ''}
             </select>
-            ${field.maxSelections ? `<p class="mt-1 text-xs text-gray-500">Maximum ${field.maxSelections} selections</p>` : ''}
-            ${hasError ? `<div class="mt-1 text-sm text-red-600">${validationErrors[field.id].join('<br>')}</div>` : ''}
+            ${field.maxSelections ? `<p class="mt-2 text-xs text-gray-500 bg-blue-50 dark:bg-blue-900/20 p-2 rounded-lg">Maximum ${field.maxSelections} selections</p>` : ''}
+            ${hasError ? `<div class="mt-2 text-sm text-red-600 bg-red-50 dark:bg-red-900/20 p-2 rounded-lg">${validationErrors[field.id].join('<br>')}</div>` : ''}
           </div>
         `;
       default:
@@ -398,11 +397,11 @@ const getThemeClasses = () => {
     }
   };
   const renderField = (field) => {
-    const themeClasses = getThemeClasses();
+const themeClasses = getThemeClasses();
     const hasError = validationErrors[field.id] && validationErrors[field.id].length > 0;
-    const inputClasses = `${themeClasses.input} ${hasError ? 'border-red-500 focus:ring-red-500 focus:border-red-500' : ''}`;
+    const inputClasses = `${themeClasses.input} ${hasError ? 'border-red-400 focus:ring-red-500 focus:border-red-500 bg-gradient-to-r from-red-50 to-white dark:from-red-900/10 dark:to-gray-800' : ''}`;
     
-    switch (field.type) {
+switch (field.type) {
       case "text":
         return (
           <div>
@@ -418,7 +417,7 @@ const getThemeClasses = () => {
               pattern={field.pattern}
             />
             {hasError && (
-              <div className="mt-1 text-sm text-red-600">
+              <div className="mt-2 text-sm text-red-600 bg-red-50 dark:bg-red-900/20 p-3 rounded-lg border border-red-200 dark:border-red-800">
                 {validationErrors[field.id].map((error, idx) => (
                   <div key={idx}>{error}</div>
                 ))}
@@ -438,7 +437,7 @@ const getThemeClasses = () => {
               className={inputClasses}
             />
             {hasError && (
-              <div className="mt-1 text-sm text-red-600">
+              <div className="mt-2 text-sm text-red-600 bg-red-50 dark:bg-red-900/20 p-3 rounded-lg border border-red-200 dark:border-red-800">
                 {validationErrors[field.id].map((error, idx) => (
                   <div key={idx}>{error}</div>
                 ))}
@@ -458,7 +457,7 @@ const getThemeClasses = () => {
               className={inputClasses}
             />
             {hasError && (
-              <div className="mt-1 text-sm text-red-600">
+              <div className="mt-2 text-sm text-red-600 bg-red-50 dark:bg-red-900/20 p-3 rounded-lg border border-red-200 dark:border-red-800">
                 {validationErrors[field.id].map((error, idx) => (
                   <div key={idx}>{error}</div>
                 ))}
@@ -478,7 +477,7 @@ const getThemeClasses = () => {
               className={inputClasses}
             />
             {hasError && (
-              <div className="mt-1 text-sm text-red-600">
+              <div className="mt-2 text-sm text-red-600 bg-red-50 dark:bg-red-900/20 p-3 rounded-lg border border-red-200 dark:border-red-800">
                 {validationErrors[field.id].map((error, idx) => (
                   <div key={idx}>{error}</div>
                 ))}
@@ -500,7 +499,7 @@ const getThemeClasses = () => {
               maxLength={field.maxLength}
             />
             {hasError && (
-              <div className="mt-1 text-sm text-red-600">
+              <div className="mt-2 text-sm text-red-600 bg-red-50 dark:bg-red-900/20 p-3 rounded-lg border border-red-200 dark:border-red-800">
                 {validationErrors[field.id].map((error, idx) => (
                   <div key={idx}>{error}</div>
                 ))}
@@ -523,7 +522,7 @@ const getThemeClasses = () => {
               step={field.step || 1}
             />
             {hasError && (
-              <div className="mt-1 text-sm text-red-600">
+              <div className="mt-2 text-sm text-red-600 bg-red-50 dark:bg-red-900/20 p-3 rounded-lg border border-red-200 dark:border-red-800">
                 {validationErrors[field.id].map((error, idx) => (
                   <div key={idx}>{error}</div>
                 ))}
@@ -543,12 +542,12 @@ const getThemeClasses = () => {
               className={inputClasses}
             />
             {field.maxSize && (
-              <p className="mt-1 text-xs text-gray-500">
+              <p className="mt-2 text-xs text-gray-600 dark:text-gray-400 bg-blue-50 dark:bg-blue-900/20 p-2 rounded-lg border border-blue-200 dark:border-blue-800">
                 Maximum file size: {field.maxSize}MB
               </p>
             )}
             {hasError && (
-              <div className="mt-1 text-sm text-red-600">
+              <div className="mt-2 text-sm text-red-600 bg-red-50 dark:bg-red-900/20 p-3 rounded-lg border border-red-200 dark:border-red-800">
                 {validationErrors[field.id].map((error, idx) => (
                   <div key={idx}>{error}</div>
                 ))}
@@ -573,7 +572,7 @@ const getThemeClasses = () => {
               ))}
             </select>
             {hasError && (
-              <div className="mt-1 text-sm text-red-600">
+              <div className="mt-2 text-sm text-red-600 bg-red-50 dark:bg-red-900/20 p-3 rounded-lg border border-red-200 dark:border-red-800">
                 {validationErrors[field.id].map((error, idx) => (
                   <div key={idx}>{error}</div>
                 ))}
@@ -606,12 +605,12 @@ const getThemeClasses = () => {
               ))}
             </select>
             {field.maxSelections && (
-              <p className="mt-1 text-xs text-gray-500">
+              <p className="mt-2 text-xs text-gray-600 dark:text-gray-400 bg-blue-50 dark:bg-blue-900/20 p-2 rounded-lg border border-blue-200 dark:border-blue-800">
                 Maximum {field.maxSelections} selections
               </p>
             )}
             {hasError && (
-              <div className="mt-1 text-sm text-red-600">
+              <div className="mt-2 text-sm text-red-600 bg-red-50 dark:bg-red-900/20 p-3 rounded-lg border border-red-200 dark:border-red-800">
                 {validationErrors[field.id].map((error, idx) => (
                   <div key={idx}>{error}</div>
                 ))}
@@ -680,15 +679,15 @@ return (
       {!isPreviewMode && (
         <div className="mb-6">
           <div className="flex items-center justify-between mb-2">
-            <h2 className="text-lg font-bold text-gray-900 bg-gradient-to-r from-primary-600 to-secondary-600 bg-clip-text text-transparent">
+<h2 className="text-xl font-bold bg-gradient-to-r from-primary-600 via-primary-700 to-secondary-600 bg-clip-text text-transparent">
               Live Preview
             </h2>
-            <div className="flex items-center space-x-1 text-xs text-green-600">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              <span>Live</span>
+            <div className="flex items-center space-x-2 text-xs text-green-600 bg-green-50 dark:bg-green-900/20 px-3 py-1 rounded-full border border-green-200 dark:border-green-800">
+              <div className="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse"></div>
+              <span className="font-semibold">Live</span>
             </div>
           </div>
-<p className="text-sm text-gray-600 dark:text-gray-300">
+          <p className="text-sm text-gray-600 dark:text-gray-400 bg-blue-50 dark:bg-blue-900/20 px-4 py-2 rounded-lg border border-blue-200 dark:border-blue-800">
             This is how your form will look to users
           </p>
         </div>
@@ -696,31 +695,31 @@ return (
 
       {/* Form Submission Success Display */}
 {isSubmitted && isPreviewMode && (
-        <div className="mb-6 p-6 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg animate-slide-up shadow-lg">
-          <div className="flex items-start space-x-3">
-            <div className="animate-scale-in" style={{ animationDelay: '0.2s' }}>
-              <ApperIcon name="CheckCircle" className="w-6 h-6 text-green-600 dark:text-green-400 mt-0.5" />
+        <div className="mb-8 p-8 bg-gradient-to-br from-green-50 via-emerald-50 to-green-100 dark:from-green-900/30 dark:via-emerald-900/20 dark:to-green-900/30 border border-green-200 dark:border-green-800 rounded-2xl animate-slide-up shadow-2xl">
+          <div className="flex items-start space-x-4">
+            <div className="animate-scale-in bg-green-100 dark:bg-green-800/50 p-2 rounded-full" style={{ animationDelay: '0.2s' }}>
+              <ApperIcon name="CheckCircle" className="w-8 h-8 text-green-600 dark:text-green-400" />
             </div>
             <div className="flex-1">
-              <h3 className="text-lg font-semibold text-green-800 dark:text-green-200 mb-2 animate-slide-up" style={{ animationDelay: '0.1s' }}>
+              <h3 className="text-xl font-bold text-green-800 dark:text-green-200 mb-3 animate-slide-up" style={{ animationDelay: '0.1s' }}>
                 Form Submitted Successfully!
               </h3>
-              <p className="text-green-700 dark:text-green-300 mb-4 animate-slide-up" style={{ animationDelay: '0.2s' }}>
+              <p className="text-green-700 dark:text-green-300 mb-6 text-lg leading-relaxed animate-slide-up" style={{ animationDelay: '0.2s' }}>
                 {formSettings.successMessage || "Thank you! Your form has been submitted successfully."}
               </p>
               
               {submittedData && Object.keys(submittedData).length > 0 && (
-                <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-green-200 dark:border-green-700 animate-slide-up shadow-md" style={{ animationDelay: '0.3s' }}>
-                  <h4 className="font-medium text-gray-900 dark:text-white mb-3">Submitted Data:</h4>
-                  <div className="space-y-2">
+                <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-green-200 dark:border-green-700 animate-slide-up shadow-xl" style={{ animationDelay: '0.3s' }}>
+                  <h4 className="font-bold text-gray-900 dark:text-white mb-4 text-lg">Submitted Data:</h4>
+                  <div className="space-y-3">
                     {Object.entries(submittedData).map(([label, value], index) => (
                       <div 
                         key={label} 
-                        className="flex justify-between items-center py-1 border-b border-gray-100 dark:border-gray-700 last:border-0 animate-slide-up"
+                        className="flex justify-between items-center py-3 px-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-100 dark:border-gray-600 animate-slide-up"
                         style={{ animationDelay: `${0.4 + (index * 0.05)}s` }}
                       >
-                        <span className="text-sm font-medium text-gray-600 dark:text-gray-300">{label}:</span>
-                        <span className="text-sm text-gray-900 dark:text-white max-w-xs truncate">
+                        <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">{label}:</span>
+                        <span className="text-sm text-gray-900 dark:text-white max-w-xs truncate bg-white dark:bg-gray-800 px-2 py-1 rounded border">
                           {Array.isArray(value) ? value.join(', ') : value}
                         </span>
                       </div>
@@ -734,7 +733,7 @@ return (
       )}
 
 <div className="preview-form">
-        <form onSubmit={handleSubmit} className="space-y-6">
+<form onSubmit={handleSubmit} className="space-y-8">
           <div className="mb-8">
             <h1 className={getThemeClasses().title}>
               {formSettings.title || "Preview Form"}
@@ -749,12 +748,12 @@ return (
 
           {fields.map((field) => (
             <div key={field.id} className="space-y-2">
-              <label 
+<label 
                 htmlFor={field.id} 
                 className={getThemeClasses().fieldLabel}
               >
                 {field.label || "Untitled Field"}
-                {field.required && <span className="text-red-500 ml-1">*</span>}
+                {field.required && <span className="text-red-500 ml-1 text-base font-bold">*</span>}
               </label>
               {renderField(field)}
               {field.description && (
