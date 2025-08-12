@@ -534,9 +534,9 @@ function displayUploadedFile(container, fileData, fieldId) {
                 }
             }
             
-            // Email validation
+// Email validation
 if (field.type === "email" && value) {
-                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                const emailRegex = /^[^ \t\n\r\f\v@]+@[^ \t\n\r\f\v@]+[.][^ \t\n\r\f\v@]+$/;
                 if (!emailRegex.test(value)) {
                     errors.push("Please enter a valid email address");
                 }
