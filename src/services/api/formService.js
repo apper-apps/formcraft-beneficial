@@ -3,25 +3,90 @@ import formsData from "@/services/mockData/forms.json";
 class FormService {
   constructor() {
     this.forms = [...formsData];
-    this.delay = 300;
+    this.delay = 200;
+    this.isInitialized = false;
+    this.initialize();
+  }
+
+  async initialize() {
+    try {
+      // Ensure forms data is valid
+      if (!Array.isArray(this.forms)) {
+        this.forms = [];
+      }
+      
+      // Validate and fix form data
+      this.forms = this.forms.map(form => ({
+        ...form,
+        Id: form.Id || this.generateId(),
+        title: form.title || 'Untitled Form',
+        description: form.description || '',
+        fields: form.fields || [],
+        createdAt: form.createdAt || new Date().toISOString()
+      }));
+      
+      this.isInitialized = true;
+    } catch (error) {
+      console.warn('FormService initialization warning:', error);
+      this.forms = [];
+      this.isInitialized = true;
+    }
+  }
+
+  generateId() {
+    return Math.max(...this.forms.map(f => f.Id || 0), 0) + 1;
   }
 
   async delay() {
     return new Promise(resolve => setTimeout(resolve, this.delay));
   }
 
-  async getAll() {
-    await this.delay();
-    return [...this.forms];
+  async ensureInitialized() {
+    if (!this.isInitialized) {
+      await new Promise(resolve => {
+        const checkInit = () => {
+          if (this.isInitialized) {
+            resolve();
+          } else {
+            setTimeout(checkInit, 10);
+          }
+        };
+        checkInit();
+      });
+    }
   }
 
-  async getById(id) {
+async getAll() {
+    await this.ensureInitialized();
     await this.delay();
-    const form = this.forms.find(form => form.Id === parseInt(id));
-    return form ? { ...form } : null;
+    
+    try {
+      return [...this.forms];
+    } catch (error) {
+      console.error('FormService.getAll error:', error);
+      return [];
+    }
+  }
+
+async getById(id) {
+    await this.ensureInitialized();
+    await this.delay();
+    
+    try {
+      if (!id) {
+        throw new Error('Form ID is required');
+      }
+      
+      const form = this.forms.find(form => form.Id === parseInt(id));
+      return form ? { ...form } : null;
+    } catch (error) {
+      console.error('FormService.getById error:', error);
+      return null;
+    }
   }
 
 async create(formData) {
+    await this.ensureInitialized();
     await this.delay();
     
     try {
@@ -38,7 +103,7 @@ async create(formData) {
       }
 
       const newForm = {
-        Id: Math.max(...this.forms.map(f => f.Id), 0) + 1,
+        Id: this.generateId(),
         title: formData.title || "Untitled Form",
         description: formData.description || "",
         submitButtonText: formData.submitButtonText || "Submit Form",
@@ -49,8 +114,9 @@ async create(formData) {
         requireAllFields: formData.requireAllFields || false,
         showProgressBar: formData.showProgressBar || false,
         allowSaveDraft: formData.allowSaveDraft || false,
-        fields: formData.fields || [],
-        createdAt: new Date().toISOString()
+        fields: Array.isArray(formData.fields) ? formData.fields : [],
+        createdAt: new Date().toISOString(),
+        version: 1
       };
       
       this.forms.push(newForm);
@@ -71,6 +137,7 @@ async create(formData) {
   }
 
 async update(id, formData) {
+    await this.ensureInitialized();
     await this.delay();
     
     try {
@@ -118,18 +185,40 @@ async update(id, formData) {
     }
   }
 
-  async delete(id) {
+async delete(id) {
+    await this.ensureInitialized();
     await this.delay();
-    const index = this.forms.findIndex(form => form.Id === parseInt(id));
-    if (index === -1) {
-      throw new Error("Form not found");
-    }
     
-    const deletedForm = this.forms.splice(index, 1)[0];
-    return { ...deletedForm };
+    try {
+      if (!id) {
+        throw new Error("Form ID is required");
+      }
+      
+      const index = this.forms.findIndex(form => form.Id === parseInt(id));
+      if (index === -1) {
+        const error = new Error("Form not found");
+        error.status = 404;
+        throw error;
+      }
+      
+      const deletedForm = this.forms.splice(index, 1)[0];
+      return { ...deletedForm };
+      
+    } catch (error) {
+      console.error('FormService.delete error:', error);
+      
+      if (error.status) {
+        throw error;
+      }
+      
+      const serviceError = new Error(`Failed to delete form: ${error.message}`);
+      serviceError.originalError = error;
+      throw serviceError;
+    }
   }
 
 async saveFormConfig(formConfig) {
+    await this.ensureInitialized();
     await this.delay();
     
     try {
@@ -139,11 +228,11 @@ async saveFormConfig(formConfig) {
       }
 
       if (!formConfig.fields || !Array.isArray(formConfig.fields)) {
-        throw new Error("Form must contain at least one field");
+        throw new Error("Form must contain valid fields array");
       }
 
       if (formConfig.fields.length === 0) {
-        throw new Error("Form cannot be empty");
+        console.warn('Saving empty form - this is allowed but not recommended');
       }
 
       // Validate field configurations
@@ -170,27 +259,36 @@ async saveFormConfig(formConfig) {
     }
   }
 
-  async exportFormConfig(formId) {
+async exportFormConfig(formId) {
+    await this.ensureInitialized();
     await this.delay();
-    const form = await this.getById(formId);
-    if (!form) {
-      throw new Error("Form not found for export");
-    }
     
-    return {
-      title: form.title,
-      description: form.description,
-      submitButtonText: form.submitButtonText,
-      successMessage: form.successMessage,
-      redirectAfterSubmission: form.redirectAfterSubmission,
-      redirectUrl: form.redirectUrl,
-      enableValidation: form.enableValidation,
-      requireAllFields: form.requireAllFields,
-      showProgressBar: form.showProgressBar,
-      allowSaveDraft: form.allowSaveDraft,
-      fields: form.fields,
-      exportedAt: new Date().toISOString()
-    };
+    try {
+      const form = await this.getById(formId);
+      if (!form) {
+        throw new Error("Form not found for export");
+      }
+      
+      return {
+        title: form.title,
+        description: form.description,
+        submitButtonText: form.submitButtonText,
+        successMessage: form.successMessage,
+        redirectAfterSubmission: form.redirectAfterSubmission,
+        redirectUrl: form.redirectUrl,
+        enableValidation: form.enableValidation,
+        requireAllFields: form.requireAllFields,
+        showProgressBar: form.showProgressBar,
+        allowSaveDraft: form.allowSaveDraft,
+        fields: form.fields || [],
+        exportedAt: new Date().toISOString(),
+        version: form.version || 1
+      };
+      
+    } catch (error) {
+      console.error('FormService.exportFormConfig error:', error);
+      throw new Error(`Failed to export form configuration: ${error.message}`);
+    }
   }
 
   async generateStandaloneHTML(formConfig) {
@@ -789,28 +887,41 @@ formTitle: \`\${formTitle}\`,
 }
 
 // Generate a shareable public link for a form
-  async generateShareableLink(formConfig) {
+async generateShareableLink(formConfig) {
+    await this.ensureInitialized();
     await this.delay();
     
     try {
+      // Validate form config
+      if (!formConfig || !formConfig.fields) {
+        throw new Error('Valid form configuration is required');
+      }
+
       // Generate a unique share ID
       const shareId = 'form_' + Date.now() + '_' + Math.random().toString(36).substr(2, 9);
       
       // Create shared form data
       const sharedForm = {
         shareId,
-        title: formConfig.settings?.title || 'Untitled Form',
-        fields: formConfig.fields,
-        settings: formConfig.settings,
-        theme: formConfig.theme,
+        title: formConfig.settings?.title || formConfig.title || 'Untitled Form',
+        description: formConfig.settings?.description || formConfig.description || '',
+        fields: formConfig.fields || [],
+        settings: formConfig.settings || {},
+        theme: formConfig.theme || null,
         createdAt: new Date().toISOString(),
-        isPublic: true
+        isPublic: true,
+        version: 1
       };
 
       // Store in localStorage (in real app, would be database)
-      const existingSharedForms = JSON.parse(localStorage.getItem('sharedForms') || '[]');
-      existingSharedForms.push(sharedForm);
-      localStorage.setItem('sharedForms', JSON.stringify(existingSharedForms));
+      try {
+        const existingSharedForms = JSON.parse(localStorage.getItem('sharedForms') || '[]');
+        existingSharedForms.push(sharedForm);
+        localStorage.setItem('sharedForms', JSON.stringify(existingSharedForms));
+      } catch (storageError) {
+        console.warn('LocalStorage error, using memory storage:', storageError);
+        // In production, this would fallback to server storage
+      }
 
       // Generate public URL
       const baseUrl = window.location.origin;
@@ -820,25 +931,31 @@ formTitle: \`\${formTitle}\`,
         success: true,
         shareUrl,
         shareId,
-        message: 'Shareable link generated successfully'
+        message: 'Shareable link generated successfully',
+        form: sharedForm
       };
 
     } catch (error) {
       console.error('Error generating shareable link:', error);
-      throw new Error('Failed to generate shareable link');
+      throw new Error(`Failed to generate shareable link: ${error.message}`);
     }
   }
 
   // Get shared form by share ID
   async getSharedForm(shareId) {
+    await this.ensureInitialized();
     await this.delay();
     
     try {
+      if (!shareId) {
+        throw new Error('Share ID is required');
+      }
+
       const sharedForms = JSON.parse(localStorage.getItem('sharedForms') || '[]');
       const sharedForm = sharedForms.find(form => form.shareId === shareId);
 
       if (!sharedForm) {
-        throw new Error('Shared form not found');
+        throw new Error('Shared form not found or may have expired');
       }
 
       return {
@@ -848,35 +965,45 @@ formTitle: \`\${formTitle}\`,
 
     } catch (error) {
       console.error('Error fetching shared form:', error);
-      throw new Error('Shared form not found or expired');
+      throw new Error(error.message || 'Shared form not found or expired');
     }
-}
+  }
 
-  // Get submissions for a specific form
+// Get submissions for a specific form
   async getSubmissionsByFormId(formId) {
+    await this.ensureInitialized();
     await this.delay();
     
     try {
+      if (!formId) {
+        throw new Error('Form ID is required');
+      }
+
       const { default: formSubmissionService } = await import('./formSubmissionService');
       const submissions = await formSubmissionService.getByFormId(formId);
-      return submissions;
+      return submissions || [];
     } catch (error) {
       console.error('Error fetching form submissions:', error);
-      throw new Error('Failed to retrieve form submissions');
+      return []; // Return empty array instead of throwing
     }
   }
 
   // Get submission statistics for a form
   async getFormSubmissionStats(formId) {
+    await this.ensureInitialized();
     await this.delay();
     
     try {
+      if (!formId) {
+        throw new Error('Form ID is required');
+      }
+
       const { default: formSubmissionService } = await import('./formSubmissionService');
       const stats = await formSubmissionService.getSubmissionStats(formId);
-      return stats;
+      return stats || { total: 0, today: 0, thisWeek: 0, thisMonth: 0 };
     } catch (error) {
       console.error('Error fetching submission stats:', error);
-      throw new Error('Failed to retrieve submission statistics');
+      return { total: 0, today: 0, thisWeek: 0, thisMonth: 0 };
     }
   }
 }

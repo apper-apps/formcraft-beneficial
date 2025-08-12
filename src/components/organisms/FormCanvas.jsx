@@ -114,10 +114,10 @@ const renderDropZone = (index) => (
     />
   );
 
-  if (fields.length === 0) {
+if (fields.length === 0) {
     return (
-<div
-className="w-full h-full bg-white dark:bg-gray-800 rounded-lg shadow-lg border-2 border-dashed border-gray-300 dark:border-gray-600 hover:border-primary-400 dark:hover:border-primary-400 hover:shadow-xl hover:scale-[1.02] transition-all duration-300 ease-out drop-zone touch-manipulation"
+      <div
+        className="w-full h-full bg-white dark:bg-gray-800 rounded-lg shadow-lg border-2 border-dashed border-gray-300 dark:border-gray-600 hover:border-primary-400 dark:hover:border-primary-400 hover:shadow-xl hover:scale-[1.02] transition-all duration-300 ease-out drop-zone touch-manipulation"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
@@ -125,27 +125,42 @@ className="w-full h-full bg-white dark:bg-gray-800 rounded-lg shadow-lg border-2
         onTouchEnd={handleTouchEnd}
       >
         <div className="flex flex-col items-center justify-center h-full text-center p-8">
-          <div className="w-16 h-16 mb-4 rounded-full bg-gradient-to-br from-primary-100 dark:from-primary-900/50 to-secondary-100 dark:to-secondary-900/50 flex items-center justify-center">
-            <ApperIcon name="MousePointer2" className="w-8 h-8 text-primary-500 dark:text-primary-400" />
+          <div className="w-20 h-20 mb-6 rounded-full bg-gradient-to-br from-primary-100 dark:from-primary-900/50 to-secondary-100 dark:to-secondary-900/50 flex items-center justify-center animate-pulse-glow">
+            <ApperIcon name="MousePointer2" className="w-10 h-10 text-primary-500 dark:text-primary-400" />
           </div>
-          <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">
-            Drag fields here to start building
+          <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-3">
+            Start Building Your Form
           </h3>
-          <p className="text-gray-500 dark:text-gray-400 max-w-md">
-            Select field types from the toolbar on the left and drag them to this canvas to create your form.
+          <p className="text-gray-600 dark:text-gray-300 max-w-md mb-6 leading-relaxed">
+            Drag field types from the left toolbar and drop them here to start creating your form. You can reorder fields by dragging them around.
           </p>
-          <div className="mt-6 flex items-center space-x-2 text-sm text-gray-400 dark:text-gray-500">
-            <div className="w-2 h-2 bg-primary-400 rounded-full animate-pulse"></div>
-            <span>Ready to accept fields</span>
+          
+          {/* Quick Start Guide */}
+          <div className="bg-gradient-to-r from-primary-50 to-secondary-50 dark:from-primary-900/20 dark:to-secondary-900/20 rounded-lg p-4 max-w-sm">
+            <h4 className="text-sm font-semibold text-gray-700 dark:text-gray-200 mb-2 flex items-center">
+              <ApperIcon name="Lightbulb" className="w-4 h-4 mr-2 text-yellow-500" />
+              Quick Start
+            </h4>
+            <ul className="text-xs text-gray-600 dark:text-gray-300 space-y-1">
+              <li>• Drag field types from the left panel</li>
+              <li>• Drop them in this area to add</li>
+              <li>• Click fields to edit properties</li>
+              <li>• Reorder by dragging fields up/down</li>
+            </ul>
+          </div>
+          
+          <div className="mt-6 flex items-center space-x-2 text-sm text-primary-500 dark:text-primary-400">
+            <div className="w-2 h-2 bg-primary-500 rounded-full animate-pulse"></div>
+            <span className="font-medium">Ready to accept fields</span>
           </div>
         </div>
       </div>
     );
   }
 
-  return (
-<div
-className="w-full h-full bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-4 md:p-6 drop-zone custom-scrollbar overflow-y-auto transition-all duration-300 ease-out touch-manipulation hover:shadow-xl"
+return (
+    <div
+      className="w-full h-full bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-4 md:p-6 drop-zone custom-scrollbar overflow-y-auto transition-all duration-300 ease-out touch-manipulation hover:shadow-xl"
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
@@ -153,9 +168,19 @@ className="w-full h-full bg-white dark:bg-gray-800 rounded-lg shadow-lg border b
       onTouchEnd={handleTouchEnd}
     >
       <div className="mb-6">
-        <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-1">Form Builder</h2>
+        <div className="flex items-center justify-between mb-2">
+          <h2 className="text-lg font-bold text-gray-900 dark:text-white">Form Canvas</h2>
+          <div className="flex items-center space-x-2 text-sm">
+            <div className="px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded-full text-xs font-medium">
+              {fields.length} field{fields.length !== 1 ? "s" : ""}
+            </div>
+            <div className="text-xs text-gray-500 dark:text-gray-400">
+              Live Preview
+            </div>
+          </div>
+        </div>
         <p className="text-sm text-gray-600 dark:text-gray-300">
-          {fields.length} field{fields.length !== 1 ? "s" : ""} • Click to edit, drag to reorder
+          Click any field to edit its properties • Drag to reorder • Drop new fields anywhere
         </p>
       </div>
 

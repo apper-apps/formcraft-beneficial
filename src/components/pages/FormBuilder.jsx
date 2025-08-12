@@ -467,7 +467,7 @@ onExport={handleExport}
       
 <div className="flex flex-col md:flex-row h-[calc(100vh-80px)]">
 <AnimatePresence mode="wait">
-          {!isPreviewMode && (
+{!isPreviewMode && (
             <motion.div 
               key="toolbar"
               className="w-full md:w-80 p-4 md:p-6 bg-background dark:bg-gray-800 border-b md:border-b-0 md:border-r border-gray-200 dark:border-gray-700 transition-colors duration-300 overflow-y-auto max-h-60 md:max-h-none"
@@ -493,9 +493,9 @@ onExport={handleExport}
 
 {/* Center Panel - Form Canvas or Preview */}
         <AnimatePresence mode="wait">
-          <motion.div 
+<motion.div 
             key={isPreviewMode ? "preview" : "canvas"}
-            className="flex-1 p-6"
+            className="flex-1 p-4 md:p-6 min-h-0"
             initial={{ y: 20, opacity: 0, scale: 0.98 }}
             animate={{ y: 0, opacity: 1, scale: 1 }}
             exit={{ y: -20, opacity: 0, scale: 0.98 }}
@@ -538,10 +538,10 @@ onExport={handleExport}
         </AnimatePresence>
 
 <AnimatePresence>
-          {!isPreviewMode && selectedFieldId && (
+{!isPreviewMode && selectedFieldId && (
             <motion.div 
               key="config-panel"
-              className="w-full md:w-80 p-4 md:p-6 bg-background dark:bg-gray-800 border-t md:border-t-0 md:border-l border-gray-200 dark:border-gray-700 transition-colors duration-300 order-last md:order-none"
+              className="w-full md:w-80 p-4 md:p-6 bg-background dark:bg-gray-800 border-t md:border-t-0 md:border-l border-gray-200 dark:border-gray-700 transition-colors duration-300 order-last md:order-none overflow-y-auto"
               initial={{ x: 80, opacity: 0, scale: 0.95 }}
               animate={{ x: 0, opacity: 1, scale: 1 }}
               exit={{ x: 80, opacity: 0, scale: 0.95 }}
