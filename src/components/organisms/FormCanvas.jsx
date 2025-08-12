@@ -104,12 +104,12 @@ const [dragOverIndex, setDragOverIndex] = useState(null);
   };
 
 const renderDropZone = (index) => (
-    <div
+<div
       key={`drop-zone-${index}`}
       className={cn(
-        "drop-zone h-2 md:h-2 transition-all duration-200",
-        dragOverIndex === index && "h-8 md:h-8 bg-primary-100 border-2 border-dashed border-primary-300 rounded-md",
-        isMobileDragging && dragOverIndex === index && "h-12 bg-primary-200 border-primary-400"
+        "drop-zone h-2 md:h-2 transition-all duration-300 ease-out",
+        dragOverIndex === index && "h-8 md:h-8 bg-primary-100 border-2 border-dashed border-primary-300 rounded-md scale-105 shadow-lg",
+        isMobileDragging && dragOverIndex === index && "h-12 bg-primary-200 border-primary-400 shadow-xl"
       )}
     />
   );
@@ -117,7 +117,7 @@ const renderDropZone = (index) => (
   if (fields.length === 0) {
     return (
 <div
-        className="w-full h-full bg-white dark:bg-gray-800 rounded-lg shadow-lg border-2 border-dashed border-gray-300 dark:border-gray-600 hover:border-primary-400 dark:hover:border-primary-400 transition-all duration-200 drop-zone touch-manipulation"
+className="w-full h-full bg-white dark:bg-gray-800 rounded-lg shadow-lg border-2 border-dashed border-gray-300 dark:border-gray-600 hover:border-primary-400 dark:hover:border-primary-400 hover:shadow-xl hover:scale-[1.02] transition-all duration-300 ease-out drop-zone touch-manipulation"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
@@ -145,7 +145,7 @@ const renderDropZone = (index) => (
 
   return (
 <div
-className="w-full h-full bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-4 md:p-6 drop-zone custom-scrollbar overflow-y-auto transition-colors duration-200 touch-manipulation"
+className="w-full h-full bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-4 md:p-6 drop-zone custom-scrollbar overflow-y-auto transition-all duration-300 ease-out touch-manipulation hover:shadow-xl"
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
@@ -163,7 +163,7 @@ className="w-full h-full bg-white dark:bg-gray-800 rounded-lg shadow-lg border b
         {renderDropZone(0)}
         {fields.map((field, index) => (
           <React.Fragment key={field.id}>
-            <FormField
+<FormField
               field={field}
               index={index}
               isSelected={selectedFieldId === field.id}
@@ -171,6 +171,7 @@ className="w-full h-full bg-white dark:bg-gray-800 rounded-lg shadow-lg border b
               onUpdate={onFieldUpdate}
               onDelete={onFieldDelete}
               isMobile={window.innerWidth < 768}
+              className="animate-slide-up"
             />
             {renderDropZone(index + 1)}
           </React.Fragment>

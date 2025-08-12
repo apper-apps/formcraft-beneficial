@@ -51,7 +51,6 @@ const [managementLoading, setManagementLoading] = useState(false);
 const handleDragStart = (fieldType) => {
     setDraggedField(fieldType);
   };
-
   const handleTouchStart = (fieldType, e) => {
     setIsMobileDragging(true);
     setDraggedField(fieldType);
@@ -467,14 +466,20 @@ onExport={handleExport}
       />
       
 <div className="flex flex-col md:flex-row h-[calc(100vh-80px)]">
-        {!isPreviewMode && (
-          <>
-            {/* Left Panel - Field Toolbar */}
+<AnimatePresence mode="wait">
+          {!isPreviewMode && (
             <motion.div 
-className="w-full md:w-80 p-4 md:p-6 bg-background dark:bg-gray-800 border-b md:border-b-0 md:border-r border-gray-200 dark:border-gray-700 transition-colors duration-200 overflow-y-auto max-h-60 md:max-h-none"
-              initial={{ x: -50, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              transition={{ duration: 0.3 }}
+              key="toolbar"
+              className="w-full md:w-80 p-4 md:p-6 bg-background dark:bg-gray-800 border-b md:border-b-0 md:border-r border-gray-200 dark:border-gray-700 transition-colors duration-300 overflow-y-auto max-h-60 md:max-h-none"
+              initial={{ x: -80, opacity: 0, scale: 0.95 }}
+              animate={{ x: 0, opacity: 1, scale: 1 }}
+              exit={{ x: -80, opacity: 0, scale: 0.95 }}
+              transition={{ 
+                duration: 0.4,
+                type: "spring",
+                stiffness: 300,
+                damping: 30
+              }}
             >
               <FieldToolbar 
                 onDragStart={handleDragStart}
@@ -483,66 +488,78 @@ className="w-full md:w-80 p-4 md:p-6 bg-background dark:bg-gray-800 border-b md:
                 isMobileDragging={isMobileDragging}
               />
             </motion.div>
-          </>
-        )}
-
-        {/* Center Panel - Form Canvas or Preview */}
-        <motion.div 
-          className={isPreviewMode ? "flex-1 p-6" : "flex-1 p-6"}
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.3, delay: 0.1 }}
-        >
-          {isPreviewMode ? (
-            <FormPreview
-              fields={fields}
-              formSettings={formSettings}
-              selectedTheme={selectedFormTheme}
-              isPreviewMode={true}
-              onBackToEditor={handlePreviewModeToggle}
-            />
-          ) : (
-<FormCanvas
-fields={fields}
-              selectedFieldId={selectedFieldId}
-              onFieldSelect={setSelectedFieldId}
-              onFieldUpdate={handleFieldUpdate}
-              onFieldDelete={handleFieldDelete}
-              onFieldAdd={handleFieldAdd}
-              onFieldReorder={handleFieldReorder}
-              formSettings={formSettings}
-              selectedTheme={selectedFormTheme}
-              fileUploads={fileUploads}
-              uploadProgress={uploadProgress}
-              onFileUpload={handleFileUpload}
-              onFileDelete={handleFileDelete}
-              onFileDownload={handleFileDownload}
-              isMobileDragging={isMobileDragging}
-              draggedField={draggedField}
-            />
           )}
-        </motion.div>
+        </AnimatePresence>
 
-        {!isPreviewMode && (
-          <>
-{/* Right Panel - Field Configuration */}
-{/* Right Panel - Field Configuration (Mobile: Below canvas, Desktop: Right side) */}
-            {!isPreviewMode && selectedFieldId && (
-              <motion.div 
-                className="w-full md:w-80 p-4 md:p-6 bg-background dark:bg-gray-800 border-t md:border-t-0 md:border-l border-gray-200 dark:border-gray-700 transition-colors duration-200 order-last md:order-none"
-                initial={{ x: 50, opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                transition={{ duration: 0.3 }}
-              >
-                <FieldConfigurationPanel
-                  selectedField={fields.find(f => f.id === selectedFieldId)}
-                  onFieldUpdate={handleFieldUpdate}
-                  onFieldDelete={handleFieldDelete}
-                />
-              </motion.div>
+{/* Center Panel - Form Canvas or Preview */}
+        <AnimatePresence mode="wait">
+          <motion.div 
+            key={isPreviewMode ? "preview" : "canvas"}
+            className="flex-1 p-6"
+            initial={{ y: 20, opacity: 0, scale: 0.98 }}
+            animate={{ y: 0, opacity: 1, scale: 1 }}
+            exit={{ y: -20, opacity: 0, scale: 0.98 }}
+            transition={{ 
+              duration: 0.5,
+              type: "spring",
+              stiffness: 260,
+              damping: 20
+            }}
+          >
+            {isPreviewMode ? (
+              <FormPreview
+                fields={fields}
+                formSettings={formSettings}
+                selectedTheme={selectedFormTheme}
+                isPreviewMode={true}
+                onBackToEditor={handlePreviewModeToggle}
+              />
+            ) : (
+              <FormCanvas
+                fields={fields}
+                selectedFieldId={selectedFieldId}
+                onFieldSelect={setSelectedFieldId}
+                onFieldUpdate={handleFieldUpdate}
+                onFieldDelete={handleFieldDelete}
+                onFieldAdd={handleFieldAdd}
+                onFieldReorder={handleFieldReorder}
+                formSettings={formSettings}
+                selectedTheme={selectedFormTheme}
+                fileUploads={fileUploads}
+                uploadProgress={uploadProgress}
+                onFileUpload={handleFileUpload}
+                onFileDelete={handleFileDelete}
+                onFileDownload={handleFileDownload}
+                isMobileDragging={isMobileDragging}
+                draggedField={draggedField}
+              />
             )}
-          </>
-        )}
+          </motion.div>
+        </AnimatePresence>
+
+<AnimatePresence>
+          {!isPreviewMode && selectedFieldId && (
+            <motion.div 
+              key="config-panel"
+              className="w-full md:w-80 p-4 md:p-6 bg-background dark:bg-gray-800 border-t md:border-t-0 md:border-l border-gray-200 dark:border-gray-700 transition-colors duration-300 order-last md:order-none"
+              initial={{ x: 80, opacity: 0, scale: 0.95 }}
+              animate={{ x: 0, opacity: 1, scale: 1 }}
+              exit={{ x: 80, opacity: 0, scale: 0.95 }}
+              transition={{ 
+                duration: 0.4,
+                type: "spring",
+                stiffness: 300,
+                damping: 30
+              }}
+            >
+              <FieldConfigurationPanel
+                selectedField={fields.find(f => f.id === selectedFieldId)}
+                onFieldUpdate={handleFieldUpdate}
+                onFieldDelete={handleFieldDelete}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
 <FormSettingsModal
         isOpen={isSettingsModalOpen}

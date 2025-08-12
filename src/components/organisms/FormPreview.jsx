@@ -643,7 +643,7 @@ return (
   }
 
 return (
-<div className={getThemeClasses().container}>
+<div className={`${getThemeClasses().container} animate-scale-in`}>
       {/* Header for preview mode */}
       {isPreviewMode && (
         <div className="mb-6 flex items-center justify-between">
@@ -695,24 +695,30 @@ return (
       )}
 
       {/* Form Submission Success Display */}
-      {isSubmitted && isPreviewMode && (
-        <div className="mb-6 p-6 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg">
+{isSubmitted && isPreviewMode && (
+        <div className="mb-6 p-6 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-lg animate-slide-up shadow-lg">
           <div className="flex items-start space-x-3">
-            <ApperIcon name="CheckCircle" className="w-6 h-6 text-green-600 dark:text-green-400 mt-0.5" />
+            <div className="animate-scale-in" style={{ animationDelay: '0.2s' }}>
+              <ApperIcon name="CheckCircle" className="w-6 h-6 text-green-600 dark:text-green-400 mt-0.5" />
+            </div>
             <div className="flex-1">
-              <h3 className="text-lg font-semibold text-green-800 dark:text-green-200 mb-2">
+              <h3 className="text-lg font-semibold text-green-800 dark:text-green-200 mb-2 animate-slide-up" style={{ animationDelay: '0.1s' }}>
                 Form Submitted Successfully!
               </h3>
-              <p className="text-green-700 dark:text-green-300 mb-4">
+              <p className="text-green-700 dark:text-green-300 mb-4 animate-slide-up" style={{ animationDelay: '0.2s' }}>
                 {formSettings.successMessage || "Thank you! Your form has been submitted successfully."}
               </p>
               
               {submittedData && Object.keys(submittedData).length > 0 && (
-                <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-green-200 dark:border-green-700">
+                <div className="bg-white dark:bg-gray-800 rounded-lg p-4 border border-green-200 dark:border-green-700 animate-slide-up shadow-md" style={{ animationDelay: '0.3s' }}>
                   <h4 className="font-medium text-gray-900 dark:text-white mb-3">Submitted Data:</h4>
                   <div className="space-y-2">
-                    {Object.entries(submittedData).map(([label, value]) => (
-                      <div key={label} className="flex justify-between items-center py-1 border-b border-gray-100 dark:border-gray-700 last:border-0">
+                    {Object.entries(submittedData).map(([label, value], index) => (
+                      <div 
+                        key={label} 
+                        className="flex justify-between items-center py-1 border-b border-gray-100 dark:border-gray-700 last:border-0 animate-slide-up"
+                        style={{ animationDelay: `${0.4 + (index * 0.05)}s` }}
+                      >
                         <span className="text-sm font-medium text-gray-600 dark:text-gray-300">{label}:</span>
                         <span className="text-sm text-gray-900 dark:text-white max-w-xs truncate">
                           {Array.isArray(value) ? value.join(', ') : value}

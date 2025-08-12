@@ -13,11 +13,16 @@ const FormField = ({
   onDragStart,
   className = "" 
 }) => {
-  const handleDragStart = (e) => {
+const handleDragStart = (e) => {
     e.dataTransfer.setData("application/json", JSON.stringify({ field, sourceIndex: index }));
+    e.currentTarget.classList.add('dragging');
     if (onDragStart) {
       onDragStart(field, index);
     }
+  };
+
+  const handleDragEnd = (e) => {
+    e.currentTarget.classList.remove('dragging');
   };
 
 const renderFieldInput = () => {
@@ -118,12 +123,13 @@ case "file":
   };
 
   return (
-    <div
+<div
       draggable
       onDragStart={handleDragStart}
+      onDragEnd={handleDragEnd}
       onClick={() => onSelect(field.id)}
       className={cn(
-        "field-item relative p-4 bg-white rounded-lg border-2 border-gray-200 cursor-move hover:border-primary-300 transition-all duration-200 group",
+        "field-item relative p-4 bg-white dark:bg-gray-800 rounded-lg border-2 border-gray-200 dark:border-gray-600 cursor-move hover:border-primary-300 dark:hover:border-primary-400 hover:shadow-lg hover:scale-[1.02] transition-all duration-300 ease-out group",
         isSelected && "field-selected",
         className
       )}
@@ -161,12 +167,12 @@ case "file":
       )}
 
       {/* Delete Button */}
-      <button
+<button
         onClick={(e) => {
           e.stopPropagation();
           onDelete(field.id);
         }}
-        className="absolute top-2 right-2 w-6 h-6 bg-accent-500 text-white rounded-full opacity-0 group-hover:opacity-100 hover:bg-accent-600 transition-all duration-200 flex items-center justify-center"
+        className="absolute top-2 right-2 w-6 h-6 bg-accent-500 text-white rounded-full opacity-0 group-hover:opacity-100 hover:bg-accent-600 hover:scale-110 transition-all duration-300 ease-out flex items-center justify-center shadow-lg"
       >
         <ApperIcon name="X" className="w-3 h-3" />
       </button>

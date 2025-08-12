@@ -25,14 +25,19 @@ const fieldTypes = [
       </div>
 
 <div className="space-y-3">
-        {fieldTypes.map((fieldType) => (
-          <FieldTypeButton
+        {fieldTypes.map((fieldType, index) => (
+          <div
             key={fieldType.type}
-            type={fieldType.type}
-            icon={fieldType.icon}
-            label={fieldType.label}
-            onDragStart={onDragStart}
-          />
+            className="animate-slide-up"
+            style={{ animationDelay: `${index * 0.05}s` }}
+          >
+            <FieldTypeButton
+              type={fieldType.type}
+              icon={fieldType.icon}
+              label={fieldType.label}
+              onDragStart={onDragStart}
+            />
+          </div>
         ))}
       </div>
 
