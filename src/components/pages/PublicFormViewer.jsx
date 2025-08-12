@@ -51,24 +51,37 @@ const PublicFormViewer = () => {
     }));
   };
 
-  const handleSubmit = async (e) => {
+const handleSubmit = async (e) => {
     e.preventDefault();
     setSubmitting(true);
 
     try {
-      // Simulate form submission
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Import submission service
+      const { default: formSubmissionService } = await import('@/services/api/formSubmissionService');
       
-      // In a real app, you would submit to your backend
-      console.log('Form submitted:', {
+      // Prepare submission data
+      const submissionData = {
         formId: formData.shareId,
-        title: formData.title,
-        values: formValues,
-        submittedAt: new Date().toISOString()
-      });
+        formTitle: formData.title,
+        data: formValues,
+        userAgent: navigator.userAgent,
+        referrer: document.referrer,
+        metadata: {
+          fieldCount: formData.fields?.length || 0,
+          hasFileUploads: formData.fields?.some(field => field.type === 'file') || false,
+          submissionSource: "public_form_viewer"
+        }
+      };
 
+      // Save submission to database
+      const savedSubmission = await formSubmissionService.create(submissionData);
+      
       setSubmitted(true);
       toast.success('Form submitted successfully!');
+      
+      // Log success for debugging
+      console.log('Form submission saved:', savedSubmission);
+      
     } catch (error) {
       console.error('Error submitting form:', error);
       toast.error('Failed to submit form. Please try again.');

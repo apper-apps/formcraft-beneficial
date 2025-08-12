@@ -579,6 +579,34 @@ async saveFormConfig(formConfig) {
       console.error('Error fetching shared form:', error);
       throw new Error('Shared form not found or expired');
     }
+}
+
+  // Get submissions for a specific form
+  async getSubmissionsByFormId(formId) {
+    await this.delay();
+    
+    try {
+      const { default: formSubmissionService } = await import('./formSubmissionService');
+      const submissions = await formSubmissionService.getByFormId(formId);
+      return submissions;
+    } catch (error) {
+      console.error('Error fetching form submissions:', error);
+      throw new Error('Failed to retrieve form submissions');
+    }
+  }
+
+  // Get submission statistics for a form
+  async getFormSubmissionStats(formId) {
+    await this.delay();
+    
+    try {
+      const { default: formSubmissionService } = await import('./formSubmissionService');
+      const stats = await formSubmissionService.getSubmissionStats(formId);
+      return stats;
+    } catch (error) {
+      console.error('Error fetching submission stats:', error);
+      throw new Error('Failed to retrieve submission statistics');
+    }
   }
 }
 
