@@ -3,7 +3,6 @@ import toast from "react-hot-toast";
 import ApperIcon from "@/components/ApperIcon";
 import Button from "@/components/atoms/Button";
 import { cn } from "@/utils/cn";
-
 const FormPreview = ({ fields, formSettings = {}, selectedTheme }) => {
   const [formData, setFormData] = useState({});
 
