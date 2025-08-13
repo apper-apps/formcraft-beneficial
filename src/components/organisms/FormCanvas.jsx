@@ -170,8 +170,8 @@ const renderDropZone = (index) => (
 
 if (fields.length === 0) {
     return (
-      <div
-className="w-full h-full bg-gradient-to-br from-white via-gray-50 to-white dark:from-dark-900/90 dark:via-dark-800/95 dark:to-dark-900/90 rounded-2xl shadow-2xl dark:shadow-primary-500/20 border-2 border-dashed border-gray-300 dark:border-primary-500/40 hover:border-primary-500 dark:hover:border-primary-400 hover:shadow-3xl dark:hover:shadow-primary-500/30 hover:scale-[1.01] transition-all duration-500 ease-out drop-zone touch-manipulation backdrop-blur-sm" 
+<div
+className="w-full h-full bg-gradient-to-br from-white via-gray-50 to-white dark:from-dark-900/90 dark:via-dark-800/95 dark:to-dark-900/90 rounded-2xl shadow-2xl dark:shadow-primary-500/20 border-2 border-dashed border-gray-300 dark:border-primary-500/40 hover:border-primary-500 dark:hover:border-primary-400 hover:shadow-3xl dark:hover:shadow-primary-500/30 hover:scale-[1.01] transition-all duration-500 ease-out drop-zone touch-manipulation backdrop-blur-sm relative z-1" 
 style={{ 
   backgroundImage: 'linear-gradient(rgba(59, 130, 246, 0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(59, 130, 246, 0.02) 1px, transparent 1px)',
   backgroundSize: '40px 40px'
@@ -312,7 +312,7 @@ style={{
 
 return (
 <div
-className="w-full h-full bg-gradient-to-br from-white via-gray-50 to-white dark:from-dark-900/80 dark:via-dark-800/90 dark:to-dark-900/80 rounded-2xl shadow-2xl dark:shadow-primary-500/30 border border-gray-200 dark:border-primary-500/30 p-6 md:p-8 drop-zone custom-scrollbar overflow-y-auto transition-all duration-300 ease-out touch-manipulation hover:shadow-3xl dark:hover:shadow-primary-500/40 backdrop-filter dark:backdrop-blur-lg"
+className="w-full h-full bg-gradient-to-br from-white via-gray-50 to-white dark:from-dark-900/80 dark:via-dark-800/90 dark:to-dark-900/80 rounded-2xl shadow-2xl dark:shadow-primary-500/30 border border-gray-200 dark:border-primary-500/30 p-6 md:p-8 drop-zone custom-scrollbar overflow-y-auto transition-all duration-300 ease-out touch-manipulation hover:shadow-3xl dark:hover:shadow-primary-500/40 backdrop-filter dark:backdrop-blur-lg relative z-1"
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}

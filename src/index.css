@@ -5,6 +5,11 @@
 
 /* Root CSS Variables for Modern Dark Purple Theme */
 :root {
+  /* Z-index hierarchy for modal system */
+  --z-canvas: 1;
+  --z-main-content: 10;
+  --z-modal-overlay: 9999;
+  --z-modal-content: 10000;
   --color-background: #F8F9FB;
   --color-surface: #FFFFFF;
   --color-text: #111827;
