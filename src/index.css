@@ -3,7 +3,7 @@
 @import 'tailwindcss/utilities';
 @import 'react-toastify/dist/ReactToastify.css';
 
-/* Root CSS Variables for Dark Purple Theme */
+/* Root CSS Variables for Modern Dark Purple Theme */
 :root {
   --color-background: #F8F9FB;
   --color-surface: #FFFFFF;
@@ -11,17 +11,22 @@
   --color-text-secondary: #6B7280;
   --color-border: #E5E7EB;
   --color-border-hover: #D1D5DB;
+  --color-primary: #4361EE;
+  --color-primary-dark: #3A0CA3;
+  --color-accent: #FF6B6B;
 }
 
 .dark {
-  --color-background: #581C87; /* purple-900 */
-  --color-surface: #7C3AED; /* purple-600 */
-  --color-text: #F9FAFB;
-  --color-text-secondary: #E5E7EB;
-  --color-border: #8B5CF6; /* purple-500 */
-  --color-border-hover: #A78BFA; /* purple-400 */
+  --color-background: #0B0C10;
+  --color-surface: #1a1a2e;
+  --color-text: #E0E0E0;
+  --color-text-secondary: #B8B8B8;
+  --color-border: #3A0CA3;
+  --color-border-hover: #4361EE;
+  --color-primary: #4361EE;
+  --color-primary-dark: #3A0CA3;
+  --color-accent: #FF6B6B;
 }
-
 * {
   box-sizing: border-box;
 }
@@ -54,10 +59,11 @@ body {
 }
 
 .dark .Toastify__toast {
-  background: linear-gradient(135deg, rgba(139, 92, 246, 0.95) 0%, rgba(124, 58, 237, 0.95) 100%);
-  color: #F9FAFB;
-  border: 1px solid rgba(167, 139, 250, 0.3);
-  backdrop-filter: blur(10px);
+  background: linear-gradient(135deg, rgba(58, 12, 163, 0.95) 0%, rgba(67, 97, 238, 0.95) 100%);
+  color: #E0E0E0;
+  border: 1px solid rgba(67, 97, 238, 0.4);
+  backdrop-filter: blur(12px);
+  box-shadow: 0 8px 32px rgba(58, 12, 163, 0.3);
 }
 
 .Toastify__toast--success {
@@ -69,19 +75,22 @@ body {
 }
 
 .Toastify__toast--info {
-  background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+  background: linear-gradient(135deg, #4361EE 0%, #3A0CA3 100%);
 }
 
 .dark .Toastify__toast--success {
   background: linear-gradient(135deg, rgba(16, 185, 129, 0.9) 0%, rgba(5, 150, 105, 0.9) 100%);
+  border: 1px solid rgba(16, 185, 129, 0.4);
 }
 
 .dark .Toastify__toast--error {
   background: linear-gradient(135deg, rgba(239, 68, 68, 0.9) 0%, rgba(220, 38, 38, 0.9) 100%);
+  border: 1px solid rgba(239, 68, 68, 0.4);
 }
 
 .dark .Toastify__toast--info {
-  background: linear-gradient(135deg, rgba(59, 130, 246, 0.9) 0%, rgba(37, 99, 235, 0.9) 100%);
+  background: linear-gradient(135deg, rgba(67, 97, 238, 0.9) 0%, rgba(58, 12, 163, 0.9) 100%);
+  border: 1px solid rgba(67, 97, 238, 0.4);
 }
 
 .Toastify__progress-bar {
@@ -437,28 +446,6 @@ button, [role="button"] {
     border-color: #FFFFFF;
   }
 }
-* {
-  box-sizing: border-box;
-}
-
-:root {
-  --color-background: #F8F9FB;
-  --color-surface: #FFFFFF;
-  --color-text: #111827;
-  --color-text-secondary: #6B7280;
-  --color-border: #E5E7EB;
-  --color-border-hover: #D1D5DB;
-}
-
-.dark {
-  --color-background: #111827;
-  --color-surface: #1F2937;
-  --color-text: #F9FAFB;
-  --color-text-secondary: #D1D5DB;
-  --color-border: #374151;
-  --color-border-hover: #4B5563;
-}
-
 body {
   margin: 0;
   font-family: 'Inter', system-ui, -apple-system, sans-serif;

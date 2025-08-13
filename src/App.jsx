@@ -11,7 +11,7 @@ const AppContent = () => {
   
   return (
     <BrowserRouter>
-<div className="min-h-screen bg-background dark:bg-gradient-to-br dark:from-purple-900 dark:via-purple-800 dark:to-indigo-900 transition-colors duration-200">
+<div className="min-h-screen bg-background dark:bg-gradient-to-br dark:from-dark-900 dark:via-primary-600 dark:to-dark-800 transition-colors duration-300">
         <Routes>
 <Route path="/" element={<FormBuilder />} />
           <Route path="/admin" element={<AdminPanel />} />

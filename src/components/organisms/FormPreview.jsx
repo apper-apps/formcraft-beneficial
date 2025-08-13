@@ -236,15 +236,15 @@ const handleSubmit = (e) => {
 
 // Export theme function for standalone forms
 window.FormValidation = window.FormValidation || {};
-  window.FormValidation.getThemeClasses = (selectedTheme) => {
+window.FormValidation.getThemeClasses = (selectedTheme) => {
     if (!selectedTheme) {
       return {
-container: "w-full h-full bg-gradient-to-br from-white via-gray-50 to-white dark:from-purple-900/30 dark:via-purple-800/20 dark:to-indigo-900/30 rounded-2xl shadow-2xl dark:shadow-purple-900/50 border border-gray-200 dark:border-purple-500/30 p-8 custom-scrollbar overflow-y-auto transition-all duration-300 backdrop-blur-sm",
-        title: "text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-purple-100 bg-clip-text text-transparent mb-4",
-        description: "text-gray-600 dark:text-gray-300 text-lg leading-relaxed",
-        fieldLabel: "block text-sm font-semibold text-gray-800 dark:text-gray-100 mb-2",
-        input: "w-full px-4 py-3 border border-gray-300 dark:border-purple-500/30 dark:bg-purple-800/20 dark:text-white rounded-xl bg-gradient-to-r from-white to-gray-50 dark:from-purple-800/20 dark:to-purple-700/20 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-400 transition-all duration-300 hover:shadow-md focus:shadow-lg backdrop-blur-sm",
-        submitButton: "w-full text-lg py-4 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700",
+container: "w-full h-full bg-gradient-to-br from-white via-gray-50 to-white dark:from-primary-600/20 dark:via-dark-900/95 dark:to-primary-700/25 rounded-2xl shadow-2xl dark:shadow-primary-600/30 border border-gray-200 dark:border-primary-500/40 p-8 custom-scrollbar overflow-y-auto transition-all duration-300 backdrop-blur-sm",
+        title: "text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-100 bg-clip-text text-transparent mb-4",
+        description: "text-gray-600 dark:text-gray-200 text-lg leading-relaxed font-medium",
+        fieldLabel: "block text-sm font-bold text-gray-800 dark:text-white mb-2",
+        input: "w-full px-4 py-3 border border-gray-300 dark:border-primary-500/40 dark:bg-primary-800/20 dark:text-white rounded-xl bg-gradient-to-r from-white to-gray-50 dark:from-primary-800/20 dark:to-primary-700/20 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-400 transition-all duration-300 hover:shadow-md focus:shadow-lg backdrop-blur-sm",
+        submitButton: "w-full text-lg py-4 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 font-bold shadow-lg hover:shadow-xl border border-primary-400/50",
         formSpacing: "space-y-6"
       };
     }
@@ -398,8 +398,8 @@ window.FormValidation.renderField = (field, formData, validationErrors, handleIn
   };
   const renderField = (field) => {
 const themeClasses = getThemeClasses();
-    const hasError = validationErrors[field.id] && validationErrors[field.id].length > 0;
-    const inputClasses = `${themeClasses.input} ${hasError ? 'border-red-400 focus:ring-red-500 focus:border-red-500 bg-gradient-to-r from-red-50 to-white dark:from-red-900/10 dark:to-gray-800' : ''}`;
+const hasError = validationErrors[field.id] && validationErrors[field.id].length > 0;
+    const inputClasses = `${themeClasses.input} ${hasError ? 'border-red-400 focus:ring-red-500 focus:border-red-500 bg-gradient-to-r from-red-50 to-white dark:from-red-900/20 dark:to-primary-800/10' : ''}`;
     
 switch (field.type) {
       case "text":
@@ -416,8 +416,8 @@ switch (field.type) {
               maxLength={field.maxLength}
               pattern={field.pattern}
             />
-            {hasError && (
-              <div className="mt-2 text-sm text-red-600 bg-red-50 dark:bg-red-900/20 p-3 rounded-lg border border-red-200 dark:border-red-800">
+{hasError && (
+              <div className="mt-2 text-sm text-red-600 dark:text-red-300 bg-red-50 dark:bg-red-900/30 p-3 rounded-lg border border-red-200 dark:border-red-700/50 font-medium">
                 {validationErrors[field.id].map((error, idx) => (
                   <div key={idx}>{error}</div>
                 ))}
@@ -436,8 +436,8 @@ switch (field.type) {
               onChange={(e) => handleInputChange(field.id, e.target.value)}
               className={inputClasses}
             />
-            {hasError && (
-              <div className="mt-2 text-sm text-red-600 bg-red-50 dark:bg-red-900/20 p-3 rounded-lg border border-red-200 dark:border-red-800">
+{hasError && (
+              <div className="mt-2 text-sm text-red-600 dark:text-red-300 bg-red-50 dark:bg-red-900/30 p-3 rounded-lg border border-red-200 dark:border-red-700/50 font-medium">
                 {validationErrors[field.id].map((error, idx) => (
                   <div key={idx}>{error}</div>
                 ))}
@@ -456,8 +456,8 @@ switch (field.type) {
               onChange={(e) => handleInputChange(field.id, e.target.value)}
               className={inputClasses}
             />
-            {hasError && (
-              <div className="mt-2 text-sm text-red-600 bg-red-50 dark:bg-red-900/20 p-3 rounded-lg border border-red-200 dark:border-red-800">
+{hasError && (
+              <div className="mt-2 text-sm text-red-600 dark:text-red-300 bg-red-50 dark:bg-red-900/30 p-3 rounded-lg border border-red-200 dark:border-red-700/50 font-medium">
                 {validationErrors[field.id].map((error, idx) => (
                   <div key={idx}>{error}</div>
                 ))}
@@ -476,8 +476,8 @@ switch (field.type) {
               onChange={(e) => handleInputChange(field.id, e.target.value)}
               className={inputClasses}
             />
-            {hasError && (
-              <div className="mt-2 text-sm text-red-600 bg-red-50 dark:bg-red-900/20 p-3 rounded-lg border border-red-200 dark:border-red-800">
+{hasError && (
+              <div className="mt-2 text-sm text-red-600 dark:text-red-300 bg-red-50 dark:bg-red-900/30 p-3 rounded-lg border border-red-200 dark:border-red-700/50 font-medium">
                 {validationErrors[field.id].map((error, idx) => (
                   <div key={idx}>{error}</div>
                 ))}
@@ -498,8 +498,8 @@ switch (field.type) {
               minLength={field.minLength}
               maxLength={field.maxLength}
             />
-            {hasError && (
-              <div className="mt-2 text-sm text-red-600 bg-red-50 dark:bg-red-900/20 p-3 rounded-lg border border-red-200 dark:border-red-800">
+{hasError && (
+              <div className="mt-2 text-sm text-red-600 dark:text-red-300 bg-red-50 dark:bg-red-900/30 p-3 rounded-lg border border-red-200 dark:border-red-700/50 font-medium">
                 {validationErrors[field.id].map((error, idx) => (
                   <div key={idx}>{error}</div>
                 ))}
@@ -520,9 +520,9 @@ switch (field.type) {
               min={field.min}
               max={field.max}
               step={field.step || 1}
-            />
+/>
             {hasError && (
-              <div className="mt-2 text-sm text-red-600 bg-red-50 dark:bg-red-900/20 p-3 rounded-lg border border-red-200 dark:border-red-800">
+              <div className="mt-2 text-sm text-red-600 dark:text-red-300 bg-red-50 dark:bg-red-900/30 p-3 rounded-lg border border-red-200 dark:border-red-700/50 font-medium">
                 {validationErrors[field.id].map((error, idx) => (
                   <div key={idx}>{error}</div>
                 ))}
@@ -541,13 +541,13 @@ switch (field.type) {
               onChange={(e) => handleInputChange(field.id, e.target.value, e.target.files)}
               className={inputClasses}
             />
-            {field.maxSize && (
-              <p className="mt-2 text-xs text-gray-600 dark:text-gray-400 bg-blue-50 dark:bg-blue-900/20 p-2 rounded-lg border border-blue-200 dark:border-blue-800">
+{field.maxSize && (
+              <p className="mt-2 text-xs text-gray-600 dark:text-gray-200 bg-primary-50 dark:bg-primary-900/30 p-2 rounded-lg border border-primary-200 dark:border-primary-600/40 font-medium">
                 Maximum file size: {field.maxSize}MB
               </p>
             )}
-            {hasError && (
-              <div className="mt-2 text-sm text-red-600 bg-red-50 dark:bg-red-900/20 p-3 rounded-lg border border-red-200 dark:border-red-800">
+{hasError && (
+              <div className="mt-2 text-sm text-red-600 dark:text-red-300 bg-red-50 dark:bg-red-900/30 p-3 rounded-lg border border-red-200 dark:border-red-700/50 font-medium">
                 {validationErrors[field.id].map((error, idx) => (
                   <div key={idx}>{error}</div>
                 ))}
@@ -572,7 +572,7 @@ switch (field.type) {
               ))}
             </select>
             {hasError && (
-              <div className="mt-2 text-sm text-red-600 bg-red-50 dark:bg-red-900/20 p-3 rounded-lg border border-red-200 dark:border-red-800">
+<div className="mt-2 text-sm text-red-600 dark:text-red-300 bg-red-50 dark:bg-red-900/30 p-3 rounded-lg border border-red-200 dark:border-red-700/50 font-medium">
                 {validationErrors[field.id].map((error, idx) => (
                   <div key={idx}>{error}</div>
                 ))}
@@ -604,13 +604,13 @@ switch (field.type) {
                 </option>
               ))}
             </select>
-            {field.maxSelections && (
-              <p className="mt-2 text-xs text-gray-600 dark:text-gray-400 bg-blue-50 dark:bg-blue-900/20 p-2 rounded-lg border border-blue-200 dark:border-blue-800">
+{field.maxSelections && (
+              <p className="mt-2 text-xs text-gray-600 dark:text-gray-200 bg-primary-50 dark:bg-primary-900/30 p-2 rounded-lg border border-primary-200 dark:border-primary-600/40 font-medium">
                 Maximum {field.maxSelections} selections
               </p>
             )}
             {hasError && (
-              <div className="mt-2 text-sm text-red-600 bg-red-50 dark:bg-red-900/20 p-3 rounded-lg border border-red-200 dark:border-red-800">
+<div className="mt-2 text-sm text-red-600 dark:text-red-300 bg-red-50 dark:bg-red-900/30 p-3 rounded-lg border border-red-200 dark:border-red-700/50 font-medium">
                 {validationErrors[field.id].map((error, idx) => (
                   <div key={idx}>{error}</div>
                 ))}
@@ -625,15 +625,15 @@ switch (field.type) {
 
   if (fields.length === 0) {
 return (
-<div className="w-full h-full bg-white dark:bg-purple-900/20 rounded-lg shadow-lg border border-gray-200 dark:border-purple-500/30 p-6 transition-colors duration-200">
+<div className="w-full h-full bg-white dark:bg-primary-900/20 rounded-lg shadow-lg border border-gray-200 dark:border-primary-500/40 p-6 transition-colors duration-200">
         <div className="flex flex-col items-center justify-center h-full text-center">
-          <div className="w-16 h-16 mb-4 rounded-full bg-gradient-to-br from-primary-100 dark:from-purple-500/30 to-secondary-100 dark:to-indigo-500/30 flex items-center justify-center">
-            <ApperIcon name="Eye" className="w-8 h-8 text-primary-500 dark:text-purple-300" />
+          <div className="w-16 h-16 mb-4 rounded-full bg-gradient-to-br from-primary-100 dark:from-primary-500/40 to-primary-200 dark:to-primary-600/50 flex items-center justify-center shadow-lg dark:shadow-primary-600/30">
+            <ApperIcon name="Eye" className="w-8 h-8 text-primary-500 dark:text-white" />
           </div>
-          <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-100 mb-2">
+          <h3 className="text-xl font-bold text-gray-700 dark:text-white mb-2">
             Live Preview
           </h3>
-          <p className="text-gray-500 dark:text-gray-300 max-w-md">
+          <p className="text-gray-500 dark:text-gray-200 max-w-md font-medium">
             Your form preview will appear here as you add fields to the canvas. Add some fields to get started!
           </p>
         </div>
@@ -644,13 +644,13 @@ return (
 return (
 <div className={`${getThemeClasses().container} animate-scale-in`}>
       {/* Header for preview mode */}
-      {isPreviewMode && (
+{isPreviewMode && (
         <div className="mb-6 flex items-center justify-between">
           <div>
-            <h2 className="text-lg font-bold text-gray-900 dark:text-white">
+            <h2 className="text-xl font-bold text-gray-900 dark:text-white">
               Form Preview - Test Mode
             </h2>
-            <p className="text-sm text-gray-600 dark:text-gray-300">
+            <p className="text-sm text-gray-600 dark:text-gray-200 font-medium">
               Test your form as users will experience it
             </p>
           </div>
@@ -676,50 +676,50 @@ return (
       )}
 
       {/* Regular preview header for build mode */}
-      {!isPreviewMode && (
+{!isPreviewMode && (
         <div className="mb-6">
           <div className="flex items-center justify-between mb-2">
-<h2 className="text-xl font-bold bg-gradient-to-r from-purple-600 via-purple-500 to-indigo-600 dark:from-purple-300 dark:via-purple-200 dark:to-indigo-300 bg-clip-text text-transparent">
+<h2 className="text-2xl font-bold bg-gradient-to-r from-primary-500 via-primary-600 to-primary-700 dark:from-primary-300 dark:via-primary-200 dark:to-white bg-clip-text text-transparent">
               Live Preview
             </h2>
-            <div className="flex items-center space-x-2 text-xs text-green-600 dark:text-green-300 bg-green-50 dark:bg-green-600/20 px-3 py-1 rounded-full border border-green-200 dark:border-green-500/30">
-              <div className="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse"></div>
-              <span className="font-semibold">Live</span>
+            <div className="flex items-center space-x-2 text-xs text-green-600 dark:text-green-200 bg-green-50 dark:bg-green-600/30 px-3 py-1 rounded-full border border-green-200 dark:border-green-500/40 font-bold shadow-sm">
+              <div className="w-2.5 h-2.5 bg-green-500 dark:bg-green-400 rounded-full animate-pulse"></div>
+              <span className="font-bold">Live</span>
             </div>
           </div>
-          <p className="text-sm text-gray-600 dark:text-gray-300 bg-blue-50 dark:bg-blue-600/20 px-4 py-2 rounded-lg border border-blue-200 dark:border-blue-500/30">
+          <p className="text-sm text-gray-600 dark:text-gray-200 bg-primary-50 dark:bg-primary-600/20 px-4 py-2 rounded-lg border border-primary-200 dark:border-primary-500/40 font-medium">
             This is how your form will look to users
           </p>
         </div>
       )}
 
-      {/* Form Submission Success Display */}
+{/* Form Submission Success Display */}
 {isSubmitted && isPreviewMode && (
-        <div className="mb-8 p-8 bg-gradient-to-br from-green-50 via-emerald-50 to-green-100 dark:from-green-900/30 dark:via-emerald-900/20 dark:to-green-900/30 border border-green-200 dark:border-green-800 rounded-2xl animate-slide-up shadow-2xl">
+        <div className="mb-8 p-8 bg-gradient-to-br from-green-50 via-emerald-50 to-green-100 dark:from-green-900/40 dark:via-emerald-900/30 dark:to-green-900/40 border border-green-200 dark:border-green-700/50 rounded-2xl animate-slide-up shadow-2xl dark:shadow-green-900/20">
           <div className="flex items-start space-x-4">
-            <div className="animate-scale-in bg-green-100 dark:bg-green-800/50 p-2 rounded-full" style={{ animationDelay: '0.2s' }}>
-              <ApperIcon name="CheckCircle" className="w-8 h-8 text-green-600 dark:text-green-400" />
+            <div className="animate-scale-in bg-green-100 dark:bg-green-800/60 p-2 rounded-full shadow-lg" style={{ animationDelay: '0.2s' }}>
+              <ApperIcon name="CheckCircle" className="w-8 h-8 text-green-600 dark:text-green-300" />
             </div>
             <div className="flex-1">
-              <h3 className="text-xl font-bold text-green-800 dark:text-green-200 mb-3 animate-slide-up" style={{ animationDelay: '0.1s' }}>
+              <h3 className="text-2xl font-bold text-green-800 dark:text-green-200 mb-3 animate-slide-up" style={{ animationDelay: '0.1s' }}>
                 Form Submitted Successfully!
               </h3>
-              <p className="text-green-700 dark:text-green-300 mb-6 text-lg leading-relaxed animate-slide-up" style={{ animationDelay: '0.2s' }}>
+              <p className="text-green-700 dark:text-green-200 mb-6 text-lg leading-relaxed animate-slide-up font-medium" style={{ animationDelay: '0.2s' }}>
                 {formSettings.successMessage || "Thank you! Your form has been submitted successfully."}
               </p>
               
               {submittedData && Object.keys(submittedData).length > 0 && (
-                <div className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-green-200 dark:border-green-700 animate-slide-up shadow-xl" style={{ animationDelay: '0.3s' }}>
+                <div className="bg-white dark:bg-primary-800/20 rounded-xl p-6 border border-green-200 dark:border-green-700/50 animate-slide-up shadow-xl backdrop-blur-sm" style={{ animationDelay: '0.3s' }}>
                   <h4 className="font-bold text-gray-900 dark:text-white mb-4 text-lg">Submitted Data:</h4>
                   <div className="space-y-3">
                     {Object.entries(submittedData).map(([label, value], index) => (
                       <div 
                         key={label} 
-                        className="flex justify-between items-center py-3 px-4 bg-gray-50 dark:bg-gray-700 rounded-lg border border-gray-100 dark:border-gray-600 animate-slide-up"
+                        className="flex justify-between items-center py-3 px-4 bg-gray-50 dark:bg-primary-700/30 rounded-lg border border-gray-100 dark:border-primary-600/30 animate-slide-up"
                         style={{ animationDelay: `${0.4 + (index * 0.05)}s` }}
                       >
-                        <span className="text-sm font-semibold text-gray-700 dark:text-gray-300">{label}:</span>
-                        <span className="text-sm text-gray-900 dark:text-white max-w-xs truncate bg-white dark:bg-gray-800 px-2 py-1 rounded border">
+                        <span className="text-sm font-bold text-gray-700 dark:text-gray-200">{label}:</span>
+                        <span className="text-sm text-gray-900 dark:text-white max-w-xs truncate bg-white dark:bg-primary-800/40 px-2 py-1 rounded border dark:border-primary-600/40 font-medium">
                           {Array.isArray(value) ? value.join(', ') : value}
                         </span>
                       </div>
@@ -734,7 +734,7 @@ return (
 
 <div className="preview-form">
 <form onSubmit={handleSubmit} className="space-y-8">
-          <div className="mb-8">
+<div className="mb-8">
             <h1 className={getThemeClasses().title}>
               {formSettings.title || "Preview Form"}
             </h1>
@@ -753,18 +753,18 @@ return (
                 className={getThemeClasses().fieldLabel}
               >
                 {field.label || "Untitled Field"}
-                {field.required && <span className="text-red-500 ml-1 text-base font-bold">*</span>}
+                {field.required && <span className="text-red-500 dark:text-red-400 ml-1 text-base font-bold">*</span>}
               </label>
               {renderField(field)}
               {field.description && (
-                <p className="text-sm text-gray-600 mt-1">
+                <p className="text-sm text-gray-600 dark:text-gray-200 mt-1 font-medium">
                   {field.description}
                 </p>
               )}
             </div>
           ))}
 
-          <div className="pt-6 border-t border-gray-200 dark:border-gray-700">
+<div className="pt-6 border-t border-gray-200 dark:border-primary-600/40">
             <Button type="submit" className={getThemeClasses().submitButton}>
               {formSettings.submitButtonText || "Submit Form"}
             </Button>

@@ -506,7 +506,7 @@ const handlePreviewModeToggle = () => {
     setIsMobileDragging(false); // Clear mobile drag state
   };
   return (
-<div className="min-h-screen bg-gray-50 dark:bg-gradient-to-br dark:from-purple-900 dark:via-purple-800 dark:to-indigo-900 transition-colors duration-200">
+<div className="min-h-screen bg-gray-50 dark:bg-gradient-to-br dark:from-dark-900 dark:via-primary-600 dark:to-dark-800 transition-colors duration-300">
       <Header 
         onExport={handleExport} 
         onFormSettings={handleFormSettingsOpen}
@@ -540,8 +540,8 @@ const handlePreviewModeToggle = () => {
         <AnimatePresence mode="wait">
           {!isPreviewMode && (
             <motion.div 
-              key="toolbar"
-className="w-full md:w-80 p-4 md:p-6 bg-background dark:bg-purple-900/40 border-b md:border-b-0 md:border-r border-gray-200 dark:border-purple-600/30 transition-colors duration-300 overflow-y-auto max-h-60 md:max-h-none"
+key="toolbar"
+className="w-full md:w-80 p-4 md:p-6 bg-background dark:bg-primary-800/30 border-b md:border-b-0 md:border-r border-gray-200 dark:border-primary-600/40 transition-colors duration-300 overflow-y-auto max-h-60 md:max-h-none backdrop-blur-sm shadow-lg dark:shadow-primary-900/20"
               initial={{ x: -80, opacity: 0, scale: 0.95 }}
               animate={{ x: 0, opacity: 1, scale: 1 }}
               exit={{ x: -80, opacity: 0, scale: 0.95 }}

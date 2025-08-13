@@ -171,7 +171,7 @@ const renderDropZone = (index) => (
 if (fields.length === 0) {
     return (
       <div
-className="w-full h-full bg-gradient-to-br from-white via-gray-50 to-white dark:from-purple-900/20 dark:via-purple-800/10 dark:to-indigo-900/20 rounded-2xl shadow-2xl border-2 border-dashed border-gray-300 dark:border-purple-600/50 hover:border-primary-400 dark:hover:border-primary-400 hover:shadow-3xl hover:scale-[1.01] transition-all duration-500 ease-out drop-zone touch-manipulation backdrop-blur-sm"
+className="w-full h-full bg-gradient-to-br from-white via-gray-50 to-white dark:from-primary-600/20 dark:via-dark-900/90 dark:to-primary-600/10 rounded-2xl shadow-2xl dark:shadow-primary-600/20 border-2 border-dashed border-gray-300 dark:border-primary-500/60 hover:border-primary-500 dark:hover:border-primary-400 hover:shadow-3xl dark:hover:shadow-primary-500/30 hover:scale-[1.01] transition-all duration-500 ease-out drop-zone touch-manipulation backdrop-blur-sm"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
@@ -181,13 +181,13 @@ className="w-full h-full bg-gradient-to-br from-white via-gray-50 to-white dark:
         <div className="flex flex-col items-center justify-center h-full text-center p-8">
           {/* Hero Section */}
           <div className="mb-10">
-            <div className="w-28 h-28 mb-6 rounded-full bg-gradient-to-br from-primary-100 via-primary-200 to-secondary-100 dark:from-purple-500/20 dark:via-purple-400/20 dark:to-indigo-500/20 flex items-center justify-center animate-pulse-glow mx-auto shadow-2xl border border-white dark:border-purple-400/30">
-              <ApperIcon name="Zap" className="w-14 h-14 text-primary-600 dark:text-purple-300" />
+<div className="w-28 h-28 mb-6 rounded-full bg-gradient-to-br from-primary-100 via-primary-200 to-primary-300 dark:from-primary-500/30 dark:via-primary-600/40 dark:to-primary-700/50 flex items-center justify-center animate-pulse-glow mx-auto shadow-2xl dark:shadow-primary-600/40 border border-white dark:border-primary-400/40">
+              <ApperIcon name="Zap" className="w-14 h-14 text-primary-600 dark:text-white" />
             </div>
-            <h3 className="text-3xl font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-white dark:via-purple-100 dark:to-white bg-clip-text text-transparent mb-4">
+            <h3 className="text-3xl font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-white dark:via-gray-100 dark:to-white bg-clip-text text-transparent mb-4">
               Create Your Perfect Form
             </h3>
-            <p className="text-gray-600 dark:text-gray-300 max-w-lg mb-8 leading-relaxed text-lg">
+            <p className="text-gray-600 dark:text-gray-200 max-w-lg mb-8 leading-relaxed text-lg font-medium">
               Start with a professional template or build from scratch. Drag & drop fields, customize everything, and create forms that convert.
             </p>
           </div>
@@ -195,37 +195,37 @@ className="w-full h-full bg-gradient-to-br from-white via-gray-50 to-white dark:
           {/* Template Gallery */}
           {formTemplates && formTemplates.length > 0 && (
             <div className="w-full max-w-4xl mb-10">
-              <div className="flex items-center justify-center mb-8">
-                <div className="flex items-center space-x-3 bg-gradient-to-r from-yellow-50 to-amber-50 dark:from-amber-500/20 dark:to-yellow-500/20 px-6 py-3 rounded-full border border-yellow-200 dark:border-amber-400/30">
-                  <ApperIcon name="Sparkles" className="w-5 h-5 text-yellow-500 dark:text-amber-300" />
-                  <h4 className="text-lg font-semibold text-gray-800 dark:text-amber-100">
+<div className="flex items-center justify-center mb-8">
+                <div className="flex items-center space-x-3 bg-gradient-to-r from-primary-50 to-primary-100 dark:from-primary-600/30 dark:to-primary-500/40 px-6 py-3 rounded-full border border-primary-200 dark:border-primary-400/50 shadow-lg dark:shadow-primary-600/30">
+                  <ApperIcon name="Sparkles" className="w-5 h-5 text-primary-600 dark:text-white" />
+                  <h4 className="text-lg font-bold text-primary-800 dark:text-white">
                     Quick Start Templates
                   </h4>
                   <ApperIcon name="Sparkles" className="w-5 h-5 text-yellow-500 dark:text-amber-300" />
                 </div>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10 justify-items-center">
+<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10 justify-items-center max-w-4xl mx-auto">
                 {formTemplates.slice(0, 4).map((template, index) => (
-                  <div
+<div
                     key={template.Id}
-                    className="w-full max-w-sm bg-gradient-to-br from-white via-gray-50 to-white dark:from-purple-800/30 dark:via-purple-700/20 dark:to-indigo-800/30 rounded-xl border border-gray-200 dark:border-purple-500/30 p-6 hover:shadow-2xl dark:hover:shadow-purple-500/20 transition-all duration-500 hover:scale-105 hover:-translate-y-2 cursor-pointer group backdrop-blur-sm"
+                    className="w-full max-w-sm bg-gradient-to-br from-white via-gray-50 to-white dark:from-primary-600/20 dark:via-dark-900/95 dark:to-primary-700/25 rounded-xl border border-gray-200 dark:border-primary-500/40 p-6 hover:shadow-2xl dark:hover:shadow-primary-500/30 transition-all duration-500 hover:scale-105 hover:-translate-y-2 cursor-pointer group backdrop-blur-sm shadow-lg dark:shadow-primary-600/10"
                     style={{ animationDelay: `${index * 0.1}s` }}
                   >
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex-1">
-                        <h5 className="font-bold text-gray-900 dark:text-white mb-3 group-hover:text-primary-600 dark:group-hover:text-purple-300 transition-colors text-lg">
+<h5 className="font-bold text-xl text-gray-900 dark:text-white mb-3 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
                           {template.title}
                         </h5>
-                        <p className="text-sm text-gray-600 dark:text-gray-300 mb-4 line-clamp-2 leading-relaxed">
+                        <p className="text-sm text-gray-600 dark:text-gray-200 mb-4 line-clamp-2 leading-relaxed font-medium">
                           {template.description}
                         </p>
-                        <div className="flex items-center space-x-4 text-xs text-gray-500 dark:text-gray-400">
-                          <span className="flex items-center bg-gray-100 dark:bg-purple-700/40 px-3 py-1.5 rounded-md border dark:border-purple-600/30">
+                        <div className="flex items-center space-x-3 text-xs text-gray-500 dark:text-gray-300">
+                          <span className="flex items-center bg-gray-100 dark:bg-primary-700/40 px-3 py-1.5 rounded-md border dark:border-primary-600/40 font-medium">
                             <ApperIcon name="FileText" className="w-3 h-3 mr-1.5" />
                             {template.fields?.length || 0} fields
                           </span>
-                          <span className="flex items-center bg-blue-100 dark:bg-indigo-600/40 px-3 py-1.5 rounded-md text-blue-600 dark:text-indigo-300 border dark:border-indigo-500/30">
+                          <span className="flex items-center bg-primary-100 dark:bg-primary-600/40 px-3 py-1.5 rounded-md text-primary-700 dark:text-primary-200 border dark:border-primary-500/40 font-medium">
                             <ApperIcon name="Clock" className="w-3 h-3 mr-1.5" />
                             2 min setup
                           </span>
@@ -233,9 +233,9 @@ className="w-full h-full bg-gradient-to-br from-white via-gray-50 to-white dark:
                       </div>
                     </div>
                     
-                    <button
+<button
                       onClick={() => onUseTemplate(template)}
-                      className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl hover:shadow-purple-500/25 transform hover:-translate-y-0.5 active:translate-y-0"
+                      className="w-full bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl hover:shadow-primary-500/40 transform hover:-translate-y-0.5 active:translate-y-0 border border-primary-400/50"
                     >
                       <ApperIcon name="Download" className="w-4 h-4" />
                       <span>Use Template</span>
@@ -247,55 +247,55 @@ className="w-full h-full bg-gradient-to-br from-white via-gray-50 to-white dark:
           )}
 
           {/* Divider */}
-          <div className="flex items-center w-full max-w-md mb-10">
-            <div className="flex-1 border-t-2 border-gray-200 dark:border-gray-700"></div>
-            <span className="px-6 text-sm font-semibold text-gray-500 dark:text-gray-400 bg-gradient-to-r from-gray-100 to-gray-50 dark:from-gray-800 dark:to-gray-700 py-2 rounded-full border border-gray-200 dark:border-gray-700">OR</span>
-            <div className="flex-1 border-t-2 border-gray-200 dark:border-gray-700"></div>
+<div className="flex items-center w-full max-w-md mb-10">
+            <div className="flex-1 border-t-2 border-gray-200 dark:border-primary-600/40"></div>
+            <span className="px-6 text-sm font-bold text-gray-500 dark:text-gray-200 bg-gradient-to-r from-gray-100 to-gray-50 dark:from-primary-600/30 dark:to-primary-700/40 py-2 rounded-full border border-gray-200 dark:border-primary-500/40 shadow-md">OR</span>
+            <div className="flex-1 border-t-2 border-gray-200 dark:border-primary-600/40"></div>
           </div>
 
-          {/* Build From Scratch */}
-          <div className="bg-gradient-to-br from-primary-50 via-white to-secondary-50 dark:from-primary-900/30 dark:via-gray-800 dark:to-secondary-900/30 rounded-2xl p-8 max-w-lg shadow-xl border border-primary-200 dark:border-primary-800">
+{/* Build From Scratch */}
+          <div className="bg-gradient-to-br from-primary-50 via-white to-primary-100 dark:from-primary-600/20 dark:via-dark-900/95 dark:to-primary-700/30 rounded-2xl p-8 max-w-lg shadow-xl dark:shadow-primary-600/20 border border-primary-200 dark:border-primary-500/40">
             <div className="flex items-center justify-center mb-6">
-              <div className="w-16 h-16 bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-800 dark:to-primary-700 rounded-full flex items-center justify-center shadow-lg">
-                <ApperIcon name="Hammer" className="w-8 h-8 text-primary-600 dark:text-primary-300" />
+              <div className="w-16 h-16 bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-600/40 dark:to-primary-700/50 rounded-full flex items-center justify-center shadow-lg dark:shadow-primary-600/40">
+                <ApperIcon name="Hammer" className="w-8 h-8 text-primary-600 dark:text-white" />
               </div>
             </div>
-            <h4 className="text-xl font-bold text-gray-800 dark:text-gray-100 mb-4 text-center">
+            <h4 className="text-2xl font-bold text-gray-800 dark:text-white mb-4 text-center">
               Build From Scratch
             </h4>
-            <p className="text-sm text-gray-600 dark:text-gray-400 mb-6 text-center leading-relaxed">
+            <p className="text-sm text-gray-600 dark:text-gray-200 mb-6 text-center leading-relaxed font-medium">
               Drag field types from the left panel to start building your custom form
             </p>
             
-            <div className="bg-white dark:bg-gray-800 rounded-xl p-5 border border-gray-200 dark:border-gray-700 shadow-inner">
-              <h5 className="text-sm font-bold text-gray-700 dark:text-gray-200 mb-3 flex items-center">
-                <ApperIcon name="Lightbulb" className="w-4 h-4 mr-2 text-yellow-500" />
+            <div className="bg-white dark:bg-primary-900/30 rounded-xl p-5 border border-gray-200 dark:border-primary-600/30 shadow-inner">
+              <h5 className="text-sm font-bold text-gray-700 dark:text-white mb-3 flex items-center">
+                <ApperIcon name="Lightbulb" className="w-4 h-4 mr-2 text-primary-500 dark:text-primary-400" />
                 Pro Tips
               </h5>
-              <ul className="text-xs text-gray-600 dark:text-gray-400 space-y-2">
-                <li className="flex items-start bg-gray-50 dark:bg-gray-700 p-2 rounded-lg">
-                  <ApperIcon name="ChevronRight" className="w-3 h-3 mt-0.5 mr-2 text-primary-500 flex-shrink-0" />
+              <ul className="text-xs text-gray-600 dark:text-gray-200 space-y-2 font-medium">
+                <li className="flex items-start bg-gray-50 dark:bg-primary-700/30 p-2 rounded-lg border dark:border-primary-600/30">
+                  <ApperIcon name="ChevronRight" className="w-3 h-3 mt-0.5 mr-2 text-primary-500 dark:text-primary-400 flex-shrink-0" />
                   <span>Drag field types to this canvas area</span>
                 </li>
-                <li className="flex items-start bg-gray-50 dark:bg-gray-700 p-2 rounded-lg">
-                  <ApperIcon name="ChevronRight" className="w-3 h-3 mt-0.5 mr-2 text-primary-500 flex-shrink-0" />
+                <li className="flex items-start bg-gray-50 dark:bg-primary-700/30 p-2 rounded-lg border dark:border-primary-600/30">
+                  <ApperIcon name="ChevronRight" className="w-3 h-3 mt-0.5 mr-2 text-primary-500 dark:text-primary-400 flex-shrink-0" />
                   <span>Click any field to customize properties</span>
                 </li>
-                <li className="flex items-start bg-gray-50 dark:bg-gray-700 p-2 rounded-lg">
-                  <ApperIcon name="ChevronRight" className="w-3 h-3 mt-0.5 mr-2 text-primary-500 flex-shrink-0" />
+                <li className="flex items-start bg-gray-50 dark:bg-primary-700/30 p-2 rounded-lg border dark:border-primary-600/30">
+                  <ApperIcon name="ChevronRight" className="w-3 h-3 mt-0.5 mr-2 text-primary-500 dark:text-primary-400 flex-shrink-0" />
                   <span>Reorder by dragging fields up or down</span>
                 </li>
-                <li className="flex items-start bg-gray-50 dark:bg-gray-700 p-2 rounded-lg">
-                  <ApperIcon name="ChevronRight" className="w-3 h-3 mt-0.5 mr-2 text-primary-500 flex-shrink-0" />
+                <li className="flex items-start bg-gray-50 dark:bg-primary-700/30 p-2 rounded-lg border dark:border-primary-600/30">
+                  <ApperIcon name="ChevronRight" className="w-3 h-3 mt-0.5 mr-2 text-primary-500 dark:text-primary-400 flex-shrink-0" />
                   <span>Preview anytime with the preview button</span>
                 </li>
               </ul>
             </div>
           </div>
           
-          <div className="mt-10 flex items-center space-x-3 text-sm bg-gradient-to-r from-primary-50 to-secondary-50 dark:from-primary-900/20 dark:to-secondary-900/20 px-4 py-2 rounded-full border border-primary-200 dark:border-primary-800">
-            <div className="w-2.5 h-2.5 bg-primary-500 rounded-full animate-pulse"></div>
-            <span className="font-semibold text-primary-600 dark:text-primary-400">Ready for your creativity</span>
+          <div className="mt-10 flex items-center space-x-3 text-sm bg-gradient-to-r from-primary-50 to-primary-100 dark:from-primary-600/30 dark:to-primary-700/40 px-4 py-2 rounded-full border border-primary-200 dark:border-primary-500/40 shadow-md">
+            <div className="w-2.5 h-2.5 bg-primary-500 dark:bg-primary-400 rounded-full animate-pulse"></div>
+            <span className="font-bold text-primary-600 dark:text-white">Ready for your creativity</span>
           </div>
         </div>
       </div>
@@ -304,7 +304,7 @@ className="w-full h-full bg-gradient-to-br from-white via-gray-50 to-white dark:
 
 return (
 <div
-className="w-full h-full bg-gradient-to-br from-white via-gray-50 to-white dark:from-purple-800/30 dark:via-purple-700/20 dark:to-indigo-800/30 rounded-2xl shadow-2xl dark:shadow-purple-900/50 border border-gray-200 dark:border-purple-500/30 p-6 md:p-8 drop-zone custom-scrollbar overflow-y-auto transition-all duration-300 ease-out touch-manipulation hover:shadow-3xl dark:hover:shadow-purple-500/25 backdrop-blur-sm"
+className="w-full h-full bg-gradient-to-br from-white via-gray-50 to-white dark:from-primary-600/20 dark:via-dark-900/95 dark:to-primary-700/25 rounded-2xl shadow-2xl dark:shadow-primary-600/30 border border-gray-200 dark:border-primary-500/40 p-6 md:p-8 drop-zone custom-scrollbar overflow-y-auto transition-all duration-300 ease-out touch-manipulation hover:shadow-3xl dark:hover:shadow-primary-500/40 backdrop-blur-sm"
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
@@ -312,18 +312,18 @@ className="w-full h-full bg-gradient-to-br from-white via-gray-50 to-white dark:
       onTouchEnd={handleTouchEnd}
     >
       <div className="mb-6">
-        <div className="flex items-center justify-between mb-2">
-<h2 className="text-lg font-bold text-gray-900 dark:text-white">Form Canvas</h2>
+<div className="flex items-center justify-between mb-2">
+<h2 className="text-xl font-bold bg-gradient-to-r from-primary-600 to-primary-700 dark:from-white dark:to-gray-100 bg-clip-text text-transparent">Form Canvas</h2>
           <div className="flex items-center space-x-2 text-sm">
-            <div className="px-3 py-1.5 bg-green-100 dark:bg-green-600/30 text-green-700 dark:text-green-200 rounded-full text-xs font-medium border dark:border-green-500/30">
+            <div className="px-3 py-1.5 bg-green-100 dark:bg-green-600/40 text-green-700 dark:text-green-200 rounded-full text-xs font-bold border dark:border-green-500/40 shadow-sm">
               {fields.length} field{fields.length !== 1 ? "s" : ""}
             </div>
-            <div className="text-xs text-gray-500 dark:text-gray-300">
+            <div className="text-xs text-gray-500 dark:text-gray-200 font-medium">
               Live Preview
             </div>
           </div>
         </div>
-        <p className="text-sm text-gray-600 dark:text-gray-300">
+        <p className="text-sm text-gray-600 dark:text-gray-200 font-medium">
           Click any field to edit its properties • Drag to reorder • Drop new fields anywhere
         </p>
       </div>
