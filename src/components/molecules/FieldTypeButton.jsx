@@ -11,7 +11,8 @@ const FieldTypeButton = ({
   onTouchEnd,
   isMobileDragging,
   className,
-  ...props 
+  isCollapsed,
+  ...props
 }) => {
   const handleDragStart = (e) => {
     e.dataTransfer.setData('text/plain', type);
