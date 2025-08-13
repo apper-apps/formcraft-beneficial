@@ -171,11 +171,13 @@ const renderDropZone = (index) => (
 
 if (fields.length === 0) {
     return (
+<div className="w-full max-w-[800px] mx-auto p-10">
 <div
 className="w-full h-full bg-[var(--bg-card)] rounded-2xl shadow-2xl border-2 border-dashed border-[var(--border-primary)] hover:border-[var(--border-hover)] hover:shadow-3xl hover:scale-[1.01] transition-all duration-500 ease-out drop-zone touch-manipulation backdrop-filter backdrop-blur-sm relative z-1" 
 style={{ 
   backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px)',
-  backgroundSize: '40px 40px'
+  backgroundSize: '40px 40px',
+  minHeight: '400px'
 }}
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
@@ -190,76 +192,11 @@ style={{
               <ApperIcon name="Zap" className="w-14 h-14 text-primary-600 dark:text-white" />
             </div>
             <h3 className="text-3xl font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-white dark:via-gray-100 dark:to-white bg-clip-text text-transparent mb-4">
-              Create Your Perfect Form
+              Start Building Your Form
             </h3>
             <p className="text-gray-600 dark:text-gray-200 max-w-lg mb-8 leading-relaxed text-lg font-medium">
-              Start with a professional template or build from scratch. Drag & drop fields, customize everything, and create forms that convert.
+              Drag fields from the left panel to start building your form
             </p>
-          </div>
-
-          {/* Template Gallery */}
-          {formTemplates && formTemplates.length > 0 && (
-            <div className="w-full max-w-4xl mb-10">
-<div className="flex items-center justify-center mb-8">
-<div className="flex items-center space-x-3 bg-gradient-to-r from-primary-50 to-primary-100 dark:from-primary-500/10 dark:to-primary-400/20 px-6 py-3 rounded-full border border-primary-200 dark:border-primary-400/30 shadow-lg dark:shadow-primary-500/20 backdrop-filter dark:backdrop-blur-lg">
-                  <ApperIcon name="Sparkles" className="w-5 h-5 text-primary-600 dark:text-white" />
-                  <h4 className="text-lg font-bold text-primary-800 dark:text-white">
-                    Quick Start Templates
-                  </h4>
-                  <ApperIcon name="Sparkles" className="w-5 h-5 text-yellow-500 dark:text-amber-300" />
-                </div>
-              </div>
-              
-<div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10 justify-items-center max-w-4xl mx-auto">
-                {formTemplates.slice(0, 4).map((template, index) => (
-                  <div
-                    key={template.id || `template-${index}`}
-                    className="w-full max-w-sm bg-gradient-to-br from-white via-gray-50 to-white dark:from-primary-600/20 dark:via-dark-900/95 dark:to-primary-700/25 rounded-xl border border-gray-200 dark:border-primary-500/40 p-6 hover:shadow-2xl dark:hover:shadow-primary-500/30 transition-all duration-500 hover:scale-105 hover:-translate-y-2 cursor-pointer group backdrop-blur-sm shadow-lg dark:shadow-primary-600/10"
-style={{ 
-                      background: 'var(--bg-card)', 
-                      backdropFilter: 'blur(10px)',
-                      animationDelay: `${index * 0.1}s` 
-                    }}
-                  >
-                    <div className="flex items-start justify-between mb-4">
-                      <div className="flex-1">
-<h5 className="font-bold text-xl text-gray-900 dark:text-white mb-3 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors">
-                          {template.title}
-                        </h5>
-                        <p className="text-sm text-gray-600 dark:text-gray-200 mb-4 line-clamp-2 leading-relaxed font-medium">
-                          {template.description}
-                        </p>
-                        <div className="flex items-center space-x-3 text-xs text-gray-500 dark:text-gray-300">
-                          <span className="flex items-center bg-gray-100 dark:bg-primary-700/40 px-3 py-1.5 rounded-md border dark:border-primary-600/40 font-medium">
-                            <ApperIcon name="FileText" className="w-3 h-3 mr-1.5" />
-                            {template.fields?.length || 0} fields
-                          </span>
-                          <span className="flex items-center bg-primary-100 dark:bg-primary-600/40 px-3 py-1.5 rounded-md text-primary-700 dark:text-primary-200 border dark:border-primary-500/40 font-medium">
-                            <ApperIcon name="Clock" className="w-3 h-3 mr-1.5" />
-                            2 min setup
-                          </span>
-                        </div>
-                      </div>
-                    </div>
-                    
-<button
-                      onClick={() => onUseTemplate(template)}
-                      className="w-full bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 text-white font-bold py-3 px-4 rounded-lg transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl hover:shadow-primary-500/30 transform hover:-translate-y-0.5 active:translate-y-0 border border-primary-400/30 backdrop-filter backdrop-blur-lg"
-                    >
-                      <ApperIcon name="Download" className="w-4 h-4" />
-                      <span>Use Template</span>
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          {/* Divider */}
-<div className="flex items-center w-full max-w-md mb-10">
-<div className="flex-1 border-t-2 border-gray-200 dark:border-primary-500/30"></div>
-            <span className="px-6 text-sm font-bold text-gray-500 dark:text-gray-200 bg-gradient-to-r from-gray-100 to-gray-50 dark:from-primary-500/20 dark:to-primary-400/30 py-2 rounded-full border border-gray-200 dark:border-primary-500/30 shadow-md backdrop-filter dark:backdrop-blur-lg">OR</span>
-            <div className="flex-1 border-t-2 border-gray-200 dark:border-primary-600/40"></div>
           </div>
 
 {/* Build From Scratch Card */}
@@ -289,10 +226,12 @@ style={{
           </div>
         </div>
       </div>
+      </div>
     );
   }
 
 return (
+<div className="w-full max-w-[800px] mx-auto p-10">
 <div
 className="w-full h-full bg-[var(--bg-card)] rounded-2xl shadow-2xl border border-[var(--border-primary)] p-6 md:p-8 drop-zone custom-scrollbar overflow-y-auto transition-all duration-300 ease-out touch-manipulation hover:shadow-3xl backdrop-filter backdrop-blur-lg relative z-1"
       onDragOver={handleDragOver}
@@ -349,6 +288,7 @@ className="w-full h-full bg-[var(--bg-card)] rounded-2xl shadow-2xl border borde
           Drop here
         </div>
       )}
+    </div>
     </div>
   );
 };

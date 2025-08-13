@@ -26,26 +26,7 @@ useEffect(() => {
   }, [selectedField]);
 
   if (!selectedField || !localField) {
-    return (
-      <motion.div 
-        className="w-96 p-6 bg-background border-l border-gray-200 flex items-center justify-center"
-        initial={{ x: 50, opacity: 0 }}
-        animate={{ x: 0, opacity: 1 }}
-        transition={{ duration: 0.3 }}
-      >
-        <div className="text-center">
-          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-primary-100 to-secondary-100 flex items-center justify-center">
-            <ApperIcon name="Settings" className="w-8 h-8 text-primary-500" />
-          </div>
-          <h3 className="text-lg font-semibold text-gray-700 mb-2">
-            No field selected
-          </h3>
-          <p className="text-gray-500 text-sm">
-            Click on a field in the canvas to configure its properties
-          </p>
-        </div>
-      </motion.div>
-    );
+    return null;
   }
 
   const handleLocalUpdate = (property, value) => {
@@ -82,14 +63,23 @@ const updates = { ...localField };
     }
   };
 
-  return (
+return (
     <motion.div 
-className="w-96 p-6 bg-gradient-to-b from-gray-50 to-white dark:from-dark-900/50 dark:to-dark-800/70 border-l border-gray-200 dark:border-primary-500/30 custom-scrollbar overflow-y-auto shadow-xl backdrop-filter dark:backdrop-blur-lg"
-      initial={{ x: 50, opacity: 0 }}
+className="fixed right-0 top-0 w-96 h-screen bg-black/80 backdrop-blur-sm z-50"
+      initial={{ x: 384, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
+      exit={{ x: 384, opacity: 0 }}
       transition={{ duration: 0.3 }}
       key={selectedField.id}
     >
+      <div className="h-full w-96 bg-gradient-to-b from-gray-50 to-white dark:from-dark-900/50 dark:to-dark-800/70 border-l border-gray-200 dark:border-primary-500/30 custom-scrollbar overflow-y-auto shadow-xl backdrop-filter dark:backdrop-blur-lg p-6">
+        {/* Close Button */}
+        <button
+          onClick={() => onFieldUpdate && onFieldUpdate(null, null)}
+          className="absolute top-4 right-4 w-8 h-8 bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 rounded-full flex items-center justify-center transition-colors z-10"
+        >
+          <ApperIcon name="X" className="w-4 h-4" />
+        </button>
       <div className="mb-6">
         <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-1 flex items-center">
 <ApperIcon name="Settings" className="w-5 h-5 mr-2 text-primary-500 dark:text-primary-300" />
@@ -657,6 +647,7 @@ className="w-96 p-6 bg-gradient-to-b from-gray-50 to-white dark:from-dark-900/50
             )}
           </div>
         </Card>
+</div>
       </div>
     </motion.div>
   );

@@ -11,7 +11,7 @@ const AppContent = () => {
   
 return (
     <BrowserRouter>
-<div className="min-h-screen transition-colors duration-300 relative z-10" style={{ 
+<div className="min-h-screen h-screen overflow-hidden transition-colors duration-300 relative" style={{ 
   background: 'var(--bg-primary)',
   backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px), radial-gradient(circle at 30% 50%, rgba(59, 130, 246, 0.1) 0%, transparent 50%), radial-gradient(circle at 70% 80%, rgba(147, 51, 234, 0.1) 0%, transparent 50%)',
   backgroundSize: '50px 50px, 50px 50px, 100% 100%, 100% 100%'

@@ -585,6 +585,78 @@ body {
     z-index: 1000;
   }
 }
+/* Layout System */
+.form-builder-layout {
+  display: flex;
+  height: 100vh;
+  position: relative;
+}
+
+.main-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  padding-top: 56px; /* Header height */
+}
+
+.canvas-container {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+/* Sidebar States */
+.sidebar-collapsed {
+  width: 60px;
+}
+
+.sidebar-expanded {
+  width: 240px;
+}
+
+/* Tooltip for collapsed sidebar */
+.tooltip-container {
+  position: relative;
+}
+
+.tooltip {
+  white-space: nowrap;
+  z-index: 9999;
+}
+
+/* Configuration Panel Overlay */
+.config-panel-overlay {
+  position: fixed;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  width: 380px;
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(8px);
+  z-index: 1000;
+}
+
+/* Field Type Button Enhancements */
+.field-type-button {
+  padding: 14px;
+  margin: 8px 0;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.field-type-button:hover {
+  transform: translateX(4px);
+  border-color: #3B82F6;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
+}
+
+/* Canvas Container */
+.canvas-centered {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 40px;
+}
 
 /* Responsive layout adjustments */
 @media (max-width: 767px) {
@@ -592,18 +664,23 @@ body {
     flex-direction: column;
   }
   
-  .toolbar-panel {
-    max-height: 240px;
-    overflow-y: auto;
-    border-bottom: 1px solid var(--color-border);
-    border-right: none;
+  .sidebar-expanded {
+    width: 100%;
+    max-height: 200px;
   }
   
-  .config-panel {
-    border-top: 1px solid var(--color-border);
-    border-left: none;
-    max-height: 300px;
-    overflow-y: auto;
+  .config-panel-overlay {
+    width: 100%;
+  }
+  
+  .canvas-centered {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .canvas-centered {
+    padding: 30px;
   }
 }
 /* Enhanced Animation System */
