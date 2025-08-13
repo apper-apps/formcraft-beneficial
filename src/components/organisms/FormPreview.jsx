@@ -239,12 +239,12 @@ window.FormValidation = window.FormValidation || {};
   window.FormValidation.getThemeClasses = (selectedTheme) => {
     if (!selectedTheme) {
       return {
-        container: "w-full h-full bg-gradient-to-br from-white via-gray-50 to-white dark:from-gray-800 dark:via-gray-850 dark:to-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 p-8 custom-scrollbar overflow-y-auto transition-all duration-300 backdrop-blur-sm",
-        title: "text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-300 bg-clip-text text-transparent mb-4",
-        description: "text-gray-600 dark:text-gray-400 text-lg leading-relaxed",
-        fieldLabel: "block text-sm font-semibold text-gray-800 dark:text-gray-200 mb-2",
-        input: "w-full px-4 py-3 border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white rounded-xl bg-gradient-to-r from-white to-gray-50 dark:from-gray-700 dark:to-gray-650 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-400 transition-all duration-300 hover:shadow-md focus:shadow-lg backdrop-blur-sm",
-        submitButton: "w-full text-lg py-4",
+container: "w-full h-full bg-gradient-to-br from-white via-gray-50 to-white dark:from-purple-900/30 dark:via-purple-800/20 dark:to-indigo-900/30 rounded-2xl shadow-2xl dark:shadow-purple-900/50 border border-gray-200 dark:border-purple-500/30 p-8 custom-scrollbar overflow-y-auto transition-all duration-300 backdrop-blur-sm",
+        title: "text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-purple-100 bg-clip-text text-transparent mb-4",
+        description: "text-gray-600 dark:text-gray-300 text-lg leading-relaxed",
+        fieldLabel: "block text-sm font-semibold text-gray-800 dark:text-gray-100 mb-2",
+        input: "w-full px-4 py-3 border border-gray-300 dark:border-purple-500/30 dark:bg-purple-800/20 dark:text-white rounded-xl bg-gradient-to-r from-white to-gray-50 dark:from-purple-800/20 dark:to-purple-700/20 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-purple-400 transition-all duration-300 hover:shadow-md focus:shadow-lg backdrop-blur-sm",
+        submitButton: "w-full text-lg py-4 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700",
         formSpacing: "space-y-6"
       };
     }
@@ -625,15 +625,15 @@ switch (field.type) {
 
   if (fields.length === 0) {
 return (
-      <div className="w-full h-full bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 p-6 transition-colors duration-200">
+<div className="w-full h-full bg-white dark:bg-purple-900/20 rounded-lg shadow-lg border border-gray-200 dark:border-purple-500/30 p-6 transition-colors duration-200">
         <div className="flex flex-col items-center justify-center h-full text-center">
-          <div className="w-16 h-16 mb-4 rounded-full bg-gradient-to-br from-primary-100 dark:from-primary-900/50 to-secondary-100 dark:to-secondary-900/50 flex items-center justify-center">
-            <ApperIcon name="Eye" className="w-8 h-8 text-primary-500 dark:text-primary-400" />
+          <div className="w-16 h-16 mb-4 rounded-full bg-gradient-to-br from-primary-100 dark:from-purple-500/30 to-secondary-100 dark:to-indigo-500/30 flex items-center justify-center">
+            <ApperIcon name="Eye" className="w-8 h-8 text-primary-500 dark:text-purple-300" />
           </div>
-          <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-200 mb-2">
+          <h3 className="text-lg font-semibold text-gray-700 dark:text-gray-100 mb-2">
             Live Preview
           </h3>
-          <p className="text-gray-500 dark:text-gray-400 max-w-md">
+          <p className="text-gray-500 dark:text-gray-300 max-w-md">
             Your form preview will appear here as you add fields to the canvas. Add some fields to get started!
           </p>
         </div>
@@ -679,15 +679,15 @@ return (
       {!isPreviewMode && (
         <div className="mb-6">
           <div className="flex items-center justify-between mb-2">
-<h2 className="text-xl font-bold bg-gradient-to-r from-primary-600 via-primary-700 to-secondary-600 bg-clip-text text-transparent">
+<h2 className="text-xl font-bold bg-gradient-to-r from-purple-600 via-purple-500 to-indigo-600 dark:from-purple-300 dark:via-purple-200 dark:to-indigo-300 bg-clip-text text-transparent">
               Live Preview
             </h2>
-            <div className="flex items-center space-x-2 text-xs text-green-600 bg-green-50 dark:bg-green-900/20 px-3 py-1 rounded-full border border-green-200 dark:border-green-800">
+            <div className="flex items-center space-x-2 text-xs text-green-600 dark:text-green-300 bg-green-50 dark:bg-green-600/20 px-3 py-1 rounded-full border border-green-200 dark:border-green-500/30">
               <div className="w-2.5 h-2.5 bg-green-500 rounded-full animate-pulse"></div>
               <span className="font-semibold">Live</span>
             </div>
           </div>
-          <p className="text-sm text-gray-600 dark:text-gray-400 bg-blue-50 dark:bg-blue-900/20 px-4 py-2 rounded-lg border border-blue-200 dark:border-blue-800">
+          <p className="text-sm text-gray-600 dark:text-gray-300 bg-blue-50 dark:bg-blue-600/20 px-4 py-2 rounded-lg border border-blue-200 dark:border-blue-500/30">
             This is how your form will look to users
           </p>
         </div>

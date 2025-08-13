@@ -31,30 +31,30 @@ const navigate = useNavigate();
 
   return (
 <header
-className="bg-gradient-to-r from-white via-gray-50 to-white dark:from-gray-800 dark:via-gray-850 dark:to-gray-800 shadow-lg border-b border-gray-200 dark:border-gray-700 px-6 py-4 transition-all duration-300 ease-out backdrop-blur-md">
+className="bg-gradient-to-r from-white via-gray-50 to-white dark:from-purple-900 dark:via-purple-800 dark:to-indigo-900 shadow-lg border-b border-gray-200 dark:border-purple-700/50 px-6 py-4 transition-all duration-300 ease-out backdrop-blur-md">
     <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-3">
                     <div
-                        className="w-8 h-8 bg-gradient-to-br from-primary-500 to-secondary-500 rounded-lg flex items-center justify-center">
+                        className="w-8 h-8 bg-gradient-to-br from-purple-500 to-indigo-500 rounded-lg flex items-center justify-center shadow-md">
                         <ApperIcon name="Layout" className="w-5 h-5 text-white" />
                     </div>
                     <div>
                         <h1 className="text-xl font-bold text-gray-900 dark:text-white">FormCraft</h1>
-                        <p className="text-sm text-gray-600 dark:text-gray-300">Visual Form Builder</p>
+                        <p className="text-sm text-gray-600 dark:text-purple-200">Visual Form Builder</p>
                     </div>
                 </div>
 <Button
                     variant="ghost"
                     onClick={toggleTheme}
-                    className="flex items-center space-x-2 text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white transition-all duration-300 ease-out"
+className="flex items-center space-x-2 text-gray-600 dark:text-purple-200 hover:text-gray-900 dark:hover:text-white transition-all duration-300 ease-out"
                     aria-label={`Switch to ${isDark ? "light" : "dark"} theme`}>
                     <ApperIcon name={isDark ? "Sun" : "Moon"} className="w-4 h-4" />
                 </Button>
             </div>
 <div className="flex items-center space-x-4">
-                <div className="flex items-center space-x-2 text-sm text-gray-600">
+<div className="flex items-center space-x-2 text-sm text-gray-600 dark:text-purple-200">
                     <ApperIcon name="Layout" className="w-4 h-4" />
                     <span>{fieldCount} field{fieldCount !== 1 ? "s" : ""}</span>
                 </div>

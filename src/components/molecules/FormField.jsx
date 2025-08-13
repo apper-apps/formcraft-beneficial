@@ -129,14 +129,14 @@ case "file":
       onDragEnd={handleDragEnd}
       onClick={() => onSelect(field.id)}
       className={cn(
-        "field-item relative p-4 bg-white dark:bg-gray-800 rounded-lg border-2 border-gray-200 dark:border-gray-600 cursor-move hover:border-primary-300 dark:hover:border-primary-400 hover:shadow-lg hover:scale-[1.02] transition-all duration-300 ease-out group",
+"field-item relative p-4 bg-white dark:bg-purple-800/30 rounded-lg border-2 border-gray-200 dark:border-purple-600/50 cursor-move hover:border-primary-300 dark:hover:border-purple-400 hover:shadow-lg dark:hover:shadow-purple-500/25 hover:scale-[1.02] transition-all duration-300 ease-out group",
         isSelected && "field-selected",
         className
       )}
     >
 {/* Field Label */}
 <div className="mb-2">
-        <label className="block text-sm font-medium text-gray-700">
+<label className="block text-sm font-medium text-gray-700 dark:text-gray-200">
           {field.label || `${field.type.charAt(0).toUpperCase() + field.type.slice(1)} Field`}
           {field.required && <span className="text-accent-500 ml-1">*</span>}
         </label>

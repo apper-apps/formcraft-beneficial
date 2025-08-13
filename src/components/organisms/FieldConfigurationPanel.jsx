@@ -84,25 +84,25 @@ const updates = { ...localField };
 
   return (
     <motion.div 
-className="w-96 p-6 bg-gradient-to-b from-gray-50 to-white dark:from-gray-800 dark:to-gray-850 border-l border-gray-200 dark:border-gray-700 custom-scrollbar overflow-y-auto shadow-xl"
+className="w-96 p-6 bg-gradient-to-b from-gray-50 to-white dark:from-purple-900/30 dark:to-purple-800/20 border-l border-gray-200 dark:border-purple-600/30 custom-scrollbar overflow-y-auto shadow-xl"
       initial={{ x: 50, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
       transition={{ duration: 0.3 }}
       key={selectedField.id}
     >
       <div className="mb-6">
-        <h2 className="text-lg font-bold text-gray-900 mb-1 flex items-center">
-          <ApperIcon name="Settings" className="w-5 h-5 mr-2 text-primary-500" />
+        <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-1 flex items-center">
+          <ApperIcon name="Settings" className="w-5 h-5 mr-2 text-primary-500 dark:text-purple-300" />
           Field Configuration
         </h2>
-        <p className="text-sm text-gray-600">
+        <p className="text-sm text-gray-600 dark:text-purple-200">
           Configure properties for {selectedField.type} field
         </p>
       </div>
 
       <div className="space-y-6">
         {/* Basic Information */}
-<Card className="p-6 bg-gradient-to-br from-white to-gray-50 dark:from-gray-800 dark:to-gray-850">
+<Card className="p-6 bg-gradient-to-br from-white to-gray-50 dark:from-purple-800/30 dark:to-purple-700/20">
           <h3 className="text-sm font-semibold text-gray-800 mb-3 flex items-center">
             <ApperIcon name="Type" className="w-4 h-4 mr-2 text-gray-500" />
             Basic Information

@@ -57,24 +57,24 @@ const [formSettings, setFormSettings] = useState({
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.95, opacity: 0 }}
           transition={{ duration: 0.2 }}
-          className="bg-white rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden"
+className="bg-white dark:bg-purple-900/95 dark:border dark:border-purple-600/30 rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden"
         >
           {/* Header */}
-          <div className="flex items-center justify-between p-6 border-b border-gray-200">
+<div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-purple-700/50">
             <div className="flex items-center space-x-3">
-              <div className="p-2 bg-primary-50 rounded-lg">
-                <ApperIcon name="Settings" className="w-5 h-5 text-primary-500" />
+              <div className="p-2 bg-primary-50 dark:bg-purple-600/30 rounded-lg">
+                <ApperIcon name="Settings" className="w-5 h-5 text-primary-500 dark:text-purple-300" />
               </div>
               <div>
-                <h2 className="text-xl font-semibold text-gray-900">Form Settings</h2>
-                <p className="text-sm text-gray-500">Configure your form's appearance and behavior</p>
+                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Form Settings</h2>
+                <p className="text-sm text-gray-500 dark:text-purple-200">Configure your form's appearance and behavior</p>
               </div>
             </div>
             <Button
               variant="ghost"
               size="sm"
               onClick={onClose}
-              className="p-2 hover:bg-gray-100 rounded-lg"
+              className="p-2 hover:bg-gray-100 dark:hover:bg-purple-800/50 rounded-lg"
             >
               <ApperIcon name="X" className="w-5 h-5" />
             </Button>
@@ -314,7 +314,7 @@ const [formSettings, setFormSettings] = useState({
           </div>
 
           {/* Footer */}
-          <div className="flex items-center justify-between px-6 py-4 border-t border-gray-200 bg-gray-50">
+<div className="flex items-center justify-between px-6 py-4 border-t border-gray-200 dark:border-purple-700/50 bg-gray-50 dark:bg-purple-800/30">
             <Button
               variant="ghost"
               onClick={handleReset}

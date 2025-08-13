@@ -506,7 +506,7 @@ const handlePreviewModeToggle = () => {
     setIsMobileDragging(false); // Clear mobile drag state
   };
   return (
-<div className="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-200">
+<div className="min-h-screen bg-gray-50 dark:bg-gradient-to-br dark:from-purple-900 dark:via-purple-800 dark:to-indigo-900 transition-colors duration-200">
       <Header 
         onExport={handleExport} 
         onFormSettings={handleFormSettingsOpen}
@@ -541,7 +541,7 @@ const handlePreviewModeToggle = () => {
           {!isPreviewMode && (
             <motion.div 
               key="toolbar"
-              className="w-full md:w-80 p-4 md:p-6 bg-background dark:bg-gray-800 border-b md:border-b-0 md:border-r border-gray-200 dark:border-gray-700 transition-colors duration-300 overflow-y-auto max-h-60 md:max-h-none"
+className="w-full md:w-80 p-4 md:p-6 bg-background dark:bg-purple-900/40 border-b md:border-b-0 md:border-r border-gray-200 dark:border-purple-600/30 transition-colors duration-300 overflow-y-auto max-h-60 md:max-h-none"
               initial={{ x: -80, opacity: 0, scale: 0.95 }}
               animate={{ x: 0, opacity: 1, scale: 1 }}
               exit={{ x: -80, opacity: 0, scale: 0.95 }}
@@ -614,7 +614,7 @@ const handlePreviewModeToggle = () => {
           {!isPreviewMode && selectedFieldId && (
             <motion.div 
               key="config-panel"
-              className="w-full md:w-80 p-4 md:p-6 bg-background dark:bg-gray-800 border-t md:border-t-0 md:border-l border-gray-200 dark:border-gray-700 transition-colors duration-300 order-last md:order-none overflow-y-auto"
+className="w-full md:w-80 p-4 md:p-6 bg-background dark:bg-purple-900/40 border-t md:border-t-0 md:border-l border-gray-200 dark:border-purple-600/30 transition-colors duration-300 order-last md:order-none overflow-y-auto"
               initial={{ x: 80, opacity: 0, scale: 0.95 }}
               animate={{ x: 0, opacity: 1, scale: 1 }}
               exit={{ x: 80, opacity: 0, scale: 0.95 }}

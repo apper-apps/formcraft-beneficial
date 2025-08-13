@@ -171,7 +171,7 @@ const renderDropZone = (index) => (
 if (fields.length === 0) {
     return (
       <div
-        className="w-full h-full bg-gradient-to-br from-white via-gray-50 to-white dark:from-gray-800 dark:via-gray-850 dark:to-gray-800 rounded-2xl shadow-2xl border-2 border-dashed border-gray-300 dark:border-gray-600 hover:border-primary-400 dark:hover:border-primary-500 hover:shadow-3xl hover:scale-[1.01] transition-all duration-500 ease-out drop-zone touch-manipulation backdrop-blur-sm"
+className="w-full h-full bg-gradient-to-br from-white via-gray-50 to-white dark:from-purple-900/20 dark:via-purple-800/10 dark:to-indigo-900/20 rounded-2xl shadow-2xl border-2 border-dashed border-gray-300 dark:border-purple-600/50 hover:border-primary-400 dark:hover:border-primary-400 hover:shadow-3xl hover:scale-[1.01] transition-all duration-500 ease-out drop-zone touch-manipulation backdrop-blur-sm"
         onDragOver={handleDragOver}
         onDragLeave={handleDragLeave}
         onDrop={handleDrop}
@@ -181,13 +181,13 @@ if (fields.length === 0) {
         <div className="flex flex-col items-center justify-center h-full text-center p-8">
           {/* Hero Section */}
           <div className="mb-10">
-            <div className="w-28 h-28 mb-6 rounded-full bg-gradient-to-br from-primary-100 via-primary-200 to-secondary-100 dark:from-primary-900/60 dark:via-primary-800/40 dark:to-secondary-900/60 flex items-center justify-center animate-pulse-glow mx-auto shadow-2xl border border-white dark:border-gray-700">
-              <ApperIcon name="Zap" className="w-14 h-14 text-primary-600 dark:text-primary-400" />
+            <div className="w-28 h-28 mb-6 rounded-full bg-gradient-to-br from-primary-100 via-primary-200 to-secondary-100 dark:from-purple-500/20 dark:via-purple-400/20 dark:to-indigo-500/20 flex items-center justify-center animate-pulse-glow mx-auto shadow-2xl border border-white dark:border-purple-400/30">
+              <ApperIcon name="Zap" className="w-14 h-14 text-primary-600 dark:text-purple-300" />
             </div>
-            <h3 className="text-3xl font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-white dark:via-gray-100 dark:to-white bg-clip-text text-transparent mb-4">
+            <h3 className="text-3xl font-bold bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 dark:from-white dark:via-purple-100 dark:to-white bg-clip-text text-transparent mb-4">
               Create Your Perfect Form
             </h3>
-            <p className="text-gray-600 dark:text-gray-400 max-w-lg mb-8 leading-relaxed text-lg">
+            <p className="text-gray-600 dark:text-gray-300 max-w-lg mb-8 leading-relaxed text-lg">
               Start with a professional template or build from scratch. Drag & drop fields, customize everything, and create forms that convert.
             </p>
           </div>
@@ -196,36 +196,36 @@ if (fields.length === 0) {
           {formTemplates && formTemplates.length > 0 && (
             <div className="w-full max-w-4xl mb-10">
               <div className="flex items-center justify-center mb-8">
-                <div className="flex items-center space-x-3 bg-gradient-to-r from-yellow-50 to-amber-50 dark:from-yellow-900/20 dark:to-amber-900/20 px-6 py-3 rounded-full border border-yellow-200 dark:border-yellow-800">
-                  <ApperIcon name="Sparkles" className="w-5 h-5 text-yellow-500" />
-                  <h4 className="text-lg font-semibold text-gray-800 dark:text-gray-200">
+                <div className="flex items-center space-x-3 bg-gradient-to-r from-yellow-50 to-amber-50 dark:from-amber-500/20 dark:to-yellow-500/20 px-6 py-3 rounded-full border border-yellow-200 dark:border-amber-400/30">
+                  <ApperIcon name="Sparkles" className="w-5 h-5 text-yellow-500 dark:text-amber-300" />
+                  <h4 className="text-lg font-semibold text-gray-800 dark:text-amber-100">
                     Quick Start Templates
                   </h4>
-                  <ApperIcon name="Sparkles" className="w-5 h-5 text-yellow-500" />
+                  <ApperIcon name="Sparkles" className="w-5 h-5 text-yellow-500 dark:text-amber-300" />
                 </div>
               </div>
               
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10 justify-items-center">
                 {formTemplates.slice(0, 4).map((template, index) => (
                   <div
                     key={template.Id}
-                    className="bg-gradient-to-br from-white via-gray-50 to-white dark:from-gray-700 dark:via-gray-750 dark:to-gray-800 rounded-xl border border-gray-200 dark:border-gray-600 p-6 hover:shadow-2xl transition-all duration-500 hover:scale-105 hover:-translate-y-1 cursor-pointer group backdrop-blur-sm"
+                    className="w-full max-w-sm bg-gradient-to-br from-white via-gray-50 to-white dark:from-purple-800/30 dark:via-purple-700/20 dark:to-indigo-800/30 rounded-xl border border-gray-200 dark:border-purple-500/30 p-6 hover:shadow-2xl dark:hover:shadow-purple-500/20 transition-all duration-500 hover:scale-105 hover:-translate-y-2 cursor-pointer group backdrop-blur-sm"
                     style={{ animationDelay: `${index * 0.1}s` }}
                   >
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex-1">
-                        <h5 className="font-bold text-gray-900 dark:text-white mb-3 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors text-lg">
+                        <h5 className="font-bold text-gray-900 dark:text-white mb-3 group-hover:text-primary-600 dark:group-hover:text-purple-300 transition-colors text-lg">
                           {template.title}
                         </h5>
-                        <p className="text-sm text-gray-600 dark:text-gray-400 mb-4 line-clamp-2 leading-relaxed">
+                        <p className="text-sm text-gray-600 dark:text-gray-300 mb-4 line-clamp-2 leading-relaxed">
                           {template.description}
                         </p>
-                        <div className="flex items-center space-x-6 text-xs text-gray-500 dark:text-gray-500">
-                          <span className="flex items-center bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-md">
+                        <div className="flex items-center space-x-4 text-xs text-gray-500 dark:text-gray-400">
+                          <span className="flex items-center bg-gray-100 dark:bg-purple-700/40 px-3 py-1.5 rounded-md border dark:border-purple-600/30">
                             <ApperIcon name="FileText" className="w-3 h-3 mr-1.5" />
                             {template.fields?.length || 0} fields
                           </span>
-                          <span className="flex items-center bg-blue-100 dark:bg-blue-900/30 px-2 py-1 rounded-md text-blue-600 dark:text-blue-400">
+                          <span className="flex items-center bg-blue-100 dark:bg-indigo-600/40 px-3 py-1.5 rounded-md text-blue-600 dark:text-indigo-300 border dark:border-indigo-500/30">
                             <ApperIcon name="Clock" className="w-3 h-3 mr-1.5" />
                             2 min setup
                           </span>
@@ -235,7 +235,7 @@ if (fields.length === 0) {
                     
                     <button
                       onClick={() => onUseTemplate(template)}
-                      className="w-full bg-gradient-to-r from-primary-500 to-secondary-500 hover:from-primary-600 hover:to-secondary-600 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 active:translate-y-0"
+                      className="w-full bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white font-semibold py-3 px-4 rounded-lg transition-all duration-300 flex items-center justify-center space-x-2 shadow-lg hover:shadow-xl hover:shadow-purple-500/25 transform hover:-translate-y-0.5 active:translate-y-0"
                     >
                       <ApperIcon name="Download" className="w-4 h-4" />
                       <span>Use Template</span>
@@ -304,7 +304,7 @@ if (fields.length === 0) {
 
 return (
 <div
-      className="w-full h-full bg-gradient-to-br from-white via-gray-50 to-white dark:from-gray-800 dark:via-gray-850 dark:to-gray-800 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 p-6 md:p-8 drop-zone custom-scrollbar overflow-y-auto transition-all duration-300 ease-out touch-manipulation hover:shadow-3xl backdrop-blur-sm"
+className="w-full h-full bg-gradient-to-br from-white via-gray-50 to-white dark:from-purple-800/30 dark:via-purple-700/20 dark:to-indigo-800/30 rounded-2xl shadow-2xl dark:shadow-purple-900/50 border border-gray-200 dark:border-purple-500/30 p-6 md:p-8 drop-zone custom-scrollbar overflow-y-auto transition-all duration-300 ease-out touch-manipulation hover:shadow-3xl dark:hover:shadow-purple-500/25 backdrop-blur-sm"
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}
@@ -313,12 +313,12 @@ return (
     >
       <div className="mb-6">
         <div className="flex items-center justify-between mb-2">
-          <h2 className="text-lg font-bold text-gray-900 dark:text-white">Form Canvas</h2>
+<h2 className="text-lg font-bold text-gray-900 dark:text-white">Form Canvas</h2>
           <div className="flex items-center space-x-2 text-sm">
-            <div className="px-2 py-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 rounded-full text-xs font-medium">
+            <div className="px-3 py-1.5 bg-green-100 dark:bg-green-600/30 text-green-700 dark:text-green-200 rounded-full text-xs font-medium border dark:border-green-500/30">
               {fields.length} field{fields.length !== 1 ? "s" : ""}
             </div>
-            <div className="text-xs text-gray-500 dark:text-gray-400">
+            <div className="text-xs text-gray-500 dark:text-gray-300">
               Live Preview
             </div>
           </div>

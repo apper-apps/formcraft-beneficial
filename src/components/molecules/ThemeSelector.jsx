@@ -16,7 +16,7 @@ const ThemeSelector = ({ selectedTheme, themes, onThemeSelect }) => {
       <Button
         variant="secondary"
         onClick={() => setIsOpen(!isOpen)}
-        className="flex items-center space-x-2 bg-purple-100 hover:bg-purple-200 text-purple-700 dark:bg-purple-900/50 dark:hover:bg-purple-900/70 dark:text-purple-300"
+className="flex items-center space-x-2 bg-purple-100 hover:bg-purple-200 text-purple-700 dark:bg-purple-600/30 dark:hover:bg-purple-600/50 dark:text-purple-200 dark:border-purple-500/30"
       >
         <ApperIcon name="Palette" className="w-4 h-4" />
         <span>{selectedTheme?.name || "Theme"}</span>
@@ -24,7 +24,7 @@ const ThemeSelector = ({ selectedTheme, themes, onThemeSelect }) => {
       </Button>
 
       {isOpen && (
-        <div className="absolute top-full left-0 mt-2 w-80 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 z-50 p-4">
+<div className="absolute top-full left-0 mt-2 w-80 bg-white dark:bg-purple-900/95 rounded-lg shadow-lg border border-gray-200 dark:border-purple-600/50 z-50 p-4">
           <div className="grid grid-cols-2 gap-3">
             {themes.map((theme) => (
               <button

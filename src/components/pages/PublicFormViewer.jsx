@@ -301,7 +301,7 @@ const renderField = (field) => {
 
   if (submitted) {
     return (
-      <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center p-4">
+<div className="min-h-screen bg-gray-50 dark:bg-gradient-to-br dark:from-purple-900 dark:via-purple-800 dark:to-indigo-900 flex items-center justify-center p-4">
         <div className="max-w-md w-full text-center">
           <motion.div
             initial={{ scale: 0 }}
@@ -326,11 +326,11 @@ const renderField = (field) => {
   }
 
   return (
-<div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-8">
+<div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-purple-900 dark:via-purple-800 dark:to-indigo-900 py-8">
 <div className="max-w-2xl mx-auto px-4">
-        <div className="bg-gradient-to-br from-white via-gray-50 to-white dark:from-gray-800 dark:via-gray-850 dark:to-gray-800 rounded-2xl shadow-2xl overflow-hidden border border-gray-200 dark:border-gray-700">
+        <div className="bg-gradient-to-br from-white via-gray-50 to-white dark:from-purple-800/30 dark:via-purple-700/20 dark:to-indigo-800/30 rounded-2xl shadow-2xl dark:shadow-purple-900/50 overflow-hidden border border-gray-200 dark:border-purple-500/30">
           {/* Form Header */}
-          <div className="bg-primary-500 text-white p-6">
+<div className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white p-6">
             <div className="flex items-center justify-between">
               <div>
                 <h1 className="text-2xl font-bold">{formData.title}</h1>
@@ -386,8 +386,8 @@ const renderField = (field) => {
           </form>
 
           {/* Footer */}
-          <div className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-850 px-8 py-6 border-t border-gray-200 dark:border-gray-700">
-<div className="flex items-center justify-center text-sm text-gray-500 dark:text-gray-400">
+<div className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-purple-800/30 dark:to-purple-700/30 px-8 py-6 border-t border-gray-200 dark:border-purple-600/30">
+<div className="flex items-center justify-center text-sm text-gray-500 dark:text-purple-200">
               <span>Powered by</span>
               <Button
                 onClick={() => navigate('/')}
