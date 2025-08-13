@@ -31,13 +31,13 @@ const navigate = useNavigate();
 
   return (
 <header
-className="bg-gradient-to-r from-white via-gray-50 to-white dark:from-primary-600 dark:via-dark-900 dark:to-primary-700 shadow-lg border-b border-gray-200 dark:border-primary-600/50 px-6 py-4 transition-all duration-300 ease-out backdrop-blur-md">
+className="bg-gradient-to-r from-white via-gray-50 to-white dark:from-dark-900/70 dark:via-dark-800/80 dark:to-dark-900/70 shadow-lg border-b border-gray-200 dark:border-primary-500/30 px-6 py-4 transition-all duration-300 ease-out backdrop-blur-lg">
     <div className="flex items-center justify-between">
         <div className="flex items-center space-x-4">
             <div className="flex items-center space-x-4">
                 <div className="flex items-center space-x-3">
 <div
-                        className="w-8 h-8 bg-gradient-to-br from-primary-500 to-primary-600 rounded-lg flex items-center justify-center shadow-md border border-primary-400/50">
+className="w-8 h-8 bg-gradient-to-br from-primary-500 to-primary-600 rounded-lg flex items-center justify-center shadow-md border border-primary-400/30 backdrop-filter backdrop-blur-lg">
                         <ApperIcon name="Layout" className="w-5 h-5 text-white" />
                     </div>
                     <div>
@@ -48,7 +48,7 @@ className="bg-gradient-to-r from-white via-gray-50 to-white dark:from-primary-60
 <Button
                     variant="ghost"
                     onClick={toggleTheme}
-className="flex items-center space-x-2 text-gray-600 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white transition-all duration-300 ease-out dark:hover:bg-primary-600/20"
+className="flex items-center space-x-2 text-gray-600 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white transition-all duration-300 ease-out dark:hover:bg-primary-500/10 hover:backdrop-blur-lg"
                     aria-label={`Switch to ${isDark ? "light" : "dark"} theme`}>
                     <ApperIcon name={isDark ? "Sun" : "Moon"} className="w-4 h-4" />
                 </Button>

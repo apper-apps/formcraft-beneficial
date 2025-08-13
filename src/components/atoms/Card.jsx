@@ -6,7 +6,7 @@ const Card = forwardRef(({ className = "", children, ...props }, ref) => {
     <div
       ref={ref}
 className={cn(
-        "rounded-xl bg-white dark:bg-gray-800 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-700 backdrop-blur-sm hover:border-gray-200 dark:hover:border-gray-600",
+"rounded-xl bg-white dark:bg-dark-900/80 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-primary-500/30 backdrop-filter dark:backdrop-blur-lg hover:border-gray-200 dark:hover:border-primary-400/50",
         className
       )}
       {...props}

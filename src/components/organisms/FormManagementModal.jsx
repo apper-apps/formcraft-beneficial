@@ -78,15 +78,15 @@ const FormManagementModal = ({
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
         transition={{ duration: 0.2 }}
-        className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[80vh] overflow-hidden"
+className="bg-white dark:bg-dark-900/95 rounded-lg shadow-xl w-full max-w-2xl max-h-[80vh] overflow-hidden border dark:border-primary-500/30 backdrop-filter dark:backdrop-blur-lg"
       >
-        <div className="flex items-center justify-between p-6 border-b">
-          <h2 className="text-xl font-semibold">Load Saved Form</h2>
+<div className="flex items-center justify-between p-6 border-b dark:border-primary-500/30">
+          <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Load Saved Form</h2>
           <Button
             variant="ghost"
             size="sm"
             onClick={onClose}
-            className="p-1 hover:bg-gray-100 rounded-md"
+className="p-1 hover:bg-gray-100 dark:hover:bg-primary-500/20 rounded-md backdrop-filter dark:backdrop-blur-lg"
           >
             <ApperIcon name="X" size={20} />
           </Button>
@@ -219,7 +219,7 @@ const FormManagementModal = ({
           )}
         </div>
 
-        <div className="flex justify-end space-x-3 p-6 border-t bg-gray-50">
+<div className="flex justify-end space-x-3 p-6 border-t dark:border-primary-500/30 bg-gray-50 dark:bg-primary-500/10 backdrop-filter dark:backdrop-blur-lg">
           <Button variant="ghost" onClick={onClose}>
             Cancel
           </Button>

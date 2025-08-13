@@ -301,7 +301,10 @@ const renderField = (field) => {
 
   if (submitted) {
     return (
-<div className="min-h-screen bg-gray-50 dark:bg-gradient-to-br dark:from-purple-900 dark:via-purple-800 dark:to-indigo-900 flex items-center justify-center p-4">
+<div className="min-h-screen bg-gray-50 dark:bg-gradient-to-br dark:from-dark-900 dark:via-dark-800 dark:to-dark-900 flex items-center justify-center p-4" style={{ 
+  backgroundImage: 'linear-gradient(rgba(59, 130, 246, 0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(59, 130, 246, 0.02) 1px, transparent 1px), radial-gradient(circle at 25% 25%, rgba(59, 130, 246, 0.3) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(6, 182, 212, 0.3) 0%, transparent 50%)',
+  backgroundSize: '50px 50px, 50px 50px, 100% 100%, 100% 100%'
+}}>
         <div className="max-w-md w-full text-center">
           <motion.div
             initial={{ scale: 0 }}
@@ -326,9 +329,12 @@ const renderField = (field) => {
   }
 
   return (
-<div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-purple-900 dark:via-purple-800 dark:to-indigo-900 py-8">
+<div className="min-h-screen bg-gradient-to-br from-gray-50 via-white to-gray-100 dark:from-dark-900 dark:via-dark-800 dark:to-dark-900 py-8" style={{ 
+  backgroundImage: 'linear-gradient(rgba(59, 130, 246, 0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(59, 130, 246, 0.02) 1px, transparent 1px), radial-gradient(circle at 25% 25%, rgba(59, 130, 246, 0.3) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(6, 182, 212, 0.3) 0%, transparent 50%)',
+  backgroundSize: '50px 50px, 50px 50px, 100% 100%, 100% 100%'
+}}>
 <div className="max-w-2xl mx-auto px-4">
-        <div className="bg-gradient-to-br from-white via-gray-50 to-white dark:from-purple-800/30 dark:via-purple-700/20 dark:to-indigo-800/30 rounded-2xl shadow-2xl dark:shadow-purple-900/50 overflow-hidden border border-gray-200 dark:border-purple-500/30">
+<div className="bg-gradient-to-br from-white via-gray-50 to-white dark:from-dark-900/80 dark:via-dark-800/90 dark:to-dark-900/80 rounded-2xl shadow-2xl dark:shadow-primary-500/30 overflow-hidden border border-gray-200 dark:border-primary-500/30 backdrop-filter dark:backdrop-blur-lg">
           {/* Form Header */}
 <div className="bg-gradient-to-r from-purple-600 to-indigo-600 text-white p-6">
             <div className="flex items-center justify-between">
@@ -386,7 +392,7 @@ const renderField = (field) => {
           </form>
 
           {/* Footer */}
-<div className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-purple-800/30 dark:to-purple-700/30 px-8 py-6 border-t border-gray-200 dark:border-purple-600/30">
+<div className="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-primary-500/10 dark:to-primary-400/20 px-8 py-6 border-t border-gray-200 dark:border-primary-500/30 backdrop-filter dark:backdrop-blur-lg">
 <div className="flex items-center justify-center text-sm text-gray-500 dark:text-purple-200">
               <span>Powered by</span>
               <Button

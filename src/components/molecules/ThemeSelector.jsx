@@ -16,7 +16,7 @@ const ThemeSelector = ({ selectedTheme, themes, onThemeSelect }) => {
       <Button
         variant="secondary"
         onClick={() => setIsOpen(!isOpen)}
-className="flex items-center space-x-2 bg-purple-100 hover:bg-purple-200 text-purple-700 dark:bg-purple-600/30 dark:hover:bg-purple-600/50 dark:text-purple-200 dark:border-purple-500/30"
+className="flex items-center space-x-2 bg-primary-100 hover:bg-primary-200 text-primary-700 dark:bg-primary-500/20 dark:hover:bg-primary-500/40 dark:text-primary-200 dark:border-primary-400/30 backdrop-filter dark:backdrop-blur-lg"
       >
         <ApperIcon name="Palette" className="w-4 h-4" />
         <span>{selectedTheme?.name || "Theme"}</span>
@@ -24,7 +24,7 @@ className="flex items-center space-x-2 bg-purple-100 hover:bg-purple-200 text-pu
       </Button>
 
       {isOpen && (
-<div className="absolute top-full left-0 mt-2 w-80 bg-white dark:bg-purple-900/95 rounded-lg shadow-lg border border-gray-200 dark:border-purple-600/50 z-50 p-4">
+<div className="absolute top-full left-0 mt-2 w-80 bg-white dark:bg-dark-900/95 rounded-lg shadow-lg border border-gray-200 dark:border-primary-500/30 z-50 p-4 backdrop-filter dark:backdrop-blur-lg">
           <div className="grid grid-cols-2 gap-3">
             {themes.map((theme) => (
               <button
@@ -33,7 +33,7 @@ className="flex items-center space-x-2 bg-purple-100 hover:bg-purple-200 text-pu
                 className={cn(
                   "relative p-3 rounded-lg border-2 transition-all duration-200 hover:shadow-md group",
                   selectedTheme?.id === theme.id
-                    ? "border-purple-500 bg-purple-50 dark:bg-purple-900/20"
+? "border-primary-500 bg-primary-50 dark:bg-primary-500/20"
                     : "border-gray-200 dark:border-gray-600 hover:border-gray-300 dark:hover:border-gray-500"
                 )}
               >
@@ -51,7 +51,7 @@ className="flex items-center space-x-2 bg-purple-100 hover:bg-purple-200 text-pu
                 </div>
                 {selectedTheme?.id === theme.id && (
                   <div className="absolute top-2 right-2">
-                    <div className="w-5 h-5 bg-purple-500 rounded-full flex items-center justify-center">
+<div className="w-5 h-5 bg-primary-500 rounded-full flex items-center justify-center">
                       <ApperIcon name="Check" className="w-3 h-3 text-white" />
                     </div>
                   </div>

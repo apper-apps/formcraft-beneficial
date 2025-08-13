@@ -66,23 +66,23 @@ const ShareFormModal = ({ isOpen, onClose, formData }) => {
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
         transition={{ duration: 0.2 }}
-        className="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-full max-w-lg overflow-hidden"
+className="bg-white dark:bg-dark-900/95 rounded-lg shadow-xl w-full max-w-lg overflow-hidden border dark:border-primary-500/30 backdrop-filter dark:backdrop-blur-lg"
       >
-        <div className="flex items-center justify-between p-6 border-b dark:border-gray-700">
+<div className="flex items-center justify-between p-6 border-b dark:border-primary-500/30">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-primary-100 dark:bg-primary-900 rounded-lg flex items-center justify-center">
+<div className="w-10 h-10 bg-primary-100 dark:bg-primary-500/20 rounded-lg flex items-center justify-center backdrop-filter dark:backdrop-blur-lg">
               <ApperIcon name="Share2" size={20} className="text-primary-600 dark:text-primary-400" />
             </div>
             <div>
-              <h2 className="text-xl font-semibold text-gray-900 dark:text-white">Share Form</h2>
-              <p className="text-sm text-gray-500 dark:text-gray-400">Generate a public link to share your form</p>
+<h2 className="text-xl font-semibold text-gray-900 dark:text-white">Share Form</h2>
+              <p className="text-sm text-gray-500 dark:text-gray-300">Generate a public link to share your form</p>
             </div>
           </div>
           <Button
             variant="ghost"
             size="sm"
             onClick={onClose}
-            className="p-1 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-md"
+className="p-1 hover:bg-gray-100 dark:hover:bg-primary-500/20 rounded-md backdrop-filter dark:backdrop-blur-lg"
           >
             <ApperIcon name="X" size={20} />
           </Button>
@@ -167,7 +167,7 @@ const ShareFormModal = ({ isOpen, onClose, formData }) => {
           )}
         </div>
 
-        <div className="flex justify-end space-x-3 p-6 border-t dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+<div className="flex justify-end space-x-3 p-6 border-t dark:border-primary-500/30 bg-gray-50 dark:bg-primary-500/10 backdrop-filter dark:backdrop-blur-lg">
           <Button variant="ghost" onClick={onClose}>
             Close
           </Button>

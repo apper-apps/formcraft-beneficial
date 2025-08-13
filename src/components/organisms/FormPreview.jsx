@@ -239,11 +239,11 @@ window.FormValidation = window.FormValidation || {};
 window.FormValidation.getThemeClasses = (selectedTheme) => {
     if (!selectedTheme) {
       return {
-container: "w-full h-full bg-gradient-to-br from-white via-gray-50 to-white dark:from-primary-600/20 dark:via-dark-900/95 dark:to-primary-700/25 rounded-2xl shadow-2xl dark:shadow-primary-600/30 border border-gray-200 dark:border-primary-500/40 p-8 custom-scrollbar overflow-y-auto transition-all duration-300 backdrop-blur-sm",
-        title: "text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-white dark:to-gray-100 bg-clip-text text-transparent mb-4",
+container: "w-full h-full bg-gradient-to-br from-white via-gray-50 to-white dark:from-dark-900/80 dark:via-dark-800/90 dark:to-dark-900/80 rounded-2xl shadow-2xl dark:shadow-primary-500/30 border border-gray-200 dark:border-primary-500/30 p-8 custom-scrollbar overflow-y-auto transition-all duration-300 backdrop-filter dark:backdrop-blur-lg",
+        title: "text-3xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 dark:from-primary-200 dark:to-white bg-clip-text text-transparent mb-4",
         description: "text-gray-600 dark:text-gray-200 text-lg leading-relaxed font-medium",
         fieldLabel: "block text-sm font-bold text-gray-800 dark:text-white mb-2",
-        input: "w-full px-4 py-3 border border-gray-300 dark:border-primary-500/40 dark:bg-primary-800/20 dark:text-white rounded-xl bg-gradient-to-r from-white to-gray-50 dark:from-primary-800/20 dark:to-primary-700/20 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-400 transition-all duration-300 hover:shadow-md focus:shadow-lg backdrop-blur-sm",
+        input: "w-full px-4 py-3 border border-gray-300 dark:border-primary-500/30 dark:bg-dark-900/20 dark:text-white rounded-xl bg-gradient-to-r from-white to-gray-50 dark:from-dark-900/20 dark:to-dark-800/20 focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-primary-400 transition-all duration-300 hover:shadow-md focus:shadow-lg backdrop-filter dark:backdrop-blur-lg",
         submitButton: "w-full text-lg py-4 bg-gradient-to-r from-primary-500 to-primary-600 hover:from-primary-600 hover:to-primary-700 font-bold shadow-lg hover:shadow-xl border border-primary-400/50",
         formSpacing: "space-y-6"
       };
@@ -625,9 +625,9 @@ switch (field.type) {
 
   if (fields.length === 0) {
 return (
-<div className="w-full h-full bg-white dark:bg-primary-900/20 rounded-lg shadow-lg border border-gray-200 dark:border-primary-500/40 p-6 transition-colors duration-200">
+<div className="w-full h-full bg-white dark:bg-dark-900/60 rounded-lg shadow-lg border border-gray-200 dark:border-primary-500/30 p-6 transition-colors duration-200 backdrop-filter dark:backdrop-blur-lg">
         <div className="flex flex-col items-center justify-center h-full text-center">
-          <div className="w-16 h-16 mb-4 rounded-full bg-gradient-to-br from-primary-100 dark:from-primary-500/40 to-primary-200 dark:to-primary-600/50 flex items-center justify-center shadow-lg dark:shadow-primary-600/30">
+<div className="w-16 h-16 mb-4 rounded-full bg-gradient-to-br from-primary-100 dark:from-primary-500/30 to-primary-200 dark:to-primary-400/40 flex items-center justify-center shadow-lg dark:shadow-primary-500/20 backdrop-filter dark:backdrop-blur-lg">
             <ApperIcon name="Eye" className="w-8 h-8 text-primary-500 dark:text-white" />
           </div>
           <h3 className="text-xl font-bold text-gray-700 dark:text-white mb-2">
@@ -679,7 +679,7 @@ return (
 {!isPreviewMode && (
         <div className="mb-6">
           <div className="flex items-center justify-between mb-2">
-<h2 className="text-2xl font-bold bg-gradient-to-r from-primary-500 via-primary-600 to-primary-700 dark:from-primary-300 dark:via-primary-200 dark:to-white bg-clip-text text-transparent">
+<h2 className="text-2xl font-bold bg-gradient-to-r from-primary-500 via-primary-600 to-primary-700 dark:from-primary-300 dark:via-primary-200 dark:to-primary-100 bg-clip-text text-transparent">
               Live Preview
             </h2>
             <div className="flex items-center space-x-2 text-xs text-green-600 dark:text-green-200 bg-green-50 dark:bg-green-600/30 px-3 py-1 rounded-full border border-green-200 dark:border-green-500/40 font-bold shadow-sm">
@@ -695,7 +695,7 @@ return (
 
 {/* Form Submission Success Display */}
 {isSubmitted && isPreviewMode && (
-        <div className="mb-8 p-8 bg-gradient-to-br from-green-50 via-emerald-50 to-green-100 dark:from-green-900/40 dark:via-emerald-900/30 dark:to-green-900/40 border border-green-200 dark:border-green-700/50 rounded-2xl animate-slide-up shadow-2xl dark:shadow-green-900/20">
+<div className="mb-8 p-8 bg-gradient-to-br from-green-50 via-emerald-50 to-green-100 dark:from-green-500/10 dark:via-emerald-500/10 dark:to-green-500/10 border border-green-200 dark:border-green-500/30 rounded-2xl animate-slide-up shadow-2xl dark:shadow-green-500/20 backdrop-filter dark:backdrop-blur-lg">
           <div className="flex items-start space-x-4">
             <div className="animate-scale-in bg-green-100 dark:bg-green-800/60 p-2 rounded-full shadow-lg" style={{ animationDelay: '0.2s' }}>
               <ApperIcon name="CheckCircle" className="w-8 h-8 text-green-600 dark:text-green-300" />

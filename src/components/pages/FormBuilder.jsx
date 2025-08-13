@@ -506,7 +506,10 @@ const handlePreviewModeToggle = () => {
     setIsMobileDragging(false); // Clear mobile drag state
   };
   return (
-<div className="min-h-screen bg-gray-50 dark:bg-gradient-to-br dark:from-dark-900 dark:via-primary-600 dark:to-dark-800 transition-colors duration-300">
+<div className="min-h-screen bg-gray-50 dark:bg-gradient-to-br dark:from-dark-900 dark:via-dark-800 dark:to-dark-900 transition-colors duration-300" style={{ 
+  backgroundImage: 'linear-gradient(rgba(59, 130, 246, 0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(59, 130, 246, 0.02) 1px, transparent 1px), radial-gradient(circle at 25% 25%, rgba(59, 130, 246, 0.3) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(6, 182, 212, 0.3) 0%, transparent 50%)',
+  backgroundSize: '50px 50px, 50px 50px, 100% 100%, 100% 100%'
+}}>
       <Header 
         onExport={handleExport} 
         onFormSettings={handleFormSettingsOpen}
@@ -541,7 +544,7 @@ const handlePreviewModeToggle = () => {
           {!isPreviewMode && (
             <motion.div 
 key="toolbar"
-className="w-full md:w-80 p-4 md:p-6 bg-background dark:bg-primary-800/30 border-b md:border-b-0 md:border-r border-gray-200 dark:border-primary-600/40 transition-colors duration-300 overflow-y-auto max-h-60 md:max-h-none backdrop-blur-sm shadow-lg dark:shadow-primary-900/20"
+className="w-full md:w-80 p-4 md:p-6 bg-background dark:bg-dark-900/50 border-b md:border-b-0 md:border-r border-gray-200 dark:border-primary-500/30 transition-colors duration-300 overflow-y-auto max-h-60 md:max-h-none backdrop-filter dark:backdrop-blur-lg shadow-lg dark:shadow-primary-500/20"
               initial={{ x: -80, opacity: 0, scale: 0.95 }}
               animate={{ x: 0, opacity: 1, scale: 1 }}
               exit={{ x: -80, opacity: 0, scale: 0.95 }}
@@ -614,7 +617,7 @@ className="w-full md:w-80 p-4 md:p-6 bg-background dark:bg-primary-800/30 border
           {!isPreviewMode && selectedFieldId && (
             <motion.div 
               key="config-panel"
-className="w-full md:w-80 p-4 md:p-6 bg-background dark:bg-purple-900/40 border-t md:border-t-0 md:border-l border-gray-200 dark:border-purple-600/30 transition-colors duration-300 order-last md:order-none overflow-y-auto"
+className="w-full md:w-80 p-4 md:p-6 bg-background dark:bg-dark-900/50 border-t md:border-t-0 md:border-l border-gray-200 dark:border-primary-500/30 transition-colors duration-300 order-last md:order-none overflow-y-auto backdrop-filter dark:backdrop-blur-lg"
               initial={{ x: 80, opacity: 0, scale: 0.95 }}
               animate={{ x: 0, opacity: 1, scale: 1 }}
               exit={{ x: 80, opacity: 0, scale: 0.95 }}

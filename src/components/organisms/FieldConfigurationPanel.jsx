@@ -84,7 +84,7 @@ const updates = { ...localField };
 
   return (
     <motion.div 
-className="w-96 p-6 bg-gradient-to-b from-gray-50 to-white dark:from-purple-900/30 dark:to-purple-800/20 border-l border-gray-200 dark:border-purple-600/30 custom-scrollbar overflow-y-auto shadow-xl"
+className="w-96 p-6 bg-gradient-to-b from-gray-50 to-white dark:from-dark-900/50 dark:to-dark-800/70 border-l border-gray-200 dark:border-primary-500/30 custom-scrollbar overflow-y-auto shadow-xl backdrop-filter dark:backdrop-blur-lg"
       initial={{ x: 50, opacity: 0 }}
       animate={{ x: 0, opacity: 1 }}
       transition={{ duration: 0.3 }}
@@ -92,17 +92,17 @@ className="w-96 p-6 bg-gradient-to-b from-gray-50 to-white dark:from-purple-900/
     >
       <div className="mb-6">
         <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-1 flex items-center">
-          <ApperIcon name="Settings" className="w-5 h-5 mr-2 text-primary-500 dark:text-purple-300" />
+<ApperIcon name="Settings" className="w-5 h-5 mr-2 text-primary-500 dark:text-primary-300" />
           Field Configuration
         </h2>
-        <p className="text-sm text-gray-600 dark:text-purple-200">
+<p className="text-sm text-gray-600 dark:text-gray-300">
           Configure properties for {selectedField.type} field
         </p>
       </div>
 
       <div className="space-y-6">
         {/* Basic Information */}
-<Card className="p-6 bg-gradient-to-br from-white to-gray-50 dark:from-purple-800/30 dark:to-purple-700/20">
+<Card className="p-6 bg-gradient-to-br from-white to-gray-50 dark:from-dark-900/40 dark:to-dark-800/60 border dark:border-primary-500/20 backdrop-filter dark:backdrop-blur-lg">
           <h3 className="text-sm font-semibold text-gray-800 mb-3 flex items-center">
             <ApperIcon name="Type" className="w-4 h-4 mr-2 text-gray-500" />
             Basic Information
@@ -375,7 +375,7 @@ className="w-96 p-6 bg-gradient-to-b from-gray-50 to-white dark:from-purple-900/
           
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-<div className="bg-gradient-to-r from-primary-50 to-secondary-50 dark:from-primary-900/20 dark:to-secondary-900/20 p-4 rounded-xl border border-primary-200 dark:border-primary-800">
+<div className="bg-gradient-to-r from-primary-50 to-secondary-50 dark:from-primary-500/10 dark:to-secondary-500/10 p-4 rounded-xl border border-primary-200 dark:border-primary-500/30 backdrop-filter dark:backdrop-blur-lg">
                 <div>
                   <label className="block text-sm font-bold text-gray-800 dark:text-gray-200">
                     Required Field
@@ -484,7 +484,7 @@ className="w-96 p-6 bg-gradient-to-b from-gray-50 to-white dark:from-purple-900/
         </div>
 
 {/* Field Preview */}
-<Card className="p-6 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-blue-900/20 dark:via-indigo-900/20 dark:to-purple-900/20 border-blue-200 dark:border-blue-800">
+<Card className="p-6 bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-primary-500/10 dark:via-secondary-500/10 dark:to-accent-500/10 border-blue-200 dark:border-primary-500/30 backdrop-filter dark:backdrop-blur-lg">
           <h3 className="text-lg font-bold text-gray-800 dark:text-gray-200 mb-4 flex items-center">
             <div className="w-6 h-6 bg-gradient-to-r from-blue-500 to-purple-500 rounded-full flex items-center justify-center mr-3">
               <ApperIcon name="Eye" className="w-3.5 h-3.5 text-white" />
