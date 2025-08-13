@@ -14,7 +14,7 @@ const fieldTypes = [
   ];
 
   return (
-<div className="field-types-sidebar fixed left-0 top-16 w-52 h-[calc(100vh-4rem)] bg-[rgba(10,10,15,0.95)] backdrop-blur-[10px] border-r border-[rgba(255,255,255,0.1)] p-5 px-3 overflow-y-auto z-40 custom-scrollbar">
+<div className="field-types-sidebar fixed left-0 top-0 w-52 h-screen bg-[var(--bg-secondary)] backdrop-blur-[10px] border-r border-[var(--border-primary)] p-5 px-3 overflow-y-auto z-40 custom-scrollbar pt-20">
       <div className="mb-6">
         <h2 className="text-lg font-bold text-white mb-2 bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
           Field Types

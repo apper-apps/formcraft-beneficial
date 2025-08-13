@@ -60,13 +60,13 @@ const ShareFormModal = ({ isOpen, onClose, formData }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+<div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4" style={{ zIndex: 'var(--z-modal-overlay)' }}>
       <motion.div
         initial={{ scale: 0.9, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
         transition={{ duration: 0.2 }}
-className="bg-white dark:bg-dark-900/95 rounded-lg shadow-xl w-full max-w-lg overflow-hidden border dark:border-primary-500/30 backdrop-filter dark:backdrop-blur-lg"
+className="bg-white dark:bg-[var(--bg-secondary)] rounded-lg shadow-xl w-full max-w-lg overflow-hidden border dark:border-[var(--border-primary)] backdrop-filter dark:backdrop-blur-lg relative" style={{ zIndex: 'var(--z-modal-content)' }}
       >
 <div className="flex items-center justify-between p-6 border-b dark:border-primary-500/30">
           <div className="flex items-center space-x-3">

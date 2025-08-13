@@ -17,7 +17,8 @@ const FormCanvas = ({
   isMobileDragging,
   draggedField,
   formTemplates,
-  onUseTemplate
+  onUseTemplate,
+  onBuildFromScratch
 }) => {
 const [dragOverIndex, setDragOverIndex] = useState(null);
   const [touchPosition, setTouchPosition] = useState(null);
@@ -171,9 +172,9 @@ const renderDropZone = (index) => (
 if (fields.length === 0) {
     return (
 <div
-className="w-full h-full bg-gradient-to-br from-white via-gray-50 to-white dark:from-dark-900/90 dark:via-dark-800/95 dark:to-dark-900/90 rounded-2xl shadow-2xl dark:shadow-primary-500/20 border-2 border-dashed border-gray-300 dark:border-primary-500/40 hover:border-primary-500 dark:hover:border-primary-400 hover:shadow-3xl dark:hover:shadow-primary-500/30 hover:scale-[1.01] transition-all duration-500 ease-out drop-zone touch-manipulation backdrop-blur-sm relative z-1" 
+className="w-full h-full bg-[var(--bg-card)] rounded-2xl shadow-2xl border-2 border-dashed border-[var(--border-primary)] hover:border-[var(--border-hover)] hover:shadow-3xl hover:scale-[1.01] transition-all duration-500 ease-out drop-zone touch-manipulation backdrop-filter backdrop-blur-sm relative z-1" 
 style={{ 
-  backgroundImage: 'linear-gradient(rgba(59, 130, 246, 0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(59, 130, 246, 0.02) 1px, transparent 1px)',
+  backgroundImage: 'linear-gradient(rgba(255, 255, 255, 0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(255, 255, 255, 0.02) 1px, transparent 1px)',
   backgroundSize: '40px 40px'
 }}
         onDragOver={handleDragOver}
@@ -214,8 +215,8 @@ style={{
                   <div
                     key={template.id || `template-${index}`}
                     className="w-full max-w-sm bg-gradient-to-br from-white via-gray-50 to-white dark:from-primary-600/20 dark:via-dark-900/95 dark:to-primary-700/25 rounded-xl border border-gray-200 dark:border-primary-500/40 p-6 hover:shadow-2xl dark:hover:shadow-primary-500/30 transition-all duration-500 hover:scale-105 hover:-translate-y-2 cursor-pointer group backdrop-blur-sm shadow-lg dark:shadow-primary-600/10"
-                    style={{ 
-                      background: 'rgba(20, 20, 32, 0.6)', 
+style={{ 
+                      background: 'var(--bg-card)', 
                       backdropFilter: 'blur(10px)',
                       animationDelay: `${index * 0.1}s` 
                     }}
@@ -261,44 +262,25 @@ style={{
             <div className="flex-1 border-t-2 border-gray-200 dark:border-primary-600/40"></div>
           </div>
 
-{/* Build From Scratch */}
-<div className="bg-gradient-to-br from-primary-50 via-white to-primary-100 dark:from-dark-900/50 dark:via-dark-800/70 dark:to-dark-900/50 rounded-2xl p-8 max-w-lg shadow-xl dark:shadow-primary-500/20 border border-primary-200 dark:border-primary-500/30 backdrop-filter dark:backdrop-blur-lg">
-            <div className="flex items-center justify-center mb-6">
-              <div className="w-16 h-16 bg-gradient-to-br from-primary-100 to-primary-200 dark:from-primary-600/40 dark:to-primary-700/50 rounded-full flex items-center justify-center shadow-lg dark:shadow-primary-600/40">
-                <ApperIcon name="Hammer" className="w-8 h-8 text-primary-600 dark:text-white" />
+{/* Build From Scratch Card */}
+<div 
+  className="build-from-scratch-card bg-gradient-to-br from-[rgba(59,130,246,0.1)] to-[rgba(147,51,234,0.1)] border-2 border-dashed border-[rgba(59,130,246,0.3)] rounded-2xl p-10 max-w-lg shadow-xl backdrop-filter backdrop-blur-sm cursor-pointer hover:border-[rgba(59,130,246,0.6)] hover:bg-gradient-to-br hover:from-[rgba(59,130,246,0.2)] hover:to-[rgba(147,51,234,0.2)] hover:scale-105 transition-all duration-300 ease-out min-h-[200px] flex flex-col items-center justify-center text-center"
+  onClick={onBuildFromScratch}
+  role="button"
+  tabIndex={0}
+  onKeyDown={(e) => e.key === 'Enter' && onBuildFromScratch()}
+>
+            <div className="icon-wrapper mb-6">
+              <div className="w-16 h-16 bg-gradient-to-br from-[rgba(59,130,246,0.2)] to-[rgba(147,51,234,0.2)] rounded-full flex items-center justify-center shadow-lg backdrop-filter backdrop-blur-sm border border-[rgba(59,130,246,0.3)]">
+                <ApperIcon name="Hammer" className="w-8 h-8 text-[var(--accent-blue)]" />
               </div>
             </div>
-            <h4 className="text-2xl font-bold text-gray-800 dark:text-white mb-4 text-center">
+            <h3 className="text-xl font-semibold text-white mb-2">
               Build From Scratch
-            </h4>
-            <p className="text-sm text-gray-600 dark:text-gray-200 mb-6 text-center leading-relaxed font-medium">
+            </h3>
+            <p className="text-gray-400 text-sm leading-relaxed">
               Drag field types from the left panel to start building your custom form
             </p>
-            
-            <div className="bg-white dark:bg-primary-900/30 rounded-xl p-5 border border-gray-200 dark:border-primary-600/30 shadow-inner">
-              <h5 className="text-sm font-bold text-gray-700 dark:text-white mb-3 flex items-center">
-                <ApperIcon name="Lightbulb" className="w-4 h-4 mr-2 text-primary-500 dark:text-primary-400" />
-                Pro Tips
-              </h5>
-              <ul className="text-xs text-gray-600 dark:text-gray-200 space-y-2 font-medium">
-                <li className="flex items-start bg-gray-50 dark:bg-primary-700/30 p-2 rounded-lg border dark:border-primary-600/30">
-                  <ApperIcon name="ChevronRight" className="w-3 h-3 mt-0.5 mr-2 text-primary-500 dark:text-primary-400 flex-shrink-0" />
-                  <span>Drag field types to this canvas area</span>
-                </li>
-                <li className="flex items-start bg-gray-50 dark:bg-primary-700/30 p-2 rounded-lg border dark:border-primary-600/30">
-                  <ApperIcon name="ChevronRight" className="w-3 h-3 mt-0.5 mr-2 text-primary-500 dark:text-primary-400 flex-shrink-0" />
-                  <span>Click any field to customize properties</span>
-                </li>
-                <li className="flex items-start bg-gray-50 dark:bg-primary-700/30 p-2 rounded-lg border dark:border-primary-600/30">
-                  <ApperIcon name="ChevronRight" className="w-3 h-3 mt-0.5 mr-2 text-primary-500 dark:text-primary-400 flex-shrink-0" />
-                  <span>Reorder by dragging fields up or down</span>
-                </li>
-                <li className="flex items-start bg-gray-50 dark:bg-primary-700/30 p-2 rounded-lg border dark:border-primary-600/30">
-                  <ApperIcon name="ChevronRight" className="w-3 h-3 mt-0.5 mr-2 text-primary-500 dark:text-primary-400 flex-shrink-0" />
-                  <span>Preview anytime with the preview button</span>
-                </li>
-              </ul>
-            </div>
           </div>
           
           <div className="mt-10 flex items-center space-x-3 text-sm bg-gradient-to-r from-primary-50 to-primary-100 dark:from-primary-600/30 dark:to-primary-700/40 px-4 py-2 rounded-full border border-primary-200 dark:border-primary-500/40 shadow-md">
@@ -312,7 +294,7 @@ style={{
 
 return (
 <div
-className="w-full h-full bg-gradient-to-br from-white via-gray-50 to-white dark:from-dark-900/80 dark:via-dark-800/90 dark:to-dark-900/80 rounded-2xl shadow-2xl dark:shadow-primary-500/30 border border-gray-200 dark:border-primary-500/30 p-6 md:p-8 drop-zone custom-scrollbar overflow-y-auto transition-all duration-300 ease-out touch-manipulation hover:shadow-3xl dark:hover:shadow-primary-500/40 backdrop-filter dark:backdrop-blur-lg relative z-1"
+className="w-full h-full bg-[var(--bg-card)] rounded-2xl shadow-2xl border border-[var(--border-primary)] p-6 md:p-8 drop-zone custom-scrollbar overflow-y-auto transition-all duration-300 ease-out touch-manipulation hover:shadow-3xl backdrop-filter backdrop-blur-lg relative z-1"
       onDragOver={handleDragOver}
       onDragLeave={handleDragLeave}
       onDrop={handleDrop}

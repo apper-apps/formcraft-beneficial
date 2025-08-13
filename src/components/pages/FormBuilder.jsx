@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
-import { toast } from 'react-toastify'
-import JSZip from 'jszip'
-import FormCanvas from '@/components/organisms/FormCanvas'
-import Header from '@/components/organisms/Header'
-import FormSettingsModal from '@/components/organisms/FormSettingsModal'
-import FieldToolbar from '@/components/organisms/FieldToolbar'
-import FieldConfigurationPanel from '@/components/organisms/FieldConfigurationPanel'
-import FormPreview from '@/components/organisms/FormPreview'
-import ShareFormModal from '@/components/organisms/ShareFormModal'
-import fieldTypesData from '@/services/mockData/fieldTypes.json'
-import formsData from '@/services/mockData/forms.json'
+import React, { useEffect, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
+import { toast } from "react-toastify";
+import JSZip from "jszip";
+import FormCanvas from "@/components/organisms/FormCanvas";
+import Header from "@/components/organisms/Header";
+import FormSettingsModal from "@/components/organisms/FormSettingsModal";
+import ShareFormModal from "@/components/organisms/ShareFormModal";
+import FieldToolbar from "@/components/organisms/FieldToolbar";
+import FieldConfigurationPanel from "@/components/organisms/FieldConfigurationPanel";
+import FormPreview from "@/components/organisms/FormPreview";
+import fieldTypesData from "@/services/mockData/fieldTypes.json";
+import formsData from "@/services/mockData/forms.json";
 import themeTemplateService from "@/services/api/themeTemplateService";
 import localStorageService from "@/services/api/localStorageService";
 import formService from "@/services/api/formService";
@@ -299,38 +299,34 @@ const handleLoadFormModal = async () => {
 const handleNewForm = () => {
     if (fields.length > 0) {
       if (window.confirm("Are you sure you want to start a new form? All unsaved changes will be lost.")) {
-        setFields([]);
-        setSelectedFieldId(null);
-        setFormSettings({
-          title: "My New Form",
-          description: "Please fill out this form completely and accurately.",
-          submitButtonText: "Submit Form",
-          successMessage: "Thank you! Your form has been submitted successfully. We'll get back to you soon.",
-          redirectAfterSubmission: false,
-          redirectUrl: "",
-          enableValidation: true,
-          requireAllFields: false,
-          showProgressBar: false,
-          allowSaveDraft: false
-        });
-        toast.info("✨ Started new form - ready for your creativity!");
+        clearFormBuilder();
       }
     } else {
-      // If no fields, just reset settings
-      setFormSettings({
-        title: "My New Form",
-        description: "Please fill out this form completely and accurately.",
-        submitButtonText: "Submit Form",
-        successMessage: "Thank you! Your form has been submitted successfully. We'll get back to you soon.",
-        redirectAfterSubmission: false,
-        redirectUrl: "",
-        enableValidation: true,
-        requireAllFields: false,
-        showProgressBar: false,
-        allowSaveDraft: false
-      });
-      toast.info("✨ Form reset - ready to build!");
+      clearFormBuilder();
     }
+  };
+
+  const clearFormBuilder = () => {
+    // Clear any existing form data
+    setFields([]);
+    setSelectedFieldId(null);
+    
+    // Initialize empty form builder
+    setFormSettings({
+      title: 'Untitled Form',
+      description: 'Please fill out this form completely and accurately.',
+      submitButtonText: 'Submit',
+      successMessage: 'Thank you for your submission!',
+      redirectAfterSubmission: false,
+      redirectUrl: "",
+      enableValidation: true,
+      requireAllFields: false,
+      showProgressBar: false,
+      allowSaveDraft: false
+    });
+    
+    // Show success toast
+    toast.success('New form created! Start adding fields from the left panel.');
   };
 
   const handleUseTemplate = (template) => {
@@ -506,9 +502,9 @@ const handlePreviewModeToggle = () => {
     setIsMobileDragging(false); // Clear mobile drag state
   };
   return (
-<div className="min-h-screen bg-gray-50 dark:bg-gradient-to-br dark:from-dark-900 dark:via-dark-800 dark:to-dark-900 transition-colors duration-300" style={{ 
-  backgroundImage: 'linear-gradient(rgba(59, 130, 246, 0.02) 1px, transparent 1px), linear-gradient(90deg, rgba(59, 130, 246, 0.02) 1px, transparent 1px), radial-gradient(circle at 25% 25%, rgba(59, 130, 246, 0.3) 0%, transparent 50%), radial-gradient(circle at 75% 75%, rgba(6, 182, 212, 0.3) 0%, transparent 50%)',
-  backgroundSize: '50px 50px, 50px 50px, 100% 100%, 100% 100%'
+<div className="app-container min-h-screen transition-colors duration-300" style={{ 
+  background: 'var(--bg-primary)',
+  backgroundImage: 'radial-gradient(circle at 30% 50%, rgba(59, 130, 246, 0.1) 0%, transparent 50%), radial-gradient(circle at 70% 80%, rgba(147, 51, 234, 0.1) 0%, transparent 50%)'
 }}>
       <Header 
         onExport={handleExport} 
@@ -529,7 +525,7 @@ const handlePreviewModeToggle = () => {
       />
 
       {/* Share Form Modal */}
-      <ShareFormModal
+<ShareFormModal
         isOpen={isShareModalOpen}
         onClose={handleShareModalClose}
         formData={{
@@ -539,37 +535,24 @@ const handlePreviewModeToggle = () => {
         }}
       />
       
-      <div className="flex flex-col md:flex-row h-[calc(100vh-80px)]">
+<div className="main-area flex h-[calc(100vh-80px)]">
         <AnimatePresence mode="wait">
           {!isPreviewMode && (
-            <motion.div 
-key="toolbar"
-className="w-full md:w-80 p-4 md:p-6 bg-background dark:bg-dark-900/50 border-b md:border-b-0 md:border-r border-gray-200 dark:border-primary-500/30 transition-colors duration-300 overflow-y-auto max-h-60 md:max-h-none backdrop-filter dark:backdrop-blur-lg shadow-lg dark:shadow-primary-500/20"
-              initial={{ x: -80, opacity: 0, scale: 0.95 }}
-              animate={{ x: 0, opacity: 1, scale: 1 }}
-              exit={{ x: -80, opacity: 0, scale: 0.95 }}
-              transition={{ 
-                duration: 0.4,
-                type: "spring",
-                stiffness: 300,
-                damping: 30
-              }}
-            >
-              <FieldToolbar 
-                onDragStart={handleDragStart}
-                onTouchStart={handleTouchStart}
-                onTouchEnd={handleTouchEnd}
-                isMobileDragging={isMobileDragging}
-              />
-            </motion.div>
+            <FieldToolbar 
+              onDragStart={handleDragStart}
+              onTouchStart={handleTouchStart}
+              onTouchEnd={handleTouchEnd}
+              isMobileDragging={isMobileDragging}
+            />
           )}
         </AnimatePresence>
 
         {/* Center Panel - Form Canvas or Preview */}
         <AnimatePresence mode="wait">
+<div className="content-grid flex-1 overflow-y-auto">
           <motion.div 
             key={isPreviewMode ? "preview" : "canvas"}
-            className="flex-1 p-4 md:p-6 min-h-0"
+            className="p-6 md:p-8 min-h-full"
             initial={{ y: 20, opacity: 0, scale: 0.98 }}
             animate={{ y: 0, opacity: 1, scale: 1 }}
             exit={{ y: -20, opacity: 0, scale: 0.98 }}
@@ -606,18 +589,19 @@ className="w-full md:w-80 p-4 md:p-6 bg-background dark:bg-dark-900/50 border-b 
                 onFileDownload={handleFileDownload}
                 isMobileDragging={isMobileDragging}
                 draggedField={draggedField}
-                formTemplates={formTemplates}
+formTemplates={formTemplates}
                 onUseTemplate={handleUseTemplate}
+                onBuildFromScratch={clearFormBuilder}
               />
-            )}
+)}
           </motion.div>
+        </div>
         </AnimatePresence>
-
-        <AnimatePresence>
+        <AnimatePresence mode="wait">
           {!isPreviewMode && selectedFieldId && (
             <motion.div 
               key="config-panel"
-className="w-full md:w-80 p-4 md:p-6 bg-background dark:bg-dark-900/50 border-t md:border-t-0 md:border-l border-gray-200 dark:border-primary-500/30 transition-colors duration-300 order-last md:order-none overflow-y-auto backdrop-filter dark:backdrop-blur-lg"
+className="config-panel w-80 p-6 bg-[var(--bg-card)] border-l border-[var(--border-primary)] overflow-y-auto backdrop-filter backdrop-blur-lg shadow-lg"
               initial={{ x: 80, opacity: 0, scale: 0.95 }}
               animate={{ x: 0, opacity: 1, scale: 1 }}
               exit={{ x: 80, opacity: 0, scale: 0.95 }}
@@ -638,6 +622,8 @@ className="w-full md:w-80 p-4 md:p-6 bg-background dark:bg-dark-900/50 border-t 
         </AnimatePresence>
       </div>
       
+</div>
+
       <FormSettingsModal
         isOpen={isSettingsModalOpen}
         onClose={handleFormSettingsClose}

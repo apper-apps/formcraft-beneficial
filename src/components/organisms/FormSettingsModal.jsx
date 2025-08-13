@@ -51,13 +51,13 @@ const [formSettings, setFormSettings] = useState({
 
   return (
     <AnimatePresence>
-<div className="fixed inset-0 bg-black/80 backdrop-blur-sm z-[9999] flex items-center justify-center p-4">
+<div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center p-4" style={{ zIndex: 'var(--z-modal-overlay)' }}>
         <motion.div
           initial={{ scale: 0.95, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           exit={{ scale: 0.95, opacity: 0 }}
           transition={{ duration: 0.2 }}
-className="bg-white dark:bg-dark-900/95 dark:border dark:border-primary-500/30 rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden backdrop-filter dark:backdrop-blur-lg relative z-[10000]"
+className="bg-white dark:bg-[var(--bg-secondary)] dark:border dark:border-[var(--border-primary)] rounded-xl shadow-2xl w-full max-w-2xl max-h-[90vh] overflow-hidden backdrop-filter dark:backdrop-blur-lg relative" style={{ zIndex: 'var(--z-modal-content)' }}
         >
           {/* Header */}
 <div className="flex items-center justify-between p-6 border-b border-gray-200 dark:border-primary-500/30">
