@@ -14,17 +14,17 @@ const fieldTypes = [
   ];
 
   return (
-<div className="w-full h-full bg-white dark:bg-purple-900/30 rounded-lg shadow-lg border border-gray-200 dark:border-purple-600/30 p-6">
+<div className="field-types-sidebar fixed left-0 top-16 w-52 h-[calc(100vh-4rem)] bg-[rgba(10,10,15,0.95)] backdrop-blur-[10px] border-r border-[rgba(255,255,255,0.1)] p-5 px-3 overflow-y-auto z-40 custom-scrollbar">
       <div className="mb-6">
-        <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-2 bg-gradient-to-r from-purple-600 to-indigo-600 dark:from-purple-300 dark:to-indigo-300 bg-clip-text text-transparent">
+        <h2 className="text-lg font-bold text-white mb-2 bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">
           Field Types
         </h2>
-        <p className="text-sm text-gray-600 dark:text-purple-200">
+        <p className="text-sm text-gray-300">
           Drag field types to the canvas to add them to your form
         </p>
       </div>
 
-<div className="space-y-3">
+      <div className="space-y-2">
         {fieldTypes.map((fieldType, index) => (
           <div
             key={fieldType.type}
@@ -41,12 +41,12 @@ const fieldTypes = [
         ))}
       </div>
 
-<div className="mt-8 p-4 bg-gradient-to-br from-primary-50 to-secondary-50 dark:from-purple-600/20 dark:to-indigo-600/20 rounded-lg border border-primary-200 dark:border-purple-500/30">
-        <h3 className="font-semibold text-primary-700 dark:text-purple-200 mb-2 flex items-center">
-          <span className="w-2 h-2 bg-primary-500 dark:bg-purple-400 rounded-full mr-2"></span>
+      <div className="mt-8 p-4 bg-[rgba(59,130,246,0.1)] rounded-lg border border-[rgba(59,130,246,0.3)] backdrop-blur-sm">
+        <h3 className="font-semibold text-blue-300 mb-2 flex items-center">
+          <span className="w-2 h-2 bg-blue-400 rounded-full mr-2"></span>
           Quick Tips
         </h3>
-        <ul className="text-xs text-primary-600 dark:text-purple-300 space-y-1">
+        <ul className="text-xs text-gray-300 space-y-1">
           <li>• Drag fields to the canvas area</li>
           <li>• Click fields to edit properties</li>
           <li>• Reorder by dragging within canvas</li>
