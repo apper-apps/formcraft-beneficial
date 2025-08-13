@@ -211,14 +211,14 @@ style={{
               
 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10 justify-items-center max-w-4xl mx-auto">
                 {formTemplates.slice(0, 4).map((template, index) => (
-<div
-className="w-full max-w-sm bg-gradient-to-br from-white via-gray-50 to-white dark:from-dark-900/60 dark:via-dark-800/80 dark:to-dark-900/60 rounded-xl border border-gray-200 dark:border-primary-500/20 p-6 hover:shadow-2xl dark:hover:shadow-primary-500/20 transition-all duration-500 hover:scale-105 hover:-translate-y-2 cursor-pointer group backdrop-filter dark:backdrop-blur-lg shadow-lg dark:shadow-primary-500/10 dark:hover:border-primary-400/50 dark:hover:shadow-primary-500/30" 
-style={{ 
-  background: 'rgba(20, 20, 32, 0.6)', 
-  backdropFilter: 'blur(10px)' 
-}}
+                  <div
+                    key={template.id || `template-${index}`}
                     className="w-full max-w-sm bg-gradient-to-br from-white via-gray-50 to-white dark:from-primary-600/20 dark:via-dark-900/95 dark:to-primary-700/25 rounded-xl border border-gray-200 dark:border-primary-500/40 p-6 hover:shadow-2xl dark:hover:shadow-primary-500/30 transition-all duration-500 hover:scale-105 hover:-translate-y-2 cursor-pointer group backdrop-blur-sm shadow-lg dark:shadow-primary-600/10"
-                    style={{ animationDelay: `${index * 0.1}s` }}
+                    style={{ 
+                      background: 'rgba(20, 20, 32, 0.6)', 
+                      backdropFilter: 'blur(10px)',
+                      animationDelay: `${index * 0.1}s` 
+                    }}
                   >
                     <div className="flex items-start justify-between mb-4">
                       <div className="flex-1">
