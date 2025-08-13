@@ -620,10 +620,8 @@ className="config-panel w-80 p-6 bg-[var(--bg-card)] border-l border-[var(--bord
             </motion.div>
           )}
         </AnimatePresence>
-      </div>
-      
 </div>
-
+      
       <FormSettingsModal
         isOpen={isSettingsModalOpen}
         onClose={handleFormSettingsClose}
